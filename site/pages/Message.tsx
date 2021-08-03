@@ -1,28 +1,41 @@
-import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
+import Header from '../Components/Header/Header';
 import EmailIcon from '@material-ui/icons/Email';
-const message: React.FC = () => {
+import Link from 'next/link';
+
+import { useStyles } from '../styles/message.style';
+const Message: React.FC = () => {
+  const classes = useStyles();
   return (
-    <Container>
-      <div>
-        <Typography>Сообщения</Typography>
-      </div>
-      <div>
-        <EmailIcon />
-        <Typography variant="h6">Сообщений пока нет</Typography>
-        <Typography variant="subtitle2">
-          Здесь будут находиться ваши чаты с работодателями
-        </Typography>
-      </div>
-      <div>
-        <Button variant="contained" color="primary">
-          Искать Вакансии
-        </Button>
-      </div>
-    </Container>
+    <>
+      <Header />
+      <Container maxWidth="md">
+        <div className={classes.wrapper}>
+          <div>
+            <Typography variant="h4">Сообщения</Typography>
+          </div>
+          <div className={classes.flex}>
+            <EmailIcon className={classes.img} />
+            <Typography variant="h6">Сообщений пока нет</Typography>
+            <Typography variant="subtitle2">
+              Здесь будут находиться ваши чаты с работодателями
+            </Typography>
+          </div>
+          <div>
+            <Link href="/">
+              <a>
+                <Button variant="contained" color="primary">
+                  Искать подписки
+                </Button>
+              </a>
+            </Link>
+          </div>
+        </div>
+      </Container>
+    </>
   );
 };
 
-export default message;
+export default Message;
