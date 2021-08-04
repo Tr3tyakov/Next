@@ -8,7 +8,7 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import StarIcon from '@material-ui/icons/Star';
-import { useStyles } from './style';
+import { useStyles } from './vacancy.style';
 
 const Vacancy: React.FC = () => {
   const classes = useStyles();

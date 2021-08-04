@@ -6,12 +6,12 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import theme from '../styles/theme';
-
+import { wrapper } from '../Components/store/reducers/rootReducer';
 const MyApp: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
-        <title>My App</title>
+        <title>TT.ru</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
         <link
           rel="stylesheet"
@@ -27,4 +27,4 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);

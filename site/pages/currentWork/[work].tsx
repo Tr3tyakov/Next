@@ -1,21 +1,19 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Header from '../../Components/Header/Header';
 import { useStyles } from './work.style';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 import Link from 'next/link';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import Vacancy from '../../Components/Vacancies/Vacancy';
+import Vacancy from '../../Components/vacancies/Vacancy';
+import MainLayouts from '../../Components/layouts/MainLayouts';
 const Work: React.FC = () => {
   const classes = useStyles();
   return (
     <>
       <div className={classes.backGround}>
-        <Header />
-        <Container maxWidth="md" className={classes.container}>
+        <MainLayouts>
           <div>
             <Typography gutterBottom>Санкт-Петербург</Typography>
           </div>
@@ -36,7 +34,7 @@ const Work: React.FC = () => {
               <Typography className={classes.titleTag}>Онлайн Трейд</Typography>
             </div>
           </Link>
-        </Container>
+        </MainLayouts>
       </div>
       <Container maxWidth="md">
         <div className={classes.companyInfo}>
