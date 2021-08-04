@@ -5,12 +5,13 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const userRouter = require('./Routers/useRouter');
 const ErrorHandler = require('./middleware/ErrorHandler');
-
+const cors = require('cors');
 const app = express();
 PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(express.static('static'));
+app.use(cors({ origin: process.env.SERVER, credentials: true }));
 app.use(cookieParser());
 app.use('/api', userRouter);
 app.use(ErrorHandler);

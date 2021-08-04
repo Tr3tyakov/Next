@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
@@ -9,7 +9,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SearchIcon from '@material-ui/icons/Search';
 import StarIcon from '@material-ui/icons/Star';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Link from 'next/link';
@@ -18,6 +18,10 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import { useTypedSelector } from '../../Components/Hooks/useTypedSelector';
 import { useActions } from '../Hooks/useAction';
+import EmailIcon from '@material-ui/icons/Email';
+import { NextThunkDispatch, wrapper } from '../store/reducers/rootReducer';
+import { checkAuth } from '../store/actions/userActions';
+
 const navigation = [
   {
     title: 'Поиск',
@@ -29,44 +33,45 @@ const navigation = [
     href: '/Favorite',
     img: <StarIcon />,
   },
-  { title: 'Сообщения', href: '/Message', img: <AccountCircleIcon /> },
+  { title: 'Сообщения', href: '/Message', img: <EmailIcon /> },
 ];
 
 const Header: React.FC = () => {
+  const classes = useStyles();
   const [menu, setMenu] = React.useState<null | HTMLElement>(null);
-  const [modal, setModal] = React.useState<boolean>(false);
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
-  // const isAuth = useTypedSelector(({ userReducer }) => userReducer.isAuth);
-  const isAuth = false;
-  const classes = useStyles();
-  const { setRegistration, setLogin, setLogout } = useActions();
+  const { setRegistration, setLogin, setLogout, setModal, checkAuth } = useActions();
+  const { isAuth, openModal } = useTypedSelector(({ userReducer }) => {
+    return {
+      isAuth: userReducer.isAuth,
+      openModal: userReducer.openModal,
+    };
+  });
   //menu
-  const handleClose = (): void => {
+  const handleClose = () => {
     setMenu(null);
   };
-  const handleOpen = (event: any): void => {
+  const handleOpen = (event: any) => {
     setMenu(event.currentTarget);
   };
 
   //modal
-  const openModal = (): void => {
+  const setOpenModal = () => {
     setModal(true);
   };
-  const closeModal = (): void => {
+  const setCloseModal = () => {
     setModal(false);
   };
   //input
   const changeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setEmail(value);
-    console.log(email);
   };
 
   const changePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setPassword(value);
-    console.log(password);
   };
   const enter = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
@@ -80,7 +85,13 @@ const Header: React.FC = () => {
   const login = () => {
     setLogin(email, password);
   };
-  const makeLogout = (): void => {};
+  const makeLogout = (): void => {
+    setLogout();
+  };
+
+  React.useEffect(() => {
+    checkAuth();
+  }, []);
 
   return (
     <AppBar position="relative">
@@ -108,19 +119,19 @@ const Header: React.FC = () => {
                   <a className={classes.textDecortation}>Мой аккаунт</a>
                 </Link>
               </MenuItem>
-              <MenuItem className={classes.textDecortation} onClick={() => makeLogout}>
+              <MenuItem className={classes.textDecortation} onClick={makeLogout}>
                 Выйти
               </MenuItem>
             </Menu>
           </>
         ) : (
-          <Button variant="contained" onClick={openModal}>
+          <Button variant="contained" onClick={setOpenModal}>
             Войти
           </Button>
         )}
 
-        <Modal open={modal} onClose={closeModal} className={classes.modal}>
-          <Fade in={modal}>
+        <Modal open={openModal} onClose={setCloseModal} className={classes.modal}>
+          <Fade in={openModal}>
             <Paper className={classes.paperModal}>
               <div>
                 <Typography align="center" color="primary" variant="h5" gutterBottom>
@@ -180,6 +191,8 @@ const Header: React.FC = () => {
     </AppBar>
   );
 };
-
-export async function getServerSideProps() {}
 export default Header;
+//@ts-ignore
+// export const getServerSideProps = wrapper.getServerSideProps(async ({ store }) => {
+//   await store.dispatch(checkAuth());
+// });

@@ -1,4 +1,4 @@
-import * as UserActionCreators from './userAsync';
+import * as UserActionCreators from './userActions';
 
 export default {
   ...UserActionCreators,

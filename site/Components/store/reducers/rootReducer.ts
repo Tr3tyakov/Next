@@ -1,5 +1,5 @@
-import { createStore, applyMiddleware, combineReducers, Store } from 'redux';
-import thunk from 'redux-thunk';
+import { createStore, applyMiddleware, combineReducers, Store, AnyAction } from 'redux';
+import thunk, { ThunkDispatch } from 'redux-thunk';
 import { createWrapper, Context, MakeStore, HYDRATE } from 'next-redux-wrapper';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { userReducer } from './userReducer';
@@ -22,7 +22,8 @@ const reducer = (state: any, action: any) => {
 };
 export type RootState = ReturnType<typeof rootReducer>;
 
-export const makeStore: MakeStore<any> = (context: Context) =>
+export const makeStore = (context: Context) =>
   createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
 
 export const wrapper = createWrapper<Store<RootState>>(makeStore, { debug: true });
+export type NextThunkDispatch = ThunkDispatch<RootState, void, AnyAction>;
