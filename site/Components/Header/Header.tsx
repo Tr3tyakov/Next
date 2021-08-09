@@ -19,8 +19,6 @@ import TextField from '@material-ui/core/TextField';
 import { useTypedSelector } from '../../Components/Hooks/useTypedSelector';
 import { useActions } from '../Hooks/useAction';
 import EmailIcon from '@material-ui/icons/Email';
-import { NextThunkDispatch, wrapper } from '../store/reducers/rootReducer';
-import { checkAuth } from '../store/actions/userActions';
 
 const navigation = [
   {

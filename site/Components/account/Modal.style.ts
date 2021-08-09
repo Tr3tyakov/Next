@@ -10,7 +10,12 @@ export const useStyles = makeStyles({
     maxWidth: '500px',
     maxHeight: '950px',
   },
-
+  paperSkill: {
+    padding: '20px',
+    maxWidth: '450px',
+    width: '100%',
+    minWidth: '250px',
+  },
   outlineBtn: {
     flex: 1,
     margin: '10px 10px 0 0',

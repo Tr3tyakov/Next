@@ -11,21 +11,24 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { useStyles } from '../../styles/account.style';
 import Paper from '@material-ui/core/Paper';
 import MainLayouts from '../../Components/layouts/MainLayouts';
-import AccountModal from '../../Components/account/ModalSkills';
 import Link from 'next/link';
 import ModalPosition from '../../Components/account/ModalPosition';
 import { useTypedSelector } from '../../Components/Hooks/useTypedSelector';
 import { useActions } from '../../Components/Hooks/useAction';
+import ModalSkills from '../../Components/account/ModalSkills';
 
 const Account: React.FC = () => {
-  const { sphereActivity, desiredSalary, desiredPosition } = useTypedSelector(({ userReducer }) => {
-    return {
-      sphereActivity: userReducer.sphereActivity,
-      desiredPosition: userReducer.position,
-      desiredSalary: userReducer.salary,
-    };
-  });
-  const { setSphere } = useActions();
+  const { sphereActivity, desiredSalary, desiredPosition, skills } = useTypedSelector(
+    ({ userReducer }) => {
+      return {
+        sphereActivity: userReducer.sphereActivity,
+        desiredPosition: userReducer.position,
+        desiredSalary: userReducer.salary,
+        skills: userReducer.skills,
+      };
+    },
+  );
+  const { setSphere, setSkills } = useActions();
   const [modalSkills, setModalSkills] = React.useState<boolean>(false);
   const [position, setPosition] = React.useState<boolean>(false);
   //skillsModal
@@ -102,18 +105,34 @@ const Account: React.FC = () => {
       <div>
         <Paper className={classes.paper}>
           <div>
-            <Typography className={classes.gutterBottom} variant="h5">
-              Дополните свое резюме
-            </Typography>
-            <Typography variant="subtitle2">
-              Добавьте информацию о себе. Это поможет привлечь внимание работадателя
-            </Typography>
+            {skills.length ? (
+              ''
+            ) : (
+              <>
+                <Typography variant="h5">Дополните свое резюме</Typography>
+                <Typography variant="subtitle2" className={classes.gutterBottom}>
+                  Добавьте информацию о себе. Это поможет привлечь внимание работодателей
+                </Typography>
+              </>
+            )}
             <div className={classes.skills}>
-              <Typography variant="h6">Ключевые навыки</Typography>
+              <Typography variant="h5">Ключевые навыки</Typography>
               <Button variant="contained" color="primary" onClick={openModalSkills}>
                 <AddIcon />
               </Button>
-              <AccountModal modal={modalSkills} closeModalSkills={closeModalSkills} />
+              <ModalSkills
+                modal={modalSkills}
+                closeModalSkills={closeModalSkills}
+                setSkills={setSkills}
+                skills={skills}
+              />
+            </div>
+            <div className={classes.spheres}>
+              {skills.map((element, index) => (
+                <div className={classes.skill} key={index}>
+                  {element}
+                </div>
+              ))}
             </div>
           </div>
         </Paper>
@@ -149,7 +168,9 @@ const Account: React.FC = () => {
         <div className={classes.flexBetween}>
           <div className={classes.lineHeight}>
             <Typography variant="subtitle2">{desiredPosition}</Typography>
-            <p>{desiredSalary ? desiredSalary + ' ₽' : 'Уровень дохода не указан'}</p>
+            <p className={classes.salary}>
+              {desiredSalary ? desiredSalary + ' ₽' : 'Уровень дохода не указан'}
+            </p>
           </div>
           <Button color="primary" onClick={openModalPosition}>
             <ArrowForwardIosIcon />

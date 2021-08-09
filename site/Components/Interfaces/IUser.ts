@@ -3,11 +3,13 @@ export enum userType {
   LOADING = 'LOADING',
   MODAL = 'MODAL',
   SPHERE = 'SPHERE',
+  SKILLS = 'SKILLS',
 }
 export interface IUser {
   isAuth: boolean;
   isLoading: boolean;
   openModal: boolean;
+  skills: string[];
   position: string;
   salary: string;
   sphereActivity: string[];
@@ -26,6 +28,10 @@ interface modalAction {
   type: userType.MODAL;
   payload: boolean;
 }
+interface skillsAction {
+  type: userType.SKILLS;
+  payload: string[];
+}
 interface sphereAction {
   type: userType.SPHERE;
   payload: {
@@ -35,4 +41,4 @@ interface sphereAction {
   };
 }
 
-export type userActions = authAction | loadingAction | modalAction | sphereAction;
+export type userActions = authAction | loadingAction | modalAction | sphereAction | skillsAction;

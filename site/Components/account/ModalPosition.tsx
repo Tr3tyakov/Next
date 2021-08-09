@@ -1,24 +1,12 @@
 import React from 'react';
-
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import SearchIcon from '@material-ui/icons/Search';
-import StarIcon from '@material-ui/icons/Star';
-
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
-
 import { useStyles } from './Modal.style';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
-import { userActions } from '../Interfaces/IUser';
 
 interface PositionProps {
   position: boolean;
@@ -64,7 +52,7 @@ const ModalPosition: React.FC<PositionProps> = ({
 }) => {
   const classes = useStyles();
   const [positionInput, setPositionInput] = React.useState<string>(desiredPosition);
-  const [salary, setSalary] = React.useState<number | string>(desiredSalary);
+  const [salary, setSalary] = React.useState<string>(desiredSalary);
   const [error, setError] = React.useState<boolean>(false);
 
   const [specializationInput, setSpecializationInput] = React.useState<string>('');

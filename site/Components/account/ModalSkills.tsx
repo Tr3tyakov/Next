@@ -16,12 +16,14 @@ import CloseIcon from '@material-ui/icons/Close';
 interface AccountProps {
   modal: boolean;
   closeModalSkills: any;
+  setSkills: any;
+  skills: string[];
 }
 
-const AccountModal: React.FC<AccountProps> = ({ modal, closeModalSkills }) => {
+const ModalSkills: React.FC<AccountProps> = ({ modal, closeModalSkills, setSkills, skills }) => {
   const [input, setInput] = React.useState<string>('');
   const [error, setError] = React.useState<boolean>(false);
-  const [skills, setSkills] = React.useState<string[]>([]);
+  const [ability, setAbility] = React.useState<string[]>(skills);
   const classes = useStyles();
 
   //input
@@ -35,23 +37,36 @@ const AccountModal: React.FC<AccountProps> = ({ modal, closeModalSkills }) => {
     }
   };
   const deleteSkill = (title: string) => {
-    setSkills(skills.filter((element) => element !== title));
+    setAbility(ability.filter((element) => element !== title));
+  };
+  const clearSkills = () => {
+    setAbility([]);
+    setInput('');
+  };
+  const saveSkills = () => {
+    setSkills(ability);
+    closeModalSkills();
   };
   const addSkill = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      setSkills([...skills, input]);
+      setAbility([...ability, input]);
       setInput('');
     }
   };
   return (
     <Modal open={modal} onClose={closeModalSkills} className={classes.modal}>
       <Fade in={modal}>
-        <Paper className={classes.paperModal}>
+        <Paper className={classes.paperSkill}>
           <div>
-            <Typography align="center" color="primary" variant="h5" gutterBottom>
-              Ключевые навыки
-            </Typography>
+            <div className={classes.title}>
+              <Typography align="center" color="primary" variant="h5" gutterBottom>
+                Ключевые навыки
+              </Typography>
+              <Button variant="outlined" color="primary" size="small" onClick={clearSkills}>
+                Очистить
+              </Button>
+            </div>
             <form onKeyPress={addSkill}>
               <TextField
                 margin="dense"
@@ -65,7 +80,7 @@ const AccountModal: React.FC<AccountProps> = ({ modal, closeModalSkills }) => {
             </form>
           </div>
           <div className={classes.skills}>
-            {skills.map((element, index) => {
+            {ability.map((element, index) => {
               return (
                 <div className={classes.skill} key={index}>
                   {element}
@@ -84,7 +99,9 @@ const AccountModal: React.FC<AccountProps> = ({ modal, closeModalSkills }) => {
             // onClick={saveChanges}
             variant="outlined"
             disabled={error}
-            color="primary">
+            fullWidth
+            color="primary"
+            onClick={saveSkills}>
             Сохранить навыки
           </Button>
         </Paper>
@@ -93,4 +110,4 @@ const AccountModal: React.FC<AccountProps> = ({ modal, closeModalSkills }) => {
   );
 };
 
-export default AccountModal;
+export default ModalSkills;
