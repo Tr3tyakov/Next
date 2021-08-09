@@ -64,13 +64,15 @@ const ModalPosition: React.FC<PositionProps> = ({
 }) => {
   const classes = useStyles();
   const [positionInput, setPositionInput] = React.useState<string>(desiredPosition);
-  const [salary, setSalary] = React.useState<string>(desiredSalary);
+  const [salary, setSalary] = React.useState<number | string>(desiredSalary);
+  const [error, setError] = React.useState<boolean>(false);
 
   const [specializationInput, setSpecializationInput] = React.useState<string>('');
   const [currentTarget, setCurrentTarget] = React.useState<string[]>(sphereActivity);
 
   const changePositionInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
+    setError(false);
     setPositionInput(value);
   };
 
@@ -104,6 +106,10 @@ const ModalPosition: React.FC<PositionProps> = ({
   };
 
   const saveSphereActivities = () => {
+    if (positionInput === '') {
+      return setError(true);
+    }
+
     setSphere(positionInput, salary, currentTarget);
     closeModalPosition();
   };
@@ -121,12 +127,13 @@ const ModalPosition: React.FC<PositionProps> = ({
                 очистить
               </Button>
             </div>
-
             <TextField
               margin="dense"
               variant="standard"
               label="Должность"
               fullWidth
+              error={error}
+              helperText={error && 'Данная графа не может быть пустой'}
               value={positionInput}
               onChange={changePositionInput}></TextField>
             <TextField
@@ -152,7 +159,7 @@ const ModalPosition: React.FC<PositionProps> = ({
             <TextField
               margin="dense"
               variant="standard"
-              label="Название сферы деятельности"
+              label="Сфера деятельности"
               fullWidth
               value={specializationInput}
               onChange={findSpecialization}></TextField>

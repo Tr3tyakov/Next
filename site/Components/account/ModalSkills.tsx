@@ -23,10 +23,8 @@ const AccountModal: React.FC<AccountProps> = ({ modal, closeModalSkills }) => {
   const [error, setError] = React.useState<boolean>(false);
   const [skills, setSkills] = React.useState<string[]>([]);
   const classes = useStyles();
-  //modal
 
   //input
-
   const changeInputValidation = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const check = RegExp(/\d/gi).test(value);

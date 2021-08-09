@@ -7,9 +7,8 @@ export const useStyles = makeStyles({
   },
   paperModal: {
     padding: '20px',
-    minWidth: '400px',
     maxWidth: '500px',
-    maxHeight: '750px',
+    maxHeight: '950px',
   },
 
   outlineBtn: {

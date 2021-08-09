@@ -143,13 +143,13 @@ const Account: React.FC = () => {
       </Paper>
       <Divider />
       <Paper className={classes.paper}>
-        <Typography variant="h5">Желаемая должность :</Typography>
+        <Typography variant="h5" className={classes.gutterBottom}>
+          Желаемая должность :
+        </Typography>
         <div className={classes.flexBetween}>
           <div className={classes.lineHeight}>
-            <Typography variant="subtitle2" className={classes.gutterBottom}>
-              {desiredPosition}
-            </Typography>
-            <p>{desiredSalary ? desiredSalary : 'Уровень дохода не указан'} ₽</p>
+            <Typography variant="subtitle2">{desiredPosition}</Typography>
+            <p>{desiredSalary ? desiredSalary + ' ₽' : 'Уровень дохода не указан'}</p>
           </div>
           <Button color="primary" onClick={openModalPosition}>
             <ArrowForwardIosIcon />
