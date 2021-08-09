@@ -1,7 +1,6 @@
 import { UserService } from './../../utils/services/userService';
 import { Dispatch } from 'react';
 import { RootState } from '../reducers/rootReducer';
-
 import { userActions } from '../../Interfaces/IUser';
 import { userType } from '../../Interfaces/IUser';
 
@@ -16,6 +15,15 @@ export const setAuth = (value: boolean): userActions => ({
 export const setModal = (value: boolean): userActions => ({
   type: userType.MODAL,
   payload: value,
+});
+
+export const setSphere = (
+  position: string,
+  salary: string,
+  sphereActivity: string[],
+): userActions => ({
+  type: userType.SPHERE,
+  payload: { position, salary, sphereActivity },
 });
 
 export const setRegistration = (email: string, password: string) => {

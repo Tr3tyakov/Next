@@ -1,3 +1,4 @@
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
@@ -7,11 +8,41 @@ import ShareIcon from '@material-ui/icons/Share';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AddIcon from '@material-ui/icons/Add';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { useStyles } from '../styles/account.style';
+import { useStyles } from '../../styles/account.style';
 import Paper from '@material-ui/core/Paper';
-import MainLayouts from '../Components/layouts/MainLayouts';
+import MainLayouts from '../../Components/layouts/MainLayouts';
+import AccountModal from '../../Components/account/ModalSkills';
+import Link from 'next/link';
+import ModalPosition from '../../Components/account/ModalPosition';
+import { useTypedSelector } from '../../Components/Hooks/useTypedSelector';
+import { useActions } from '../../Components/Hooks/useAction';
 
 const Account: React.FC = () => {
+  const { sphereActivity, desiredSalary, desiredPosition } = useTypedSelector(({ userReducer }) => {
+    return {
+      sphereActivity: userReducer.sphereActivity,
+      desiredPosition: userReducer.position,
+      desiredSalary: userReducer.salary,
+    };
+  });
+  const { setSphere } = useActions();
+  const [modalSkills, setModalSkills] = React.useState<boolean>(false);
+  const [position, setPosition] = React.useState<boolean>(false);
+  //skillsModal
+  const openModalSkills = () => {
+    setModalSkills(true);
+  };
+  const closeModalSkills = () => {
+    setModalSkills(false);
+  };
+
+  //positionModal
+  const openModalPosition = () => {
+    setPosition(true);
+  };
+  const closeModalPosition = () => {
+    setPosition(false);
+  };
   const classes = useStyles();
   return (
     <MainLayouts>
@@ -79,9 +110,10 @@ const Account: React.FC = () => {
             </Typography>
             <div className={classes.skills}>
               <Typography variant="h6">Ключевые навыки</Typography>
-              <Button variant="contained" color="primary">
+              <Button variant="contained" color="primary" onClick={openModalSkills}>
                 <AddIcon />
               </Button>
+              <AccountModal modal={modalSkills} closeModalSkills={closeModalSkills} />
             </div>
           </div>
         </Paper>
@@ -91,9 +123,13 @@ const Account: React.FC = () => {
           <Typography className={classes.gutterBottom} variant="h5">
             Основная информация
           </Typography>
-          <Button color="primary">
-            <ArrowForwardIosIcon />
-          </Button>
+          <Link href="/account/mainInfo/1">
+            <a>
+              <Button color="primary">
+                <ArrowForwardIosIcon />
+              </Button>
+            </a>
+          </Link>
         </div>
         <div>
           <p>Третьяков Михаил</p>
@@ -107,17 +143,32 @@ const Account: React.FC = () => {
       </Paper>
       <Divider />
       <Paper className={classes.paper}>
-        <Typography className={classes.gutterBottom} variant="h5">
-          Желаемая должность :
-        </Typography>
+        <Typography variant="h5">Желаемая должность :</Typography>
         <div className={classes.flexBetween}>
           <div className={classes.lineHeight}>
-            <Typography variant="h6">Начинающий специалист</Typography>
-            <p>Уровень дохода не указан</p>
+            <Typography variant="subtitle2" className={classes.gutterBottom}>
+              {desiredPosition}
+            </Typography>
+            <p>{desiredSalary ? desiredSalary : 'Уровень дохода не указан'} ₽</p>
           </div>
-          <Button color="primary">
+          <Button color="primary" onClick={openModalPosition}>
             <ArrowForwardIosIcon />
           </Button>
+          <ModalPosition
+            position={position}
+            closeModalPosition={closeModalPosition}
+            setSphere={setSphere}
+            desiredSalary={desiredSalary}
+            desiredPosition={desiredPosition}
+            sphereActivity={sphereActivity}
+          />
+        </div>
+        <div className={classes.spheres}>
+          {sphereActivity.map((element, index) => (
+            <div className={classes.skill} key={index}>
+              {element}
+            </div>
+          ))}
         </div>
       </Paper>
     </MainLayouts>

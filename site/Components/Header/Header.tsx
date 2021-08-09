@@ -115,7 +115,7 @@ const Header: React.FC = () => {
             </IconButton>
             <Menu id="menu" open={Boolean(menu)} onClose={handleClose} anchorEl={menu}>
               <MenuItem>
-                <Link href="/Account">
+                <Link href="/account/1">
                   <a className={classes.textDecortation}>Мой аккаунт</a>
                 </Link>
               </MenuItem>

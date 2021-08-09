@@ -43,6 +43,19 @@ export const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
   },
+  spheres: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  skill: {
+    display: 'flex',
+    alignItems: 'center',
+    margin: '5px 5px 0 0',
+    padding: '5px',
+    borderRadius: '5px',
+    border: '1px solid #CCCCCC ',
+    backgroundColor: '#ECECEC',
+  },
   gutterBottom: {
     margin: '0 0 1em 0',
   },
