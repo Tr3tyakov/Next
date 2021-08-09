@@ -8,6 +8,16 @@ const initialState: IUser = {
   sphereActivity: [],
   salary: '',
   position: '',
+  mainInfo: {
+    avatar: '',
+    gender: '',
+    name: '',
+    lastName: '',
+    date: '',
+    email: '',
+    phone: '',
+    city: '',
+  },
 };
 
 export const userReducer = (state = initialState, action: userActions): IUser => {
@@ -29,6 +39,21 @@ export const userReducer = (state = initialState, action: userActions): IUser =>
       return {
         ...state,
         skills: action.payload,
+      };
+    case userType.MAIN_INFO:
+      return {
+        ...state,
+        mainInfo: {
+          ...state.mainInfo,
+          avatar: action.payload.avatar,
+          gender: action.payload.gender,
+          name: action.payload.name,
+          lastName: action.payload.lastName,
+          date: action.payload.date,
+          email: action.payload.email,
+          phone: action.payload.phone,
+          city: action.payload.city,
+        },
       };
     default:
       return state;

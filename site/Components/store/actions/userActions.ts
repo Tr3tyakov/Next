@@ -27,3 +27,26 @@ export const setSkills = (skills: string[]) => ({
   type: userType.SKILLS,
   payload: skills,
 });
+
+export const setMainInfo = (
+  avatar: string,
+  gender: string,
+  name: string,
+  lastName: string,
+  date: string,
+  email: string,
+  phone: string,
+  city: string,
+) => ({
+  type: userType.MAIN_INFO,
+  payload: {
+    avatar,
+    gender,
+    name,
+    lastName,
+    date,
+    email,
+    phone,
+    city,
+  },
+});

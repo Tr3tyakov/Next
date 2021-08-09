@@ -6,10 +6,22 @@ export const useStyles = makeStyles({
     alignItems: 'center',
     margin: '10px 0 20px 0',
   },
+  inputFile: {
+    display: 'none',
+  },
+  marginBottom: {
+    margin: '10px 0',
+  },
   userIcon: {
     margin: '0 20px',
     height: '150px',
     width: '150px',
+  },
+  avatar: {
+    width: '150px',
+    height: '150px',
+    objectFit: 'cover',
+    borderRadius: '50%',
   },
   flex: {
     display: 'flex',
@@ -32,7 +44,18 @@ export const useStyles = makeStyles({
   },
   secondInfo: {
     display: 'flex',
-    // flex: 1,
     flexDirection: 'column',
+  },
+  textField: {
+    margin: '10px 0 0 0 ',
+  },
+  btns: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  saveData: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
   },
 });

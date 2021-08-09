@@ -4,6 +4,7 @@ export enum userType {
   MODAL = 'MODAL',
   SPHERE = 'SPHERE',
   SKILLS = 'SKILLS',
+  MAIN_INFO = 'MAIN_INFO',
 }
 export interface IUser {
   isAuth: boolean;
@@ -13,6 +14,16 @@ export interface IUser {
   position: string;
   salary: string;
   sphereActivity: string[];
+  mainInfo: {
+    avatar: string;
+    gender: string;
+    name: string;
+    lastName: string;
+    date: string;
+    email: string;
+    phone: string;
+    city: string;
+  };
 }
 
 //actions
@@ -40,5 +51,24 @@ interface sphereAction {
     sphereActivity: string[];
   };
 }
+interface mainInfoAction {
+  type: userType.MAIN_INFO;
+  payload: {
+    avatar: string;
+    gender: string;
+    name: string;
+    lastName: string;
+    date: string;
+    email: string;
+    phone: string;
+    city: string;
+  };
+}
 
-export type userActions = authAction | loadingAction | modalAction | sphereAction | skillsAction;
+export type userActions =
+  | authAction
+  | loadingAction
+  | modalAction
+  | sphereAction
+  | skillsAction
+  | mainInfoAction;

@@ -18,13 +18,15 @@ import { useActions } from '../../Components/Hooks/useAction';
 import ModalSkills from '../../Components/account/ModalSkills';
 
 const Account: React.FC = () => {
-  const { sphereActivity, desiredSalary, desiredPosition, skills } = useTypedSelector(
+  const { sphereActivity, desiredSalary, desiredPosition, skills, mainInfo } = useTypedSelector(
     ({ userReducer }) => {
       return {
         sphereActivity: userReducer.sphereActivity,
         desiredPosition: userReducer.position,
         desiredSalary: userReducer.salary,
         skills: userReducer.skills,
+
+        mainInfo: userReducer.mainInfo,
       };
     },
   );
@@ -49,9 +51,6 @@ const Account: React.FC = () => {
   const classes = useStyles();
   return (
     <MainLayouts>
-      <div>
-        <MenuIcon />
-      </div>
       <div className={classes.user}>
         <Button>
           <ShareIcon />
@@ -62,8 +61,10 @@ const Account: React.FC = () => {
         </Button>
       </div>
       <div className={classes.flex}>
-        <Typography variant="h5">Начинающий специалист</Typography>
-        <Typography variant="subtitle1">name</Typography>
+        <Typography variant="h5">{desiredPosition || 'Начинающий специалист'}</Typography>
+        <Typography variant="subtitle1">
+          {mainInfo.name ? `${mainInfo.name} ${mainInfo.lastName}` : 'User'}
+        </Typography>
       </div>
       <div className={classes.info}>
         <Paper className={classes.paper}>
@@ -151,20 +152,15 @@ const Account: React.FC = () => {
           </Link>
         </div>
         <div>
-          <p>Третьяков Михаил</p>
-          <p>Санкт-Петербург</p>
-
-          {/* <Box component="p">Санкт-Петербург</Box> */}
-          {/* <Box component="p">{country}</Box> */}
-          {/* <Box component="p">{email}</Box> */}
-          {/* <Box component="p">{number}</Box> */}
+          <p>{`${mainInfo.name} ${mainInfo.lastName}`}</p>
+          <p>{mainInfo.city}</p>
+          <p>{mainInfo.email}</p>
+          <p>{mainInfo.phone}</p>
         </div>
       </Paper>
       <Divider />
       <Paper className={classes.paper}>
-        <Typography variant="h5" className={classes.gutterBottom}>
-          Желаемая должность :
-        </Typography>
+        <Typography variant="h5">Желаемая должность :</Typography>
         <div className={classes.flexBetween}>
           <div className={classes.lineHeight}>
             <Typography variant="subtitle2">{desiredPosition}</Typography>
