@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import Vacancy from '../../Components/vacancies/Vacancy';
 import MainLayouts from '../../Components/layouts/MainLayouts';
+
 const Work: React.FC = () => {
   const classes = useStyles();
   return (

@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import theme from '../styles/theme';
+
 import { wrapper } from '../Components/store/reducers/rootReducer';
 const MyApp: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
   return (
@@ -18,11 +18,10 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
         />
       </Head>
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
+
+      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+      <CssBaseline />
+      <Component {...pageProps} />
     </>
   );
 };
