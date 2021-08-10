@@ -17,7 +17,7 @@ interface PositionProps {
   desiredPosition: string;
 }
 
-const specializations = [
+export const specializations = [
   'Бухгалтерия',
   'Закупки',
   'Другое',

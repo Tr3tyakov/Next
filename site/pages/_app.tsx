@@ -25,5 +25,4 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
     </>
   );
 };
-
 export default wrapper.withRedux(MyApp);

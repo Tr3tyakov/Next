@@ -19,7 +19,7 @@ import TextField from '@material-ui/core/TextField';
 import { useTypedSelector } from '../../Components/Hooks/useTypedSelector';
 import { useActions } from '../Hooks/useAction';
 import EmailIcon from '@material-ui/icons/Email';
-
+import WorkIcon from '@material-ui/icons/Work';
 const navigation = [
   {
     title: 'Поиск',
@@ -32,6 +32,7 @@ const navigation = [
     img: <StarIcon />,
   },
   { title: 'Сообщения', href: '/Message', img: <EmailIcon /> },
+  { title: 'Cоздать резюме', href: '/CreateOffer', img: <WorkIcon /> },
 ];
 
 const Header: React.FC = () => {
