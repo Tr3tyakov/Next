@@ -16,13 +16,6 @@ export const useStyles = makeStyles({
     maxWidth: '700px',
     width: '100%',
   },
-
-  professional: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
   cursor: {
     maxWidth: '200px',
     cursor: 'pointer',
@@ -83,6 +76,7 @@ export const useStyles = makeStyles({
     maxHeight: '500px',
     minHeight: '200px',
     fontSize: '15px',
+    borderRadius: '5px',
     overflow: 'auto',
     resize: 'none',
   },

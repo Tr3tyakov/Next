@@ -11,8 +11,12 @@ export const useStyles = makeStyles({
   },
   textDecortation: {
     textDecoration: 'none',
-    color: 'white',
+    color: 'black',
   },
+  avatar: {
+    borderRadius: '50%',
+  },
+
   modal: {
     display: 'flex',
     justifyContent: 'center',

@@ -3,7 +3,7 @@ const withImages = require('next-images');
 
 const nextConfig = {
   images: {
-    domains: ['http://localhost:300'],
+    domains: ['localhost'],
   },
 };
 

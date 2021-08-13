@@ -8,15 +8,16 @@ const initialState: IUser = {
   sphereActivity: [],
   salary: '',
   position: '',
+  email: '',
   mainInfo: {
-    avatar: '',
-    gender: '',
     name: '',
-    lastName: '',
-    date: '',
-    email: '',
+    secondName: '',
+    avatar: '',
+    bithday: '',
+    gender: '',
     phone: '',
     city: '',
+    country: '',
   },
 };
 
@@ -48,12 +49,44 @@ export const userReducer = (state = initialState, action: userActions): IUser =>
           avatar: action.payload.avatar,
           gender: action.payload.gender,
           name: action.payload.name,
-          lastName: action.payload.lastName,
-          date: action.payload.date,
-          email: action.payload.email,
+          secondName: action.payload.secondName,
+          bithday: action.payload.bithday,
           phone: action.payload.phone,
           city: action.payload.city,
         },
+        email: action.payload.email,
+      };
+    case userType.USER:
+      return {
+        ...state,
+        isAuth: true,
+        openModal: false,
+        mainInfo: action.payload.mainInfo,
+        skills: action.payload.skills,
+        email: action.payload.email,
+        sphereActivity: action.payload.specializations,
+        salary: action.payload.desiredPay,
+        position: action.payload.desiredPosition,
+      };
+    case userType.CLEAR:
+      return {
+        ...state,
+        isAuth: false,
+        mainInfo: {
+          name: '',
+          secondName: '',
+          avatar: '',
+          bithday: '',
+          gender: '',
+          phone: '',
+          city: '',
+          country: '',
+        },
+        skills: [],
+        sphereActivity: [],
+        salary: '',
+        position: '',
+        email: '',
       };
     default:
       return state;

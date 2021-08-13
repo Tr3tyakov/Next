@@ -52,9 +52,10 @@ export const useStyles = makeStyles({
     alignItems: 'center',
     margin: '5px 5px 0 0',
     padding: '5px',
-    borderRadius: '5px',
-    border: '1px solid #CCCCCC ',
-    backgroundColor: '#ECECEC',
+    borderRadius: '4px',
+    color: '#3f51b5',
+    border: '1px solid rgba(63, 81, 181, 0.5)',
+    fontWeight: 500,
   },
   gutterBottom: {
     margin: '0 0 1em 0',
@@ -68,5 +69,8 @@ export const useStyles = makeStyles({
   },
   salary: {
     margin: '0',
+  },
+  avatar: {
+    borderRadius: '50%',
   },
 });

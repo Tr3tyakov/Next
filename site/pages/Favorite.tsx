@@ -3,6 +3,8 @@ import Button from '@material-ui/core/Button';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useStyles } from '../styles/favorite.style';
 import MainLayouts from '../Components/layouts/MainLayouts';
+import { NextThunkDispatch, wrapper } from '../Components/store/reducers/rootReducer';
+import { getUser } from '../Components/store/actions/userAsyncAction';
 
 const Favorite: React.FC = () => {
   const classes = useStyles();
@@ -39,3 +41,8 @@ const Favorite: React.FC = () => {
 };
 
 export default Favorite;
+
+// export const getServerSideProps = wrapper.getServerSideProps(async ({ store }) => {
+//   const dispatch = store.dispatch as NextThunkDispatch;
+//   await dispatch(await getUser());
+// });

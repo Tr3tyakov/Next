@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
+const ApiError = require('../middleware/apiError');
 const TokenModel = require('../models/tokenModel');
+
 class TokenService {
   async createTokens(user) {
     const accessToken = jwt.sign({ user }, process.env.ACCESS_SECRET_KEY, { expiresIn: '1h' });
@@ -39,6 +41,21 @@ class TokenService {
       return null;
     }
   }
-}
 
+  async checkRefreshToken(refreshToken) {
+    if (!refreshToken) {
+      throw ApiError.UnathorizedError();
+    }
+    try {
+      const tokenData = await this.validateRefreshToken(refreshToken);
+      const tokenDB = await this.findToken(refreshToken);
+      if (!tokenData || !tokenDB) {
+        throw ApiError.UnathorizedError();
+      }
+      return tokenData;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
 module.exports = new TokenService();

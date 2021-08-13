@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const userDto = require('../DTO/userDto');
 const TokenService = require('./tokenService');
 const ApiError = require('../middleware/apiError');
+const fileService = require('./fileService');
+
 class UserService {
   async registration(email, password) {
     try {
@@ -44,24 +46,77 @@ class UserService {
     }
   }
   async refresh(refreshToken) {
-    if (!refreshToken) {
-      throw ApiError.UnathorizedError();
-    }
     try {
-      const tokenData = await TokenService.validateRefreshToken(refreshToken);
-      const tokenDB = await TokenService.findToken(refreshToken);
-      if (!tokenData || !tokenDB) {
-        throw ApiError.UnathorizedError();
-      }
+      const tokenData = await TokenService.checkRefreshToken(refreshToken);
       const user = await userModel.findById(tokenData.user.id);
       const dto = new userDto(user);
       const tokens = await TokenService.createTokens(dto);
+
       await TokenService.refresh(dto.id, tokens.refreshToken);
       return { ...dto, ...tokens };
+    } catch (error) {
+      throw ApiError.BadRequest(e);
+    }
+  }
+
+  async getUser(refreshToken) {
+    try {
+      const tokenData = await TokenService.checkRefreshToken(refreshToken);
+      const userData = await userModel.findById(tokenData.user.id);
+      return userData;
     } catch (e) {
       throw ApiError.BadRequest(e);
     }
   }
-}
 
+  async updateSkills(refreshToken, skills) {
+    try {
+      const tokenData = await TokenService.checkRefreshToken(refreshToken);
+      const user = await userModel.findById(tokenData.user.id);
+      user.skills = skills;
+      await user.save();
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async updateMainInfo(refreshToken, newUserData, avatar) {
+    try {
+      const tokenData = await TokenService.checkRefreshToken(refreshToken);
+      console.log(avatar, ' AVATAR');
+      const file = fileService.saveFile(avatar);
+      const user = await userModel.findById(tokenData.user.id);
+      const ImgAvatar = file ? file : tokenData.user.mainInfo.avatar;
+      (user.mainInfo = {
+        name: newUserData.name,
+        secondName: newUserData.secondName,
+        avatar: ImgAvatar,
+        bithday: newUserData.date,
+        gender: newUserData.gender,
+        phone: newUserData.phone,
+        city: newUserData.city,
+        country: newUserData.country,
+      }),
+        await user.save();
+      return user;
+    } catch (error) {
+      throw ApiError.BadRequest(error);
+    }
+  }
+  async updatePosition(refreshToken, newUserData) {
+    console.log(newUserData);
+    try {
+      const tokenData = await TokenService.checkRefreshToken(refreshToken);
+      const user = await userModel.findById(tokenData.user.id);
+      user.desiredPosition = newUserData.position;
+      user.desiredPay = newUserData.salary;
+      user.specializations = newUserData.specializations;
+      await user.save();
+      return user;
+    } catch (error) {
+      throw ApiError.BadRequest(error);
+    }
+  }
+}
 module.exports = new UserService();

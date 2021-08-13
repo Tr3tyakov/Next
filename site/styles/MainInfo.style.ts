@@ -14,8 +14,8 @@ export const useStyles = makeStyles({
   },
   userIcon: {
     margin: '0 20px',
-    height: '150px',
-    width: '150px',
+    height: '200px',
+    width: '200px',
   },
   avatar: {
     width: '150px',
@@ -57,5 +57,13 @@ export const useStyles = makeStyles({
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
+  },
+  link: {
+    textDecoration: 'none',
+    color: 'gray',
+  },
+  currentLink: {
+    textDecoration: 'none',
+    color: 'white',
   },
 });

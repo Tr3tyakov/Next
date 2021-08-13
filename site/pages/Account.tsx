@@ -8,14 +8,18 @@ import ShareIcon from '@material-ui/icons/Share';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AddIcon from '@material-ui/icons/Add';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { useStyles } from '../../styles/account.style';
+import { useStyles } from '../styles/account.style';
 import Paper from '@material-ui/core/Paper';
-import MainLayouts from '../../Components/layouts/MainLayouts';
+import MainLayouts from '../Components/layouts/MainLayouts';
 import Link from 'next/link';
-import ModalPosition from '../../Components/account/ModalPosition';
-import { useTypedSelector } from '../../Components/Hooks/useTypedSelector';
-import { useActions } from '../../Components/Hooks/useAction';
-import ModalSkills from '../../Components/account/ModalSkills';
+import ModalPosition from '../Components/account/ModalPosition';
+import { useTypedSelector } from '../Components/Hooks/useTypedSelector';
+import { useActions } from '../Components/Hooks/useAction';
+import ModalSkills from '../Components/account/ModalSkills';
+import { NextThunkDispatch, wrapper } from '../Components/store/reducers/rootReducer';
+import Image from 'next/image';
+import Box from '@material-ui/core/Box';
+// import { getUser } from '../Components/store/actions/userAsyncAction';
 
 const Account: React.FC = () => {
   const { sphereActivity, desiredSalary, desiredPosition, skills, mainInfo } = useTypedSelector(
@@ -25,37 +29,50 @@ const Account: React.FC = () => {
         desiredPosition: userReducer.position,
         desiredSalary: userReducer.salary,
         skills: userReducer.skills,
-
         mainInfo: userReducer.mainInfo,
       };
     },
   );
-  const { setSphere, setSkills } = useActions();
   const [modalSkills, setModalSkills] = React.useState<boolean>(false);
-  const [position, setPosition] = React.useState<boolean>(false);
-  //skillsModal
+  const [modalPosition, setModalPosition] = React.useState<boolean>(false);
+  const classes = useStyles();
+
+  //skillstModal
   const openModalSkills = () => {
     setModalSkills(true);
   };
-  const closeModalSkills = () => {
+  const closeModalSkills = React.useCallback(() => {
     setModalSkills(false);
-  };
+  }, []);
 
   //positionModal
   const openModalPosition = () => {
-    setPosition(true);
+    setModalPosition(true);
   };
-  const closeModalPosition = () => {
-    setPosition(false);
-  };
-  const classes = useStyles();
+  const closeModalPosition = React.useCallback(() => {
+    setModalPosition(false);
+  }, []);
+
   return (
     <MainLayouts>
       <div className={classes.user}>
         <Button>
           <ShareIcon />
         </Button>
-        <Avatar className={classes.userIcon} />
+
+        {mainInfo.avatar ? (
+          <Box m={2}>
+            <Image
+              className={classes.avatar}
+              src={`http://localhost:5000/${mainInfo.avatar}`}
+              layout="intrinsic"
+              width={200}
+              height={200}
+            />
+          </Box>
+        ) : (
+          <Avatar className={classes.userIcon} />
+        )}
         <Button>
           <MoreVertIcon />
         </Button>
@@ -63,7 +80,9 @@ const Account: React.FC = () => {
       <div className={classes.flex}>
         <Typography variant="h5">{desiredPosition || 'Начинающий специалист'}</Typography>
         <Typography variant="subtitle1">
-          {mainInfo.name ? `${mainInfo.name} ${mainInfo.lastName}` : 'User'}
+          {mainInfo?.name && mainInfo?.secondName
+            ? `${mainInfo?.name} ${mainInfo?.secondName}`
+            : 'User'}
         </Typography>
       </div>
       <div className={classes.info}>
@@ -72,7 +91,7 @@ const Account: React.FC = () => {
           <Typography className={classes.gutterBottom} variant="h5">
             Подтвердите номер телефона
           </Typography>
-          <Typography variant="subtitle2">
+          <Typography variant="subtitle2" className={classes.gutterBottom}>
             Работодатели чаще звонят на подтвержденные номера телефонов
           </Typography>
           <div className={classes.phone}>
@@ -87,13 +106,13 @@ const Account: React.FC = () => {
               Статистика за неделю
             </Typography>
             <div>{/* {table} */}</div>
-            <Typography variant="subtitle2">
+            <Typography variant="subtitle2" className={classes.gutterBottom}>
               Многие работадатели не видят это резюме.
               <br />
               Чтобы быстрее найти работу, измените его видимость
             </Typography>
             <div className={classes.btns}>
-              <Button className={classes.btn} variant="contained" color="primary">
+              <Button variant="contained" color="primary">
                 Сделать видимым
               </Button>
               <Button className={classes.btn} variant="outlined" color="primary">
@@ -124,7 +143,6 @@ const Account: React.FC = () => {
               <ModalSkills
                 modal={modalSkills}
                 closeModalSkills={closeModalSkills}
-                setSkills={setSkills}
                 skills={skills}
               />
             </div>
@@ -140,10 +158,8 @@ const Account: React.FC = () => {
       </div>
       <Paper className={classes.paper}>
         <div className={classes.flexBetween}>
-          <Typography className={classes.gutterBottom} variant="h5">
-            Основная информация
-          </Typography>
-          <Link href="/account/mainInfo/1">
+          <Typography variant="h5">Основная информация</Typography>
+          <Link href="/MainInfo">
             <a>
               <Button color="primary">
                 <ArrowForwardIosIcon />
@@ -152,15 +168,20 @@ const Account: React.FC = () => {
           </Link>
         </div>
         <div>
-          <p>{`${mainInfo.name} ${mainInfo.lastName}`}</p>
-          <p>{mainInfo.city}</p>
-          <p>{mainInfo.email}</p>
-          <p>{mainInfo.phone}</p>
+          <p>{`${mainInfo?.name} ${mainInfo?.secondName}`}</p>
+          <p>{mainInfo?.city}</p>
+          <p>{mainInfo?.country}</p>
+          <p>{mainInfo?.phone}</p>
         </div>
       </Paper>
-      <Divider />
+
       <Paper className={classes.paper}>
-        <Typography variant="h5">Желаемая должность :</Typography>
+        <div className={classes.flexBetween}>
+          <Typography variant="h5">Желаемая должность</Typography>
+          <Button color="primary" onClick={openModalPosition}>
+            <ArrowForwardIosIcon />
+          </Button>
+        </div>
         <div className={classes.flexBetween}>
           <div className={classes.lineHeight}>
             <Typography variant="subtitle2">{desiredPosition}</Typography>
@@ -168,13 +189,9 @@ const Account: React.FC = () => {
               {desiredSalary ? desiredSalary + ' ₽' : 'Уровень дохода не указан'}
             </p>
           </div>
-          <Button color="primary" onClick={openModalPosition}>
-            <ArrowForwardIosIcon />
-          </Button>
           <ModalPosition
-            position={position}
+            modal={modalPosition}
             closeModalPosition={closeModalPosition}
-            setSphere={setSphere}
             desiredSalary={desiredSalary}
             desiredPosition={desiredPosition}
             sphereActivity={sphereActivity}
@@ -193,3 +210,9 @@ const Account: React.FC = () => {
 };
 
 export default Account;
+
+// export const getServerSideProps = wrapper.getServerSideProps(async ({ store, req, res }) => {
+//   const cookies = req.headers.cookie;
+//   const dispatch = store.dispatch as NextThunkDispatch;
+// await dispatch(await getUser());
+// });

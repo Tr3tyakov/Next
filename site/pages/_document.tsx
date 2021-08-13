@@ -31,7 +31,6 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <link rel="shortcut icon" type="image/png" href="../static/favicon.ico" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         </Head>
         <body className="custom_class">
           <Main />

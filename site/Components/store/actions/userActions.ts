@@ -1,4 +1,4 @@
-import { userActions } from '../../Interfaces/IUser';
+import { IUser, userActions } from './../../Interfaces/IUser';
 import { userType } from '../../Interfaces/IUser';
 
 export const setLoading = (value: boolean): userActions => ({
@@ -13,7 +13,9 @@ export const setModal = (value: boolean): userActions => ({
   type: userType.MODAL,
   payload: value,
 });
-
+export const setClear = (): userActions => ({
+  type: userType.CLEAR,
+});
 export const setSphere = (
   position: string,
   salary: string,
@@ -26,6 +28,11 @@ export const setSphere = (
 export const setSkills = (skills: string[]) => ({
   type: userType.SKILLS,
   payload: skills,
+});
+
+export const setUser = (data: IUser): userActions => ({
+  type: userType.USER,
+  payload: data,
 });
 
 export const setMainInfo = (

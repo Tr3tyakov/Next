@@ -7,12 +7,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import MainLayouts from '../Components/layouts/MainLayouts';
 import { Divider, TextareaAutosize } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
-import TextFieldVacancy from '../Components/vacancies/textFieldVacancy';
+import TextFieldVacancy from '../Components/vacancies/TextFieldVacancy';
 import CheckBoxVacancy from '../Components/vacancies/CheckBoxVacancy';
 
 import KeySkills from '../Components/vacancies/KeySkills';
 import ModalVacancy from '../Components/vacancies/ModalVacancy';
-import { setModal } from '../Components/store/actions/userActions';
 
 const typeCategory = ['A', 'B', 'C', 'D', 'E', 'BE', 'CE', 'DE', 'TM', 'TB'];
 
@@ -126,20 +125,6 @@ const createOffer: React.FC = () => {
       workSchedule,
       employment,
     );
-    // setNewVacancy(
-    //   vacancy,
-    //   city,
-    //   address,
-    //   specialization,
-    //   category,
-    //   firstSalary,
-    //   secondSalary,
-    //   currency,
-    //   skills,
-    //   experiences,
-    //   workSchedule,
-    //   employment,
-    // );
   };
   return (
     <MainLayouts>
@@ -167,20 +152,23 @@ const createOffer: React.FC = () => {
         value={address}
         change={setAddress}
       />
-      <div className={classes.professional}>
+      <div className={classes.graph}>
         <Typography variant="subtitle1">Специализации</Typography>
         <div className={classes.maxWidth}>
           <Typography className={classes.cursor} color="primary" onClick={openModal}>
             {specialization.length ? 'Изменить специализации' : 'Указать специализации'}
           </Typography>
-
-          <div className={classes.skills}>
-            {specialization.map((element, index) => (
-              <div className={classes.skill} key={index}>
-                {element}
-              </div>
-            ))}
-          </div>
+          {specialization.length ? (
+            <div className={classes.skills}>
+              {specialization.map((element, index) => (
+                <div className={classes.skill} key={index}>
+                  {element}
+                </div>
+              ))}
+            </div>
+          ) : (
+            ''
+          )}
 
           <ModalVacancy
             classes={classes}

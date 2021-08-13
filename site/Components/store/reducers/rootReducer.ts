@@ -1,14 +1,22 @@
-import { createStore, applyMiddleware, combineReducers, Store, AnyAction } from 'redux';
+import { createStore, applyMiddleware, combineReducers, AnyAction } from 'redux';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 import { createWrapper, Context, MakeStore, HYDRATE } from 'next-redux-wrapper';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import { userReducer } from './userReducer';
 
 const rootReducer = combineReducers({
-  userReducer,
+  userReducer: userReducer,
 });
+//@ts-ignore
 
-const reducer = (state: any, action: any) => {
+const bindMiddleware = (middleware) => {
+  if (process.env.NODE_ENV !== 'production') {
+    const { composeWithDevTools } = require('redux-devtools-extension');
+    return composeWithDevTools(applyMiddleware(middleware));
+  }
+  return applyMiddleware(middleware);
+};
+//@ts-ignore
+const reducer = (state, action) => {
   if (action.type === HYDRATE) {
     const nextState = {
       ...state, // use previous state
@@ -22,8 +30,8 @@ const reducer = (state: any, action: any) => {
 };
 export type RootState = ReturnType<typeof rootReducer>;
 
-export const makeStore = (context: Context) =>
-  createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
+export const makeStore: MakeStore<RootState> = (context: Context) =>
+  createStore(reducer, bindMiddleware(thunk));
 
-export const wrapper = createWrapper<Store<RootState>>(makeStore, { debug: true });
+export const wrapper = createWrapper<RootState>(makeStore, { debug: true });
 export type NextThunkDispatch = ThunkDispatch<RootState, void, AnyAction>;

@@ -9,7 +9,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SearchIcon from '@material-ui/icons/Search';
 import StarIcon from '@material-ui/icons/Star';
-
+import Box from '@material-ui/core/Box';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Link from 'next/link';
@@ -20,6 +20,8 @@ import { useTypedSelector } from '../../Components/Hooks/useTypedSelector';
 import { useActions } from '../Hooks/useAction';
 import EmailIcon from '@material-ui/icons/Email';
 import WorkIcon from '@material-ui/icons/Work';
+import Image from 'next/image';
+
 const navigation = [
   {
     title: 'Поиск',
@@ -36,15 +38,20 @@ const navigation = [
 ];
 
 const Header: React.FC = () => {
-  const classes = useStyles();
+  React.useEffect(() => {
+    checkAuth();
+  }, []);
   const [menu, setMenu] = React.useState<null | HTMLElement>(null);
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
-  const { setRegistration, setLogin, setLogout, setModal, checkAuth } = useActions();
-  const { isAuth, openModal } = useTypedSelector(({ userReducer }) => {
+  const { setRegistration, setLogin, setLogout, setModal, checkAuth, getUser } = useActions();
+  const classes = useStyles();
+  const { isAuth, openModal, avatar, UserEmail } = useTypedSelector(({ userReducer }) => {
     return {
       isAuth: userReducer.isAuth,
       openModal: userReducer.openModal,
+      avatar: userReducer.mainInfo.avatar,
+      UserEmail: userReducer.email,
     };
   });
   //menu
@@ -58,6 +65,7 @@ const Header: React.FC = () => {
   //modal
   const setOpenModal = () => {
     setModal(true);
+    handleClose();
   };
   const setCloseModal = () => {
     setModal(false);
@@ -72,6 +80,7 @@ const Header: React.FC = () => {
     const value = event.target.value;
     setPassword(value);
   };
+
   const enter = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       setLogin(email, password);
@@ -81,40 +90,56 @@ const Header: React.FC = () => {
   const registration = () => {
     setRegistration(email, password);
   };
-  const login = () => {
+  const login = async () => {
     setLogin(email, password);
+    getUser();
   };
   const makeLogout = (): void => {
     setLogout();
   };
-
-  React.useEffect(() => {
-    checkAuth();
-  }, []);
 
   return (
     <AppBar position="relative">
       <Toolbar className={classes.flex}>
         <Typography variant="h5">TT.ru</Typography>
         <div className={classes.flex}>
-          {navigation.map((element) => {
-            return (
+          {isAuth ? (
+            navigation.map((element) => (
               <Link href={element.href} key={element.title}>
                 <Button variant="text" startIcon={element.img} color="default">
                   <a className={classes.navigation}>{element.title}</a>
                 </Button>
               </Link>
-            );
-          })}
+            ))
+          ) : (
+            <Link href="/">
+              <Button variant="text" startIcon={<SearchIcon />} color="default">
+                <a className={classes.navigation}>Поиск</a>
+              </Button>
+            </Link>
+          )}
         </div>
         {isAuth ? (
           <>
-            <IconButton onClick={handleOpen}>
-              <Avatar />
-            </IconButton>
+            <Box display="flex" alignItems="center" justifyContent="space-between">
+              <Typography>{UserEmail}</Typography>
+              <IconButton onClick={handleOpen}>
+                {avatar ? (
+                  <Image
+                    className={classes.avatar}
+                    src={`http://localhost:5000/${avatar}`}
+                    layout="intrinsic"
+                    width={40}
+                    height={40}
+                  />
+                ) : (
+                  <Avatar />
+                )}
+              </IconButton>
+            </Box>
             <Menu id="menu" open={Boolean(menu)} onClose={handleClose} anchorEl={menu}>
               <MenuItem>
-                <Link href="/account/1">
+                <Link href="/Account">
                   <a className={classes.textDecortation}>Мой аккаунт</a>
                 </Link>
               </MenuItem>
@@ -191,7 +216,3 @@ const Header: React.FC = () => {
   );
 };
 export default Header;
-//@ts-ignore
-// export const getServerSideProps = wrapper.getServerSideProps(async ({ store }) => {
-//   await store.dispatch(checkAuth());
-// });

@@ -7,15 +7,7 @@ import { useStyles } from './Modal.style';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
-
-interface PositionProps {
-  position: boolean;
-  closeModalPosition: any;
-  setSphere: any;
-  sphereActivity: string[];
-  desiredSalary: string;
-  desiredPosition: string;
-}
+import { useActions } from '../Hooks/useAction';
 
 export const specializations = [
   'Бухгалтерия',
@@ -42,144 +34,158 @@ export const specializations = [
   'Консултирование',
 ];
 
-const ModalPosition: React.FC<PositionProps> = ({
-  position,
-  closeModalPosition,
-  setSphere,
-  desiredSalary,
-  desiredPosition,
-  sphereActivity,
-}) => {
-  const classes = useStyles();
-  const [positionInput, setPositionInput] = React.useState<string>(desiredPosition);
-  const [salary, setSalary] = React.useState<string>(desiredSalary);
-  const [error, setError] = React.useState<boolean>(false);
+interface PositionProps {
+  modal: boolean;
+  closeModalPosition: any;
+  sphereActivity: string[];
+  desiredSalary: string;
+  desiredPosition: string;
+}
+const ModalPosition: React.FC<PositionProps> = React.memo(
+  ({ modal, closeModalPosition, desiredSalary, desiredPosition, sphereActivity }) => {
+    React.useEffect(() => {
+      setCurrentTarget(sphereActivity);
+      setPositionInput(desiredPosition);
+      setSalary(desiredSalary);
+    }, [modal, sphereActivity]);
 
-  const [specializationInput, setSpecializationInput] = React.useState<string>('');
-  const [currentTarget, setCurrentTarget] = React.useState<string[]>(sphereActivity);
+    const [positionInput, setPositionInput] = React.useState<string>(desiredPosition);
+    const [salary, setSalary] = React.useState<string>(desiredSalary);
+    const [error, setError] = React.useState<boolean>(false);
 
-  const changePositionInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setError(false);
-    setPositionInput(value);
-  };
+    const [specializationInput, setSpecializationInput] = React.useState<string>('');
+    const [currentTarget, setCurrentTarget] = React.useState<string[]>(sphereActivity);
+    const { setSphere, updateDesiredPosition } = useActions();
+    const classes = useStyles();
 
-  const changeSalary = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSalary(value);
-  };
-  const findSpecialization = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSpecializationInput(value);
-  };
-  const addSpecialization = (title: string) => {
-    if (currentTarget.includes(title)) {
-      return setCurrentTarget(currentTarget.filter((element) => element !== title));
-    }
-    if (currentTarget.length === 3) {
-      return;
-    }
-    setCurrentTarget([...currentTarget, title]);
-  };
-  const filterSpecialization = React.useMemo(() => {
-    return specializations.filter((element) =>
-      element.toLowerCase().includes(specializationInput.toLowerCase()),
-    );
-  }, [specializations, specializationInput]);
+    //inputs
+    const changePositionInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setError(false);
+      setPositionInput(value);
+    };
 
-  const clearAll = () => {
-    setPositionInput('');
-    setSalary('');
-    setCurrentTarget([]);
-  };
+    const changeSalary = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setSalary(value);
+    };
 
-  const saveSphereActivities = () => {
-    if (positionInput === '') {
-      return setError(true);
-    }
+    //specialization
+    const findSpecialization = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setSpecializationInput(value);
+    };
 
-    setSphere(positionInput, salary, currentTarget);
-    closeModalPosition();
-  };
+    const addSpecialization = (title: string) => {
+      if (currentTarget.includes(title)) {
+        return setCurrentTarget(currentTarget.filter((element) => element !== title));
+      }
+      if (currentTarget.length === 3) {
+        return;
+      }
+      setCurrentTarget([...currentTarget, title]);
+    };
 
-  return (
-    <Modal open={position} onClose={closeModalPosition} className={classes.modal}>
-      <Fade in={position}>
-        <Paper className={classes.paperModal}>
-          <div>
-            <div className={classes.title}>
-              <Typography align="center" color="primary" variant="h5" gutterBottom>
-                Желаемая должность
+    const filterSpecialization = React.useMemo(() => {
+      return specializations.filter((element) =>
+        element.toLowerCase().includes(specializationInput.toLowerCase()),
+      );
+    }, [specializations, specializationInput]);
+
+    //global
+    const clearAll = () => {
+      setPositionInput('');
+      setSalary('');
+      setCurrentTarget([]);
+    };
+
+    const saveAll = () => {
+      if (positionInput === '') {
+        return setError(true);
+      }
+      updateDesiredPosition(positionInput, salary, currentTarget);
+      closeModalPosition();
+    };
+
+    return (
+      <Modal open={modal} onClose={closeModalPosition} className={classes.modal}>
+        <Fade in={modal}>
+          <Paper className={classes.paperModal}>
+            <div>
+              <div className={classes.title}>
+                <Typography align="center" color="primary" variant="h5" gutterBottom>
+                  Желаемая должность
+                </Typography>
+                <Button variant="outlined" color="primary" onClick={clearAll}>
+                  очистить
+                </Button>
+              </div>
+              <TextField
+                margin="dense"
+                variant="standard"
+                label="Должность"
+                fullWidth
+                error={error}
+                helperText={error && 'Данная графа не может быть пустой'}
+                value={positionInput}
+                onChange={changePositionInput}></TextField>
+              <TextField
+                margin="dense"
+                variant="standard"
+                label="Уровень дохода"
+                type="number"
+                fullWidth
+                value={salary}
+                onChange={changeSalary}></TextField>
+            </div>
+            <div>
+              <Typography color="primary" variant="h5">
+                Специализация
               </Typography>
-              <Button variant="outlined" color="primary" onClick={clearAll}>
-                очистить
-              </Button>
-            </div>
-            <TextField
-              margin="dense"
-              variant="standard"
-              label="Должность"
-              fullWidth
-              error={error}
-              helperText={error && 'Данная графа не может быть пустой'}
-              value={positionInput}
-              onChange={changePositionInput}></TextField>
-            <TextField
-              margin="dense"
-              variant="standard"
-              label="Уровень дохода"
-              type="number"
-              fullWidth
-              value={salary}
-              onChange={changeSalary}></TextField>
-          </div>
-          <div>
-            <Typography color="primary" variant="h5">
-              Специализация
-            </Typography>
-            <div className={classes.skills}>
-              {currentTarget.map((element, index) => (
-                <div className={classes.skill} key={index}>
-                  {element}
-                </div>
-              ))}
-            </div>
-            <TextField
-              margin="dense"
-              variant="standard"
-              label="Сфера деятельности"
-              fullWidth
-              value={specializationInput}
-              onChange={findSpecialization}></TextField>
-            <div className={classes.specializationWrapper}>
-              {filterSpecialization.map((element, index) => {
-                return (
-                  <div className={classes.specialization} key={index}>
-                    <Checkbox
-                      checked={currentTarget.includes(element)}
-                      color="primary"
-                      inputProps={{ 'aria-label': 'secondary checkbox' }}
-                      onClick={() => addSpecialization(element)}
-                    />
+              <div className={classes.skills}>
+                {currentTarget.map((element, index) => (
+                  <div className={classes.skill} key={index}>
                     {element}
                   </div>
-                );
-              })}
+                ))}
+              </div>
+              <TextField
+                margin="dense"
+                variant="standard"
+                label="Сфера деятельности"
+                fullWidth
+                value={specializationInput}
+                onChange={findSpecialization}></TextField>
+              <div className={classes.specializationWrapper}>
+                {filterSpecialization.map((element, index) => {
+                  return (
+                    <div className={classes.specialization} key={index}>
+                      <Checkbox
+                        checked={currentTarget.includes(element)}
+                        color="primary"
+                        inputProps={{ 'aria-label': 'secondary checkbox' }}
+                        onClick={() => addSpecialization(element)}
+                      />
+                      {element}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-          <Button
-            fullWidth
-            className={classes.outlineBtn}
-            variant="outlined"
-            color="primary"
-            onClick={saveSphereActivities}>
-            Сохранить <br />
-            Выбрано {currentTarget.length} из 3
-          </Button>
-        </Paper>
-      </Fade>
-    </Modal>
-  );
-};
+            <Button
+              fullWidth
+              className={classes.outlineBtn}
+              variant="contained"
+              color="primary"
+              onClick={saveAll}>
+              Сохранить <br />
+              Выбрано {currentTarget.length} из 3
+            </Button>
+          </Paper>
+        </Fade>
+      </Modal>
+    );
+  },
+);
 
 export default ModalPosition;

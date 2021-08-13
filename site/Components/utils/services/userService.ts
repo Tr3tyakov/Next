@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { IMainInfo } from '../../Interfaces/IUser';
 import { api, URL } from '../http/utils';
 
 export class UserService {
@@ -13,5 +14,38 @@ export class UserService {
   }
   static async refresh() {
     return await axios.get(`${URL}/refresh`, { withCredentials: true });
+  }
+  static async getUser() {
+    return await axios.get(`${URL}/user`, { withCredentials: true });
+  }
+  static async updateSkills(skills: string[]) {
+    return await axios.put(`${URL}/update/skills`, { skills }, { withCredentials: true });
+  }
+
+  static async updateMainInfo(mainInfo: IMainInfo) {
+    const formData = new FormData();
+    formData.append('avatar', mainInfo.avatar);
+    formData.append('name', mainInfo.name);
+    formData.append('secondName', mainInfo.secondName);
+    formData.append('date', mainInfo.bithday);
+    formData.append('phone', mainInfo.phone);
+    formData.append('city', mainInfo.city);
+    formData.append('gender', mainInfo.gender);
+    formData.append('country', mainInfo.country);
+
+    return await axios.put(`${URL}/update/mainInfo`, formData, {
+      headers: {
+        'Content-type': 'multipart/form-data',
+      },
+      withCredentials: true,
+    });
+  }
+
+  static async updatePosition(position: string, salary: string, specializations: string[]) {
+    return await axios.put(
+      `${URL}/update/position`,
+      { position, salary, specializations },
+      { withCredentials: true },
+    );
   }
 }

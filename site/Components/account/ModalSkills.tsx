@@ -7,18 +7,23 @@ import { useStyles } from './Modal.style';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import CloseIcon from '@material-ui/icons/Close';
+import { useActions } from '../Hooks/useAction';
 
 interface AccountProps {
   modal: boolean;
   closeModalSkills: any;
-  setSkills: any;
   skills: string[];
 }
 
-const ModalSkills: React.FC<AccountProps> = ({ modal, closeModalSkills, setSkills, skills }) => {
+const ModalSkills: React.FC<AccountProps> = React.memo(({ modal, skills, closeModalSkills }) => {
+  React.useEffect(() => {
+    setAbility(skills);
+  }, [skills, modal]);
+
+  const [ability, setAbility] = React.useState<string[]>(skills);
   const [input, setInput] = React.useState<string>('');
   const [error, setError] = React.useState<boolean>(false);
-  const [ability, setAbility] = React.useState<string[]>(skills);
+  const { setSkills, updateSkills } = useActions();
   const classes = useStyles();
 
   //input
@@ -31,23 +36,28 @@ const ModalSkills: React.FC<AccountProps> = ({ modal, closeModalSkills, setSkill
       setError(true);
     }
   };
-  const deleteSkill = (title: string) => {
-    setAbility(ability.filter((element) => element !== title));
-  };
-  const clearSkills = () => {
-    setAbility([]);
-    setInput('');
-  };
-  const saveSkills = () => {
-    setSkills(ability);
-    closeModalSkills();
-  };
+
+  //skills
   const addSkill = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       setAbility([...ability, input]);
       setInput('');
     }
+  };
+
+  const saveSkills = () => {
+    updateSkills(ability);
+    closeModalSkills();
+  };
+
+  const deleteSkill = (title: string) => {
+    setAbility(ability.filter((element) => element !== title));
+  };
+
+  const clearSkills = () => {
+    setAbility([]);
+    setInput('');
   };
   return (
     <Modal open={modal} onClose={closeModalSkills} className={classes.modal}>
@@ -91,8 +101,7 @@ const ModalSkills: React.FC<AccountProps> = ({ modal, closeModalSkills, setSkill
           </div>
           <Button
             className={classes.outlineBtn}
-            // onClick={saveChanges}
-            variant="outlined"
+            variant="contained"
             disabled={error}
             fullWidth
             color="primary"
@@ -103,6 +112,6 @@ const ModalSkills: React.FC<AccountProps> = ({ modal, closeModalSkills, setSkill
       </Fade>
     </Modal>
   );
-};
+});
 
 export default ModalSkills;
