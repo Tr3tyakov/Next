@@ -2,9 +2,6 @@ export enum userType {
   AUTH = 'AUTH',
   LOADING = 'LOADING',
   MODAL = 'MODAL',
-  SPHERE = 'SPHERE',
-  SKILLS = 'SKILLS',
-  MAIN_INFO = 'MAIN_INFO',
   USER = 'USER',
   CLEAR = 'CLEAR',
 }
@@ -44,46 +41,12 @@ interface modalAction {
   type: userType.MODAL;
   payload: boolean;
 }
-interface skillsAction {
-  type: userType.SKILLS;
-  payload: string[];
-}
 interface usersAction {
   type: userType.USER;
   payload: any;
 }
-interface sphereAction {
-  type: userType.SPHERE;
-  payload: {
-    position: string;
-    salary: string;
-    sphereActivity: string[];
-  };
-}
 interface clearAction {
   type: userType.CLEAR;
 }
-interface mainInfoAction {
-  type: userType.MAIN_INFO;
-  payload: {
-    avatar: string;
-    gender: string;
-    name: string;
-    secondName: string;
-    bithday: string;
-    email: string;
-    phone: string;
-    city: string;
-    country: string;
-  };
-}
 
-export type userActions =
-  | authAction
-  | loadingAction
-  | modalAction
-  | sphereAction
-  | skillsAction
-  | mainInfoAction
-  | usersAction
-  | clearAction;
+export type userActions = authAction | loadingAction | modalAction | usersAction | clearAction;

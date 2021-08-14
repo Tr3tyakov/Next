@@ -29,33 +29,6 @@ export const userReducer = (state = initialState, action: userActions): IUser =>
       return { ...state, isLoading: action.payload };
     case userType.MODAL:
       return { ...state, openModal: action.payload };
-    case userType.SPHERE:
-      return {
-        ...state,
-        salary: action.payload.salary,
-        position: action.payload.position,
-        sphereActivity: action.payload.sphereActivity,
-      };
-    case userType.SKILLS:
-      return {
-        ...state,
-        skills: action.payload,
-      };
-    case userType.MAIN_INFO:
-      return {
-        ...state,
-        mainInfo: {
-          ...state.mainInfo,
-          avatar: action.payload.avatar,
-          gender: action.payload.gender,
-          name: action.payload.name,
-          secondName: action.payload.secondName,
-          bithday: action.payload.bithday,
-          phone: action.payload.phone,
-          city: action.payload.city,
-        },
-        email: action.payload.email,
-      };
     case userType.USER:
       return {
         ...state,

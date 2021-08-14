@@ -23,7 +23,7 @@ const ModalSkills: React.FC<AccountProps> = React.memo(({ modal, skills, closeMo
   const [ability, setAbility] = React.useState<string[]>(skills);
   const [input, setInput] = React.useState<string>('');
   const [error, setError] = React.useState<boolean>(false);
-  const { setSkills, updateSkills } = useActions();
+  const { updateSkills } = useActions();
   const classes = useStyles();
 
   //input

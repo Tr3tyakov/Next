@@ -55,7 +55,7 @@ const ModalPosition: React.FC<PositionProps> = React.memo(
 
     const [specializationInput, setSpecializationInput] = React.useState<string>('');
     const [currentTarget, setCurrentTarget] = React.useState<string[]>(sphereActivity);
-    const { setSphere, updateDesiredPosition } = useActions();
+    const { updateDesiredPosition } = useActions();
     const classes = useStyles();
 
     //inputs

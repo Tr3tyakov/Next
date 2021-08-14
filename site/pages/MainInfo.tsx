@@ -61,7 +61,7 @@ function MainInfo() {
   const [city, setCity] = React.useState<string>(userCity || '');
   const [country, setCountry] = React.useState<string>(userCountry || '');
   const [gender, setGender] = React.useState<string>(userGender || '');
-  const { setMainInfo, updateMainInfo } = useActions();
+  const {updateMainInfo } = useActions();
   const classes = useStyles();
   console.log(bithday);
 
