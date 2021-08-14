@@ -31,7 +31,6 @@ export const useStyles = makeStyles({
     width: '500px',
     display: 'flex',
     flexWrap: 'wrap',
-
     alignItems: 'center',
   },
   btns: {
@@ -102,3 +101,5 @@ export const useStyles = makeStyles({
     flexWrap: 'wrap',
   },
 });
+
+export type IuseStylesCreateOffer = ReturnType<typeof useStyles>;

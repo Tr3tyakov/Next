@@ -1,12 +1,10 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import { IuseStylesCreateOffer } from '../../styles/createOffer.style';
 
 interface ITextFieldProps {
-  classes: {
-    flex: string;
-    maxWidth: string;
-  };
+  classes: IuseStylesCreateOffer;
   label: string;
   title: string;
   value: string | string[];

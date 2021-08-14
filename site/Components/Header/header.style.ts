@@ -46,3 +46,5 @@ export const useStyles = makeStyles({
     justifyContent: 'flex-start',
   },
 });
+
+export type IuseStyles = ReturnType<typeof useStyles>;

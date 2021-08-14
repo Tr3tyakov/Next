@@ -54,3 +54,5 @@ export const useStyles = makeStyles({
     lineHeight: '1.3 ',
   },
 });
+
+export type IUseStylesVacancy = ReturnType<typeof useStyles>;

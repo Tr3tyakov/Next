@@ -2,12 +2,10 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import Divider from '@material-ui/core/Divider';
+import { IuseStylesCreateOffer } from '../../styles/createOffer.style';
 
 interface ICheckBoxProps {
-  classes: {
-    graph: string;
-    checkbox: string;
-  };
+  classes: IuseStylesCreateOffer;
   title: string;
   array: string[];
   setChange: any;

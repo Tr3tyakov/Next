@@ -10,17 +10,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SearchIcon from '@material-ui/icons/Search';
 import StarIcon from '@material-ui/icons/Star';
 import Box from '@material-ui/core/Box';
-import Modal from '@material-ui/core/Modal';
-import Fade from '@material-ui/core/Fade';
 import Link from 'next/link';
 import { useStyles } from './header.style';
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
 import { useTypedSelector } from '../../Components/Hooks/useTypedSelector';
 import { useActions } from '../Hooks/useAction';
 import EmailIcon from '@material-ui/icons/Email';
 import WorkIcon from '@material-ui/icons/Work';
 import Image from 'next/image';
+import HeaderModal from './ModalHeader';
 
 const navigation = [
   {
@@ -41,11 +38,11 @@ const Header: React.FC = () => {
   React.useEffect(() => {
     checkAuth();
   }, []);
+
   const [menu, setMenu] = React.useState<null | HTMLElement>(null);
-  const [email, setEmail] = React.useState<string>('');
-  const [password, setPassword] = React.useState<string>('');
-  const { setRegistration, setLogin, setLogout, setModal, checkAuth, getUser } = useActions();
+  const { setLogout, setModal, checkAuth } = useActions();
   const classes = useStyles();
+
   const { isAuth, openModal, avatar, UserEmail } = useTypedSelector(({ userReducer }) => {
     return {
       isAuth: userReducer.isAuth,
@@ -67,37 +64,13 @@ const Header: React.FC = () => {
     setModal(true);
     handleClose();
   };
-  const setCloseModal = () => {
+  const setCloseModal = React.useCallback(() => {
     setModal(false);
-  };
-  //input
-  const changeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setEmail(value);
-  };
+  }, []);
 
-  const changePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setPassword(value);
-  };
-
-  const enter = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      setLogin(email, password);
-    }
-  };
-  //auth
-  const registration = () => {
-    setRegistration(email, password);
-  };
-  const login = async () => {
-    setLogin(email, password);
-    getUser();
-  };
   const makeLogout = (): void => {
     setLogout();
   };
-
   return (
     <AppBar position="relative">
       <Toolbar className={classes.flex}>
@@ -153,64 +126,7 @@ const Header: React.FC = () => {
             Войти
           </Button>
         )}
-
-        <Modal open={openModal} onClose={setCloseModal} className={classes.modal}>
-          <Fade in={openModal}>
-            <Paper className={classes.paperModal}>
-              <div>
-                <Typography align="center" color="primary" variant="h5" gutterBottom>
-                  Вход в TT.ru
-                </Typography>
-                <form onKeyPress={enter}>
-                  <TextField
-                    margin="dense"
-                    variant="standard"
-                    label="Email"
-                    fullWidth
-                    value={email}
-                    onChange={changeEmail}></TextField>
-                  <TextField
-                    margin="dense"
-                    variant="standard"
-                    label="Password"
-                    type="password"
-                    fullWidth
-                    value={password}
-                    onChange={changePassword}></TextField>
-                </form>
-              </div>
-              <div className={classes.forgotPassword}>
-                <Link href="/password">
-                  <a className={classes.textDecortation}>
-                    <Typography
-                      align="center"
-                      color="textSecondary"
-                      variant="subtitle2"
-                      gutterBottom>
-                      Забыли пароль?
-                    </Typography>
-                  </a>
-                </Link>
-              </div>
-              <div className={classes.btns}>
-                <Button
-                  className={classes.outlineBtn}
-                  onClick={login}
-                  variant="outlined"
-                  color="primary">
-                  Войти
-                </Button>
-                <Button
-                  className={classes.btn}
-                  onClick={registration}
-                  variant="contained"
-                  color="primary">
-                  Зарегистрироваться
-                </Button>
-              </div>
-            </Paper>
-          </Fade>
-        </Modal>
+        <HeaderModal classes={classes} openModal={openModal} setCloseModal={setCloseModal} />
       </Toolbar>
     </AppBar>
   );

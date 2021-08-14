@@ -8,17 +8,10 @@ import Button from '@material-ui/core/Button';
 import React from 'react';
 import { specializations } from '../account/ModalPosition';
 import Box from '@material-ui/core/Box';
+import { IuseStylesCreateOffer } from '../../styles/createOffer.style';
 
 interface IModalVacancyProps {
-  classes: {
-    modal: string;
-    specializationWrapper: string;
-    specialization: string;
-    paperModal: string;
-    skills: string;
-    skill: string;
-    flex: string;
-  };
+  classes: IuseStylesCreateOffer;
   modal: boolean;
   closeModal: any;
   setState: any;

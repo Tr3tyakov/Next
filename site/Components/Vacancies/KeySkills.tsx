@@ -2,15 +2,10 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import CloseIcon from '@material-ui/icons/Close';
+import { IuseStylesCreateOffer } from '../../styles/createOffer.style';
 
 interface ISkillsProps {
-  classes: {
-    flex: string;
-    skills: string;
-    skill: string;
-    maxWidth: string;
-    column: string;
-  };
+  classes: IuseStylesCreateOffer;
   stateSkills: string[];
   setSkills: any;
 }

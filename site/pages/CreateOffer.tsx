@@ -9,7 +9,6 @@ import { Divider, TextareaAutosize } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextFieldVacancy from '../Components/vacancies/TextFieldVacancy';
 import CheckBoxVacancy from '../Components/vacancies/CheckBoxVacancy';
-
 import KeySkills from '../Components/vacancies/KeySkills';
 import ModalVacancy from '../Components/vacancies/ModalVacancy';
 

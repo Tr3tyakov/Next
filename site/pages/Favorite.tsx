@@ -4,7 +4,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useStyles } from '../styles/favorite.style';
 import MainLayouts from '../Components/layouts/MainLayouts';
 import { NextThunkDispatch, wrapper } from '../Components/store/reducers/rootReducer';
-import { getUser } from '../Components/store/actions/userAsyncAction';
 
 const Favorite: React.FC = () => {
   const classes = useStyles();
