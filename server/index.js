@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const userRouter = require('./Routers/useRouter');
+const vacancyRouter = require('./Routers/vacancyRouter');
 const ErrorHandler = require('./middleware/ErrorHandler');
 const cors = require('cors');
 
@@ -23,6 +24,7 @@ app.use(
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(cookieParser());
 app.use('/api', userRouter);
+app.use('/api', vacancyRouter);
 app.use(ErrorHandler);
 const start = async () => {
   try {

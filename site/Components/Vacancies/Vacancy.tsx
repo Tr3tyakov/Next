@@ -8,37 +8,47 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import StarIcon from '@material-ui/icons/Star';
 import { useStyles } from './vacancy.style';
+import { IInfoVacancy } from '../Interfaces/IVacancy';
 
-const Vacancy: React.FC = () => {
+interface IVacanciesProps {
+  vacancy: IInfoVacancy;
+  id: string;
+}
+
+const Vacancy: React.FC<IVacanciesProps> = ({ vacancy, id }) => {
   const classes = useStyles();
-
   const check = (event: React.SyntheticEvent) => {
     event.preventDefault();
   };
   return (
     <Paper className={classes.paper}>
-      <Link href="/currentWork/ee">
+      <Link href={`/currentWork/${id}`}>
         <a style={{ textDecoration: 'none' }}>
           <Card className={classes.card}>
             <CardHeader
               title={
                 <div className={classes.cardMainInfo}>
-                  <Typography variant="subtitle1" color="primary" gutterBottom>
+                  {/* <Typography variant="subtitle1" color="primary" gutterBottom>
                     Сейчас просматривают: 43 чел.
-                  </Typography>
+                  </Typography> */}
                   <Typography className={classes.work} variant="h6">
-                    Начинающий специалист по организации выставки
+                    {vacancy.title}
                   </Typography>
-                  <Typography gutterBottom>80 000 — 130 000 ₽</Typography>
-                  <Typography>Санкт-Петербург</Typography>
-                  <Typography>Валов Евгений Дмитриевич</Typography>
+                  <Typography gutterBottom>
+                    от {vacancy.startSalary} — до {vacancy.endSalary} ₽
+                  </Typography>
+                  <Typography>{vacancy.city}</Typography>
+                  <Typography>{vacancy.userName}</Typography>
                 </div>
               }
               subheader={
                 <div className={classes.cardTags}>
-                  <span className={classes.cardTag}>Можно без резюме</span>
-                  <span className={classes.cardTag}>Можно без резюме</span>
-                  <span className={classes.cardTag}>Можно без резюме</span>
+                  {vacancy.specializations &&
+                    vacancy.specializations.map((element, index) => (
+                      <span className={classes.cardTag} key={index}>
+                        {element}
+                      </span>
+                    ))}
                 </div>
               }></CardHeader>
             <div className={classes.favorite}>
@@ -50,7 +60,7 @@ const Vacancy: React.FC = () => {
             </div>
             <div className={classes.date}>
               <Typography color="textSecondary" gutterBottom>
-                Опубликовано 21.04.2021
+                Опубликовано {new Date(vacancy.date).toLocaleString()}
               </Typography>
             </div>
             <div className={classes.btns}>

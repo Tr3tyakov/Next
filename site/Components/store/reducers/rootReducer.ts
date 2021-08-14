@@ -1,10 +1,12 @@
+import { vacancyReducer } from './vacancyReducer';
 import { createStore, applyMiddleware, combineReducers, AnyAction } from 'redux';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 import { createWrapper, Context, MakeStore, HYDRATE } from 'next-redux-wrapper';
 import { userReducer } from './userReducer';
 
 const rootReducer = combineReducers({
-  userReducer: userReducer,
+  userReducer,
+  vacancyReducer,
 });
 //@ts-ignore
 

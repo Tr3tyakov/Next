@@ -11,6 +11,8 @@ import TextFieldVacancy from '../Components/vacancies/TextFieldVacancy';
 import CheckBoxVacancy from '../Components/vacancies/CheckBoxVacancy';
 import KeySkills from '../Components/vacancies/KeySkills';
 import ModalVacancy from '../Components/vacancies/ModalVacancy';
+import { useActions } from '../Components/Hooks/useAction';
+import { IVacancy } from '../Components/Interfaces/IVacancy';
 
 const typeCategory = ['A', 'B', 'C', 'D', 'E', 'BE', 'CE', 'DE', 'TM', 'TB'];
 
@@ -46,6 +48,22 @@ const currencies = [
     label: '€',
   },
 ];
+export interface INewVacancy {
+  vacancy: string;
+  city: string;
+  address: string;
+  specialization: string[];
+  firstSalary: string;
+  secondSalary: string;
+  statusSalary: string;
+  currency: string;
+  textArea: string;
+  skills: string[];
+  category: string[];
+  experiences: string[];
+  workSchedule: string[];
+  employment: string[];
+}
 
 const createOffer: React.FC = () => {
   const [vacancy, setVacancy] = React.useState<string>('');
@@ -69,6 +87,7 @@ const createOffer: React.FC = () => {
   const [employment, setEmployment] = React.useState<string[]>([]);
 
   const classes = useStyles();
+  const { setNewVacancy } = useActions();
 
   //typeCategory
   const addCategory = (currentCategory: string) => {
@@ -109,21 +128,24 @@ const createOffer: React.FC = () => {
     setModal(false);
   };
   const createNewVacancy = () => {
-    console.log(
+    const newVacancy: INewVacancy = {
       vacancy,
       city,
-      address,
       specialization,
-      textArea,
-      category,
       firstSalary,
       secondSalary,
+      statusSalary,
       currency,
+      address,
+      textArea,
       skills,
+      category,
       experiences,
       workSchedule,
       employment,
-    );
+    };
+
+    setNewVacancy(newVacancy);
   };
   return (
     <MainLayouts>

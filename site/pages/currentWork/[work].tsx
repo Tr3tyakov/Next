@@ -8,9 +8,22 @@ import Button from '@material-ui/core/Button';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import Vacancy from '../../Components/vacancies/Vacancy';
 import MainLayouts from '../../Components/layouts/MainLayouts';
+import { useActions } from '../../Components/Hooks/useAction';
+import { useRouter } from 'next/dist/client/router';
+import { useTypedSelector } from '../../Components/Hooks/useTypedSelector';
 
 const Work: React.FC = () => {
   const classes = useStyles();
+  const { getCurrentVacancy } = useActions();
+  const router = useRouter();
+  const currentVacancy = useTypedSelector(({ vacancyReducer }) => vacancyReducer.currentVacancy);
+
+  React.useEffect(() => {
+    if (router.query.work) {
+      getCurrentVacancy(router.query.work);
+    }
+  }, []);
+
   return (
     <>
       <div className={classes.backGround}>
@@ -88,8 +101,8 @@ const Work: React.FC = () => {
             <Divider />
             <Typography variant="h6">Похожие вакансии</Typography>
             <div className={classes.moreVacancies}>
-              <Vacancy />
-              <Vacancy />
+              {/* <Vacancy /> */}
+              {/* <Vacancy /> */}
             </div>
             <div className={classes.btnVacancies}>
               <Button variant="outlined" color="primary" endIcon={<ArrowForwardIosIcon />}>
@@ -104,3 +117,9 @@ const Work: React.FC = () => {
 };
 
 export default Work;
+
+// export const getServerSideProps = wrapper.getServerSideProps(async ({ store, req, res }) => {
+//   const cookies = req.headers.cookie;
+//   const dispatch = store.dispatch as NextThunkDispatch;
+// await dispatch(await getUser());
+// });

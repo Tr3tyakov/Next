@@ -1,6 +1,6 @@
-import { specializations } from './../../account/ModalPosition';
-import { IMainInfo, userActions } from './../../Interfaces/IUser';
-import { UserService } from './../../utils/services/userService';
+import { specializations } from '../../../account/ModalPosition';
+import { IMainInfo, userActions } from '../../../Interfaces/IUser';
+import { UserService } from '../../../utils/services/userService';
 import { Dispatch } from 'react';
 import { setAuth, setModal, setUser, setClear } from './userActions';
 
@@ -48,18 +48,6 @@ export const checkAuth = () => {
   };
 };
 
-export const getUser = () => {
-  return async (dispatch: Dispatch<userActions>) => {
-    try {
-      const userData = await UserService.getUser();
-      console.log(userData.data, 'USERDATA');
-      dispatch(setUser(userData.data));
-    } catch (e) {
-      console.log(e);
-    }
-  };
-};
-
 //update
 export const updateMainInfo = (mainInfo: IMainInfo) => {
   return async (dispatch: Dispatch<userActions>) => {
@@ -95,3 +83,15 @@ export const updateDesiredPosition = (
     }
   };
 };
+
+// export const getUser = () => {
+//   return async (dispatch: Dispatch<userActions>) => {
+//     try {
+//       const userData = await UserService.getUser();
+//       console.log(userData.data, 'USERDATA');
+//       dispatch(setUser(userData.data));
+//     } catch (e) {
+//       console.log(e);
+//     }
+//   };
+// };
