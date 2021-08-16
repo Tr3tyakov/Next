@@ -55,7 +55,7 @@ class UserService {
       await TokenService.refresh(dto.id, tokens.refreshToken);
       return { ...dto, ...tokens };
     } catch (error) {
-      throw ApiError.BadRequest(e);
+      throw ApiError.BadRequest(error);
     }
   }
 
@@ -68,7 +68,30 @@ class UserService {
       throw ApiError.BadRequest(e);
     }
   }
-
+  async getMainInfo(refreshToken) {
+    try {
+      const tokenData = await TokenService.checkRefreshToken(refreshToken);
+      const userData = await userModel.aggregate([
+        {
+          $match: {
+            $expr: {
+              _id: tokenData.user.id,
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            email: 1,
+            mainInfo: 1,
+          },
+        },
+      ]);
+      return userData;
+    } catch (e) {
+      throw ApiError.BadRequest(e);
+    }
+  }
   async updateSkills(refreshToken, skills) {
     try {
       const tokenData = await TokenService.checkRefreshToken(refreshToken);
@@ -84,7 +107,6 @@ class UserService {
   async updateMainInfo(refreshToken, newUserData, avatar) {
     try {
       const tokenData = await TokenService.checkRefreshToken(refreshToken);
-      console.log(avatar, ' AVATAR');
       const file = fileService.saveFile(avatar);
       const user = await userModel.findById(tokenData.user.id);
       const ImgAvatar = file ? file : tokenData.user.mainInfo.avatar;

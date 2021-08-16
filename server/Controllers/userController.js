@@ -1,6 +1,7 @@
 const UserService = require('../Services/userService');
 const { validationResult } = require('express-validator');
 const ApiError = require('../middleware/apiError');
+const { parseCookies, setCookie, destroyCookie } = require('nookies');
 class UserController {
   async registration(req, res, next) {
     try {
@@ -27,7 +28,7 @@ class UserController {
         maxAge: 30 * 24 * 60 * 1000,
         httpOnly: true,
       });
-      res.json(userData);
+      res.json(userData.mainInfo);
     } catch (e) {
       next(e);
     }
@@ -35,6 +36,7 @@ class UserController {
   async logout(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
+
       const userData = await UserService.logout(refreshToken);
       res.clearCookie('refreshToken');
       res.json('Вы успешно вышли');
@@ -49,15 +51,15 @@ class UserController {
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 1000,
         httpOnly: true,
+        secure: false,
       });
-      res.json(userData);
+      res.json(userData.mainInfo);
     } catch (e) {
       next(e);
     }
   }
   async getUser(req, res, next) {
-    const { refreshToken } = req.cookies;
-    console.log(refreshToken, '325423523');
+    const refreshToken = req.headers.refreshtoken;
     try {
       const userData = await UserService.getUser(refreshToken);
       res.json(userData);
@@ -66,11 +68,22 @@ class UserController {
     }
   }
 
+  async getMainInfo(req, res, next) {
+    const refreshToken = req.headers.refreshtoken;
+    console.log(refreshToken);
+    console.log(213321312);
+    try {
+      const userData = await UserService.getMainInfo(refreshToken);
+      console.log(userData);
+      res.json(userData);
+    } catch (e) {
+      console.log(e);
+    }
+  }
   //update
   async updateSkills(req, res, next) {
     const { refreshToken } = req.cookies;
     const { skills } = req.body;
-    console.log(skills, refreshToken);
     try {
       const userData = await UserService.updateSkills(refreshToken, skills);
       res.json(userData);
@@ -92,10 +105,8 @@ class UserController {
   async updatePosition(req, res, next) {
     const { refreshToken } = req.cookies;
     const newUserData = req.body;
-    console.log();
     try {
       const userData = await UserService.updatePosition(refreshToken, newUserData);
-      console.log(userData, '4324324');
       res.json(userData);
     } catch (e) {
       next(e);

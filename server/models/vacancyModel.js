@@ -14,7 +14,6 @@ const Vacancy = new Schema({
     currency: { type: String },
     date: { type: Date, default: Date.now },
   },
-
   address: { type: String },
   subtitleSalary: { type: String },
   description: { type: String },

@@ -1,8 +1,3 @@
-export interface IVacancyState {
-  vacancies: [IVacancy] | [];
-  currentVacancy: IFullVacancy | {};
-}
-
 export interface IVacancy {
   info: IInfoVacancy;
   _id: string;
@@ -31,18 +26,3 @@ export interface IInfoVacancy {
   startSalary: string;
   title: string;
 }
-
-export enum vacancyType {
-  VACANCY = 'VACANCY',
-  VACANCIES = 'VACANCIES',
-}
-
-interface setVacancies {
-  type: vacancyType.VACANCIES;
-  payload: [];
-}
-interface setVacancy {
-  type: vacancyType.VACANCY;
-  payload: IFullVacancy;
-}
-export type vacancyActions = setVacancies | setVacancy;

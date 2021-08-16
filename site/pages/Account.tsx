@@ -2,8 +2,6 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
-import MenuIcon from '@material-ui/icons/Menu';
 import ShareIcon from '@material-ui/icons/Share';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AddIcon from '@material-ui/icons/Add';
@@ -13,26 +11,36 @@ import Paper from '@material-ui/core/Paper';
 import MainLayouts from '../Components/layouts/MainLayouts';
 import Link from 'next/link';
 import ModalPosition from '../Components/account/ModalPosition';
-import { useTypedSelector } from '../Components/Hooks/useTypedSelector';
-import { useActions } from '../Components/Hooks/useAction';
 import ModalSkills from '../Components/account/ModalSkills';
-import { NextThunkDispatch, wrapper } from '../Components/store/reducers/rootReducer';
 import Image from 'next/image';
 import Box from '@material-ui/core/Box';
-// import { getUser } from '../Components/store/actions/userAsyncAction';
+import axios from 'axios';
+import nookies from 'nookies';
+import { URL } from '../Components/utils/http/utils';
+import { IMainInfo } from '../Components/Interfaces/IUser';
 
-const Account: React.FC = () => {
-  const { sphereActivity, desiredSalary, desiredPosition, skills, mainInfo } = useTypedSelector(
-    ({ userReducer }) => {
-      return {
-        sphereActivity: userReducer.sphereActivity,
-        desiredPosition: userReducer.position,
-        desiredSalary: userReducer.salary,
-        skills: userReducer.skills,
-        mainInfo: userReducer.mainInfo,
-      };
-    },
-  );
+interface IAccountProps {
+  mainInfo: IMainInfo;
+  userDesiredPosition: string;
+  userDesiredSalary: string; //CHange
+  email: string;
+  userSkills: string[];
+  userSphereActivity: string[];
+}
+
+const Account: React.FC<IAccountProps> = ({
+  mainInfo,
+  userDesiredSalary,
+  userDesiredPosition,
+  email,
+  userSkills,
+  userSphereActivity,
+}) => {
+  const [desiredSalary, setDesiredSalary] = React.useState<string>(userDesiredSalary);
+  const [desiredPosition, setDesiredPosition] = React.useState<string>(userDesiredPosition);
+  const [skills, setSkills] = React.useState<string[]>(userSkills);
+  const [sphereActivity, setSphereActivity] = React.useState<string[]>(userSphereActivity);
+
   const [modalSkills, setModalSkills] = React.useState<boolean>(false);
   const [modalPosition, setModalPosition] = React.useState<boolean>(false);
   const classes = useStyles();
@@ -59,7 +67,6 @@ const Account: React.FC = () => {
         <Button>
           <ShareIcon />
         </Button>
-
         {mainInfo.avatar ? (
           <Box m={2}>
             <Image
@@ -80,8 +87,8 @@ const Account: React.FC = () => {
       <div className={classes.flex}>
         <Typography variant="h5">{desiredPosition || 'Начинающий специалист'}</Typography>
         <Typography variant="subtitle1">
-          {mainInfo?.name && mainInfo?.secondName
-            ? `${mainInfo?.name} ${mainInfo?.secondName}`
+          {mainInfo.name && mainInfo.secondName
+            ? `${mainInfo.name} ${mainInfo.secondName}`
             : 'User'}
         </Typography>
       </div>
@@ -144,6 +151,7 @@ const Account: React.FC = () => {
                 modal={modalSkills}
                 closeModalSkills={closeModalSkills}
                 skills={skills}
+                setSkills={setSkills}
               />
             </div>
             <div className={classes.spheres}>
@@ -168,10 +176,11 @@ const Account: React.FC = () => {
           </Link>
         </div>
         <div>
-          <p>{`${mainInfo?.name} ${mainInfo?.secondName}`}</p>
-          <p>{mainInfo?.city}</p>
-          <p>{mainInfo?.country}</p>
-          <p>{mainInfo?.phone}</p>
+          <p>{`${mainInfo.name} ${mainInfo.secondName}`}</p>
+          <p>{mainInfo.city}</p>
+          <p>{email}</p>
+          <p>{mainInfo.country}</p>
+          <p>{mainInfo.phone}</p>
         </div>
       </Paper>
 
@@ -195,6 +204,9 @@ const Account: React.FC = () => {
             desiredSalary={desiredSalary}
             desiredPosition={desiredPosition}
             sphereActivity={sphereActivity}
+            setSphere={setSphereActivity}
+            setDesiredSalary={setDesiredSalary}
+            setDesiredPosition={setDesiredPosition}
           />
         </div>
         <div className={classes.spheres}>
@@ -211,8 +223,20 @@ const Account: React.FC = () => {
 
 export default Account;
 
-// export const getServerSideProps = wrapper.getServerSideProps(async ({ store, req, res }) => {
-//   const cookies = req.headers.cookie;
-//   const dispatch = store.dispatch as NextThunkDispatch;
-// await dispatch(await getUser());
-// });
+export const getServerSideProps = async (ctx: any) => {
+  const { refreshToken } = nookies.get(ctx);
+  const { data } = await axios.get(`${URL}/user`, {
+    headers: { refreshToken },
+    withCredentials: true,
+  });
+  return {
+    props: {
+      mainInfo: data.mainInfo,
+      userDesiredSalary: data.desiredPay,
+      userDesiredPosition: data.desiredPosition,
+      email: data.email,
+      userSkills: data.skills,
+      userSphereActivity: data.specializations,
+    },
+  };
+};

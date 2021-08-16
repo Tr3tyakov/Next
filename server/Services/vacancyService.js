@@ -1,3 +1,4 @@
+const favoriteModel = require('../models/favoriteModel');
 const vacancyModel = require('../models/vacancyModel');
 const tokenService = require('./tokenService');
 
@@ -44,9 +45,41 @@ class VacancyService {
     const vacancyData = await vacancyModel.findById(id);
     return vacancyData;
   }
-
   async deleteVacancy(idVacancy) {
     await vacancyModel.findByIdAndDelete(idVacancy);
+  }
+  async addFavoriteVacancy(refreshToken, id) {
+    const tokenData = await tokenService.checkRefreshToken(refreshToken);
+    const favorite = await favoriteModel.findOne({ user: tokenData.user.id });
+    if (favorite) {
+      const check = favorite.list.includes(id);
+      if (check) {
+        return favorite;
+      }
+      favorite.list = [...favorite.list, id];
+      await favorite.save();
+      return favorite;
+    }
+    const vacancyData = await favoriteModel.create({ user: tokenData.user.id, list: [id] });
+    return vacancyData;
+  }
+  async getFavoriteVacancies(refreshToken) {
+    const tokenData = await tokenService.checkRefreshToken(refreshToken);
+    const { list } = await favoriteModel.findOne({ user: tokenData.user.id });
+    const vacancy = await vacancyModel.aggregate([
+      {
+        $match: {
+          $expr: { _id: list },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          info: 1,
+        },
+      },
+    ]);
+    return vacancy;
   }
 }
 module.exports = new VacancyService();

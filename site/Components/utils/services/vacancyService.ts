@@ -6,14 +6,10 @@ export class VacancyService {
   static async createVacancy(newVacancy: INewVacancy) {
     return axios.post(`${URL}/vacancy`, { newVacancy }, { withCredentials: true });
   }
-  static async getVacancies() {
-    return axios.get(`${URL}/vacancy`);
+  static async addFavoriteVacancy(id: string) {
+    return axios.post(`${URL}/vacancy/favorite`, { id }, { withCredentials: true });
   }
-  static async getCurrentVacancy(id: string) {
-    return axios.get(`${URL}/vacancy/${id}`);
-  }
-
-  static async deleteVacancy(idVacancy: string) {
-    return axios.post(`${URL}/vacancy`, { idVacancy });
+  static async deleteVacancy(id: string) {
+    return axios.post(`${URL}/vacancy`, { id });
   }
 }

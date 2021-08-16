@@ -51,9 +51,10 @@ export const useStyles = makeStyles({
   skill: {
     margin: '5px 5px 0 0',
     padding: '5px',
-    borderRadius: '5px',
-    border: '1px solid #CCCCCC ',
-    backgroundColor: '#ECECEC',
+    borderRadius: '4px',
+    color: '#3f51b5',
+    border: '1px solid rgba(63, 81, 181, 0.5)',
+    fontWeight: 500,
   },
   moreVacancies: {
     display: 'flex',

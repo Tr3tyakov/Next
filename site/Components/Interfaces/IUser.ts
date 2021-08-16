@@ -7,46 +7,30 @@ export enum userType {
 }
 export interface IUser {
   isAuth: boolean;
-  isLoading: boolean;
   openModal: boolean;
-  skills: string[];
-  position: string;
-  salary: string;
-  sphereActivity: string[];
-  email: string;
   mainInfo: IMainInfo;
 }
 
 export interface IMainInfo {
-  name: string;
-  secondName: string;
-  avatar: string;
-  bithday: string;
-  gender: string;
-  phone: string;
-  city: string;
-  country: string;
+  name?: string;
+  secondName?: string;
+  avatar?: string;
+  bithday?: string;
+  gender?: string;
+  phone?: string;
+  city?: string;
+  country?: string;
 }
 
 //actions
 interface authAction {
   type: userType.AUTH;
-  payload: boolean;
+  payload: { value: boolean; mainInfo: IMainInfo };
 }
-interface loadingAction {
-  type: userType.LOADING;
-  payload: boolean;
-}
+
 interface modalAction {
   type: userType.MODAL;
   payload: boolean;
 }
-interface usersAction {
-  type: userType.USER;
-  payload: any;
-}
-interface clearAction {
-  type: userType.CLEAR;
-}
 
-export type userActions = authAction | loadingAction | modalAction | usersAction | clearAction;
+export type userActions = authAction | modalAction;

@@ -18,6 +18,7 @@ import EmailIcon from '@material-ui/icons/Email';
 import WorkIcon from '@material-ui/icons/Work';
 import Image from 'next/image';
 import HeaderModal from './ModalHeader';
+import { IMainInfo } from '../Interfaces/IUser';
 
 const navigation = [
   {
@@ -43,12 +44,11 @@ const Header: React.FC = () => {
   const { setLogout, setModal, checkAuth } = useActions();
   const classes = useStyles();
 
-  const { isAuth, openModal, avatar, UserEmail } = useTypedSelector(({ userReducer }) => {
+  const { isAuth, openModal, mainInfo } = useTypedSelector(({ userReducer }) => {
     return {
       isAuth: userReducer.isAuth,
       openModal: userReducer.openModal,
-      avatar: userReducer.mainInfo.avatar,
-      UserEmail: userReducer.email,
+      mainInfo: userReducer.mainInfo,
     };
   });
   //menu
@@ -95,12 +95,12 @@ const Header: React.FC = () => {
         {isAuth ? (
           <>
             <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Typography>{UserEmail}</Typography>
+              <Typography>{`${mainInfo.name} ${mainInfo.secondName}`}</Typography>
               <IconButton onClick={handleOpen}>
-                {avatar ? (
+                {mainInfo.avatar ? (
                   <Image
                     className={classes.avatar}
-                    src={`http://localhost:5000/${avatar}`}
+                    src={`http://localhost:5000/${mainInfo.avatar}`}
                     layout="intrinsic"
                     width={40}
                     height={40}

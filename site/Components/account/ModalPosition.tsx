@@ -3,12 +3,11 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
-import { useStyles } from './Modal.style';
+import { useStyles } from './modal.style';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
-import { useActions } from '../Hooks/useAction';
-
+import { updateDesiredPosition } from '../utils/api/userApi';
 export const specializations = [
   'Бухгалтерия',
   'Закупки',
@@ -40,22 +39,28 @@ interface PositionProps {
   sphereActivity: string[];
   desiredSalary: string;
   desiredPosition: string;
+  setSphere: any;
+  setDesiredSalary: any;
+  setDesiredPosition: any;
 }
 const ModalPosition: React.FC<PositionProps> = React.memo(
-  ({ modal, closeModalPosition, desiredSalary, desiredPosition, sphereActivity }) => {
-    React.useEffect(() => {
-      setCurrentTarget(sphereActivity);
-      setPositionInput(desiredPosition);
-      setSalary(desiredSalary);
-    }, [modal, sphereActivity]);
-
+  ({
+    modal,
+    closeModalPosition,
+    desiredSalary,
+    desiredPosition,
+    sphereActivity,
+    setSphere,
+    setDesiredSalary,
+    setDesiredPosition,
+  }) => {
     const [positionInput, setPositionInput] = React.useState<string>(desiredPosition);
     const [salary, setSalary] = React.useState<string>(desiredSalary);
     const [error, setError] = React.useState<boolean>(false);
 
     const [specializationInput, setSpecializationInput] = React.useState<string>('');
     const [currentTarget, setCurrentTarget] = React.useState<string[]>(sphereActivity);
-    const { updateDesiredPosition } = useActions();
+
     const classes = useStyles();
 
     //inputs
@@ -103,9 +108,13 @@ const ModalPosition: React.FC<PositionProps> = React.memo(
       if (positionInput === '') {
         return setError(true);
       }
+      setSphere(currentTarget);
+      setDesiredSalary(salary);
+      setDesiredPosition(positionInput);
       updateDesiredPosition(positionInput, salary, currentTarget);
       closeModalPosition();
     };
+    console.log('RERENDER');
 
     return (
       <Modal open={modal} onClose={closeModalPosition} className={classes.modal}>

@@ -5,7 +5,6 @@ class VacancyController {
   async createVacancy(req, res, next) {
     const { refreshToken } = req.cookies;
     const { newVacancy } = req.body;
-    console.log(newVacancy);
     try {
       const vacancyData = await VacancyService.createVacancy(refreshToken, newVacancy);
       res.json(vacancyData);
@@ -15,6 +14,7 @@ class VacancyController {
   }
   async getVacancies(req, res, next) {
     try {
+      console.log('5325324');
       const vacancyData = await VacancyService.getVacancies();
       res.json(vacancyData);
     } catch (error) {
@@ -31,7 +31,27 @@ class VacancyController {
       next(error);
     }
   }
-
+  async addFavoriteVacancy(req, res, next) {
+    const { refreshToken } = req.cookies;
+    const { id } = req.body;
+    try {
+      const vacancyData = await VacancyService.addFavoriteVacancy(refreshToken, id);
+      res.json(vacancyData);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getFavoriteVacancies(req, res, next) {
+    // const { refreshToken } = req.cookies;
+    const refreshToken = req.headers.refreshtoken;
+    console.log(refreshToken, 'refreshTOken');
+    try {
+      const vacancyData = await VacancyService.getFavoriteVacancies(refreshToken);
+      res.json(vacancyData);
+    } catch (error) {
+      next(error);
+    }
+  }
   async deleteVacancy(req, res, next) {
     const newVacancy = req.body;
     try {

@@ -5,65 +5,43 @@ import Avatar from '@material-ui/core/Avatar';
 import { useStyles } from '../styles/MainInfo.style';
 import MainLayouts from '../Components/layouts/MainLayouts';
 import TextField from '@material-ui/core/TextField';
-import { useTypedSelector } from '../Components/Hooks/useTypedSelector';
-import { useActions } from '../Components/Hooks/useAction';
 import MyTextField from '../Components/account/MainTextField';
 import Link from 'next/link';
 import Image from 'next/image';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import nookies from 'nookies';
+import axios from 'axios';
+import { URL as ServerURL } from '../Components/utils/http/utils';
+import { updateMainInfo } from '../Components/utils/api/userApi';
 
-function MainInfo() {
-  const {
-    userName,
-    userSecondName,
-    userEmail,
-    userAvatar,
-    userPhone,
-    userCity,
-    userCountry,
-    userDate,
-    userGender,
-  } = useTypedSelector(({ userReducer }) => {
-    return {
-      userName: userReducer.mainInfo?.name,
-      userSecondName: userReducer.mainInfo?.secondName,
-      userEmail: userReducer.email,
-      userAvatar: userReducer.mainInfo?.avatar,
-      userPhone: userReducer.mainInfo?.phone,
-      userCity: userReducer.mainInfo?.city,
-      userCountry: userReducer.mainInfo?.country,
-      userDate: userReducer.mainInfo?.bithday,
-      userGender: userReducer.mainInfo?.gender,
-    };
-  });
-
-  React.useEffect(() => {
-    setName(userName);
-    setAvatar({ ...avatar, file: userAvatar });
-    setSecondName(userSecondName);
-    setBithday(userDate);
-    setEmail(userEmail);
-    setPhone(userPhone);
-    setCity(userCity);
-    setCountry(userCountry);
-    setGender(userGender);
-  }, [userEmail]);
-
+interface IMainInfoProps {
+  mainInfo: {
+    name: string;
+    secondName: string;
+    avatar: string;
+    bithday: string;
+    gender: string;
+    phone: string;
+    city: string;
+    country: string;
+  };
+  userEmail: string;
+}
+const MainInfo: React.FC<IMainInfoProps> = ({ mainInfo, userEmail }) => {
   const [avatar, setAvatar] = React.useState<{ file: string; img: string }>({
-    file: userAvatar,
+    file: mainInfo.avatar,
     img: '',
   });
-  const [name, setName] = React.useState<string>(userName || '');
-  const [secondName, setSecondName] = React.useState<string>(userSecondName || '');
-  const [bithday, setBithday] = React.useState<string>(userDate || '');
-  const [email, setEmail] = React.useState<string>(userEmail || '');
-  const [phone, setPhone] = React.useState<string>(userPhone || '');
-  const [city, setCity] = React.useState<string>(userCity || '');
-  const [country, setCountry] = React.useState<string>(userCountry || '');
-  const [gender, setGender] = React.useState<string>(userGender || '');
-  const {updateMainInfo } = useActions();
+  const [name, setName] = React.useState<string>(mainInfo.name);
+  const [secondName, setSecondName] = React.useState<string>(mainInfo.secondName);
+  const [bithday, setBithday] = React.useState<string>(mainInfo.bithday);
+  const [email, setEmail] = React.useState<string>(userEmail);
+  const [phone, setPhone] = React.useState<string>(mainInfo.phone);
+  const [city, setCity] = React.useState<string>(mainInfo.city);
+  const [country, setCountry] = React.useState<string>(mainInfo.country);
+  const [gender, setGender] = React.useState<string>(mainInfo.gender);
+
   const classes = useStyles();
-  console.log(bithday);
 
   const changeGender = (event: React.ChangeEvent<any>) => {
     const value = event.target.firstChild!.textContent;
@@ -156,6 +134,17 @@ function MainInfo() {
       </div>
     </MainLayouts>
   );
-}
+};
 
 export default MainInfo;
+
+export const getServerSideProps = async (ctx: any) => {
+  const { refreshToken } = nookies.get(ctx);
+  const userData = await axios.get(`${ServerURL}/user/mainInfo`, {
+    headers: { refreshToken },
+    withCredentials: true,
+  });
+  return {
+    props: { mainInfo: userData.data[0].mainInfo, userEmail: userData.data[0].email },
+  };
+};

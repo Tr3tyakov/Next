@@ -34,7 +34,7 @@ const typeEmployment = [
   'Стажировка',
 ];
 
-const currencies = [
+export const currencies = [
   {
     value: 'RUB',
     label: '₽',

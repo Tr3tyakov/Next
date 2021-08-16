@@ -1,12 +1,40 @@
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useStyles } from '../styles/favorite.style';
 import MainLayouts from '../Components/layouts/MainLayouts';
 import { NextThunkDispatch, wrapper } from '../Components/store/reducers/rootReducer';
+import { useActions } from '../Components/Hooks/useAction';
+import { useTypedSelector } from '../Components/Hooks/useTypedSelector';
+import Vacancy from '../Components/vacancies/Vacancy';
+import { IVacancy } from '../Components/Interfaces/IVacancy';
+import nookies from 'nookies';
+import axios from 'axios';
+import { URL } from '../Components/utils/http/utils';
 
-const Favorite: React.FC = () => {
+interface IFavoriteProps {
+  favoriteVacancies: [IVacancy];
+}
+
+const Favorite: React.FC<IFavoriteProps> = ({ favoriteVacancies }) => {
   const classes = useStyles();
+
+  if (favoriteVacancies) {
+    return (
+      <MainLayouts>
+        <Typography variant="h5" color="primary">
+          Избранное
+        </Typography>
+        <div className={classes.cardsWrapper}>
+          {favoriteVacancies.map((element) => (
+            <Vacancy vacancy={element.info} id={element._id} key={element._id} />
+          ))}
+        </div>
+      </MainLayouts>
+    );
+  }
+
   return (
     <MainLayouts>
       <div className={classes.wrapper}>
@@ -41,7 +69,14 @@ const Favorite: React.FC = () => {
 
 export default Favorite;
 
-// export const getServerSideProps = wrapper.getServerSideProps(async ({ store }) => {
-//   const dispatch = store.dispatch as NextThunkDispatch;
-//   await dispatch(await getUser());
-// });
+export const getServerSideProps = async (ctx: any) => {
+  const { refreshToken } = nookies.get(ctx);
+  const favoriteVacancies = await axios.get(`${URL}/vacancy/favorite`, {
+    headers: { refreshToken },
+    withCredentials: true,
+  });
+
+  return {
+    props: { favoriteVacancies: favoriteVacancies.data },
+  };
+};

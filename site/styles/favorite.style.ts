@@ -12,6 +12,10 @@ export const useStyles = makeStyles({
     height: '150px',
     margin: '0 0 20px 0',
   },
+  cardsWrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
   flex: {
     margin: '10px 0 20px 0',
     display: 'flex',

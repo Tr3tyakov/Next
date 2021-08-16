@@ -9,6 +9,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import StarIcon from '@material-ui/icons/Star';
 import { useStyles } from './vacancy.style';
 import { IInfoVacancy } from '../Interfaces/IVacancy';
+import { useActions } from '../Hooks/useAction';
 
 interface IVacanciesProps {
   vacancy: IInfoVacancy;
@@ -17,8 +18,11 @@ interface IVacanciesProps {
 
 const Vacancy: React.FC<IVacanciesProps> = ({ vacancy, id }) => {
   const classes = useStyles();
-  const check = (event: React.SyntheticEvent) => {
+
+  const { addFavoriteVacancy } = useActions();
+  const addFavorite = (event: React.SyntheticEvent) => {
     event.preventDefault();
+    addFavoriteVacancy(id);
   };
   return (
     <Paper className={classes.paper}>
@@ -31,11 +35,14 @@ const Vacancy: React.FC<IVacanciesProps> = ({ vacancy, id }) => {
                   {/* <Typography variant="subtitle1" color="primary" gutterBottom>
                     Сейчас просматривают: 43 чел.
                   </Typography> */}
-                  <Typography className={classes.work} variant="h6">
+                  <Typography className={classes.work} variant="h6" gutterBottom>
                     {vacancy.title}
                   </Typography>
                   <Typography gutterBottom>
-                    от {vacancy.startSalary} — до {vacancy.endSalary} ₽
+                    {}
+                    {vacancy.startSalary === null && vacancy.endSalary === null
+                      ? 'З/п не указана'
+                      : `От ${vacancy.startSalary} ${vacancy.currency} на руки`}
                   </Typography>
                   <Typography>{vacancy.city}</Typography>
                   <Typography>{vacancy.userName}</Typography>
@@ -52,7 +59,7 @@ const Vacancy: React.FC<IVacanciesProps> = ({ vacancy, id }) => {
                 </div>
               }></CardHeader>
             <div className={classes.favorite}>
-              <IconButton onClick={check}>
+              <IconButton onClick={addFavorite}>
                 {/* {addedWork ?} */}
                 {/* <StarBorderIcon fontSize="large" /> */}
                 <StarIcon className={classes.starAdd} fontSize="medium" />
@@ -60,7 +67,8 @@ const Vacancy: React.FC<IVacanciesProps> = ({ vacancy, id }) => {
             </div>
             <div className={classes.date}>
               <Typography color="textSecondary" gutterBottom>
-                Опубликовано {new Date(vacancy.date).toLocaleString()}
+                Опубликовано: <br />
+                {new Date(vacancy.date).toLocaleString()}
               </Typography>
             </div>
             <div className={classes.btns}>

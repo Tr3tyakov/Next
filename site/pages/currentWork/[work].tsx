@@ -6,24 +6,17 @@ import Link from 'next/link';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import Vacancy from '../../Components/vacancies/Vacancy';
 import MainLayouts from '../../Components/layouts/MainLayouts';
-import { useActions } from '../../Components/Hooks/useAction';
-import { useRouter } from 'next/dist/client/router';
-import { useTypedSelector } from '../../Components/Hooks/useTypedSelector';
+import axios from 'axios';
+import { IFullVacancy } from '../../Components/Interfaces/IVacancy';
+import { URL } from '../../Components/utils/http/utils';
 
-const Work: React.FC = () => {
+interface IWorkProps {
+  currentVacancy: IFullVacancy;
+}
+
+const Work: React.FC<IWorkProps> = ({ currentVacancy }) => {
   const classes = useStyles();
-  const { getCurrentVacancy } = useActions();
-  const router = useRouter();
-  const currentVacancy = useTypedSelector(({ vacancyReducer }) => vacancyReducer.currentVacancy);
-
-  React.useEffect(() => {
-    if (router.query.work) {
-      getCurrentVacancy(router.query.work);
-    }
-  }, []);
-
   return (
     <>
       <div className={classes.backGround}>
@@ -33,15 +26,20 @@ const Work: React.FC = () => {
           </div>
           <div>
             <Typography variant="h5" gutterBottom>
-              Начинающий специалист с бесплатным обучением
+              {currentVacancy.info?.title}
             </Typography>
             <Typography variant="h6" gutterBottom>
-              От 115 000 ₽ на руки
+              {currentVacancy.info?.startSalary === null
+                ? 'Зарплата не указана'
+                : `От ${currentVacancy.info?.startSalary} ${currentVacancy.info?.currency} на руки`}
             </Typography>
           </div>
           <div>
-            <p>Требуемый опыт: нет опыта</p>
-            <p>Полная занятось, полный день</p>
+            <p>
+              Требуемый опыт:&nbsp;
+              {currentVacancy.workExperiences?.map((element) => element)}
+            </p>
+            <p>{currentVacancy.typeEmployment?.map((element) => element)}</p>
           </div>
           <Link href="/company/ОнлайнТрейд">
             <div className={classes.companyTag}>
@@ -53,50 +51,44 @@ const Work: React.FC = () => {
       <Container maxWidth="md">
         <div className={classes.companyInfo}>
           <div className={classes.flex}>
-            <Typography>Валов Евгений Дмитриевич</Typography>
+            <Typography>{currentVacancy.info?.userName}</Typography>
             <Button color="primary">
               <ArrowForwardIosIcon />
             </Button>
           </div>
           <Divider />
           <div className={classes.city}>
-            <Typography>Санкт-Петербург</Typography>
+            <Typography>{currentVacancy.info?.city}</Typography>
           </div>
           <Divider />
           <div>
-            <Typography>
-              С 2010 года компания ОнлайнТрейд занимается полной организацией, подготовкой,
-              поставкой, закупой и продажей одежды Классический текст-«рыба». Является искажённым
-              отрывком из философского трактата Марка Туллия Цицерона «О пределах добра и зла»,
-              написанного в 45 году до н. э. на латинском языке, обнаружение сходства приписывается
-              Ричарду МакКлинтоку. Распространился в 1970-х годах из-за трафаретов компании
-              Letraset, a затем - из-за того, что служил примером текста в программе PageMaker.
-              Испорченный текст, вероятно, происходит от его издания в Loeb Classical Library 1914
-              года, в котором слово dolorem разбито переносом так,
-            </Typography>
+            <Typography>{currentVacancy.description}</Typography>
           </div>
           <div className={classes.marginTop}>
             <Typography variant="h6">Ключевые навыки</Typography>
             <div className={classes.skills}>
-              <div className={classes.skill}>Работа в команде</div>
-              <div className={classes.skill}>Коммуникабельность</div>
-              <div className={classes.skill}>Организаторские навыки</div>
-              <div className={classes.skill}>Грамотная речь</div>
+              {currentVacancy.skills?.map((element, index) => (
+                <div className={classes.skill} key={index}>
+                  {element}
+                </div>
+              ))}
             </div>
           </div>
           <div className={classes.marginTop}>
-            <Typography gutterBottom>Вакансия опубликована 21.04.2021</Typography>
+            <Typography gutterBottom>
+              Вакансия опубликована {new Date(currentVacancy.info?.date).toLocaleString()}
+            </Typography>
             <Divider />
           </div>
           <div className={classes.marginTop}>
             <Typography variant="h6" gutterBottom>
-              Яковлева Анастасия
+              {currentVacancy.info?.userName}
             </Typography>
             <Typography variant="h6" gutterBottom>
-              Телефон
+              +{currentVacancy.phone}
             </Typography>
             <Typography variant="h6" gutterBottom>
-              Email
+              {currentVacancy.email}
             </Typography>
             <Divider />
             <Typography variant="h6">Похожие вакансии</Typography>
@@ -118,8 +110,10 @@ const Work: React.FC = () => {
 
 export default Work;
 
-// export const getServerSideProps = wrapper.getServerSideProps(async ({ store, req, res }) => {
-//   const cookies = req.headers.cookie;
-//   const dispatch = store.dispatch as NextThunkDispatch;
-// await dispatch(await getUser());
-// });
+export const getServerSideProps = async (ctx: any) => {
+  const { work } = ctx.query;
+  const currentVacancy = await axios.get(`${URL}/vacancy/${work}`);
+  return {
+    props: { currentVacancy: currentVacancy.data },
+  };
+};
