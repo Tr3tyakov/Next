@@ -9,7 +9,6 @@ export const useStyles = makeStyles({
   paperModal: {
     padding: '20px',
     maxWidth: '500px',
-    maxHeight: '950px',
   },
   paper: {
     padding: '20px',

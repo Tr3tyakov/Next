@@ -13,9 +13,9 @@ class VacancyController {
     }
   }
   async getVacancies(req, res, next) {
+    const refreshToken = req.headers.refreshtoken;
     try {
-      console.log('5325324');
-      const vacancyData = await VacancyService.getVacancies();
+      const vacancyData = await VacancyService.getVacancies(refreshToken);
       res.json(vacancyData);
     } catch (error) {
       next(error);
@@ -23,7 +23,6 @@ class VacancyController {
   }
   async getCurrentVacancy(req, res, next) {
     const id = req.params.id;
-    console.log(id);
     try {
       const vacancyData = await VacancyService.getCurrentVacancy(id);
       res.json(vacancyData);
@@ -31,20 +30,19 @@ class VacancyController {
       next(error);
     }
   }
-  async addFavoriteVacancy(req, res, next) {
+  async changeFavoriteVacancies(req, res, next) {
     const { refreshToken } = req.cookies;
     const { id } = req.body;
     try {
-      const vacancyData = await VacancyService.addFavoriteVacancy(refreshToken, id);
+      console.log(id, 'ID');
+      const vacancyData = await VacancyService.changeFavoriteVacancies(refreshToken, id);
       res.json(vacancyData);
     } catch (error) {
       next(error);
     }
   }
   async getFavoriteVacancies(req, res, next) {
-    // const { refreshToken } = req.cookies;
     const refreshToken = req.headers.refreshtoken;
-    console.log(refreshToken, 'refreshTOken');
     try {
       const vacancyData = await VacancyService.getFavoriteVacancies(refreshToken);
       res.json(vacancyData);

@@ -12,15 +12,22 @@ import { IVacancy } from '../Components/Interfaces/IVacancy';
 import nookies from 'nookies';
 import axios from 'axios';
 import { URL } from '../Components/utils/http/utils';
+import FavoriteVacancies from '../Components/vacancies/FavoriteVacancy';
 
 interface IFavoriteProps {
-  favoriteVacancies: [IVacancy];
+  favorite: string[];
+  vacancies: IVacancy[];
 }
 
-const Favorite: React.FC<IFavoriteProps> = ({ favoriteVacancies }) => {
+const Favorite: React.FC<IFavoriteProps> = ({ favorite, vacancies }) => {
   const classes = useStyles();
 
-  if (favoriteVacancies) {
+  const [favoriteVacancies, setFavoriteVacancies] = React.useState<IVacancy[]>(vacancies);
+
+  const changeFavoriteState = (id: string) => {
+    setFavoriteVacancies(favoriteVacancies.filter((element) => element._id !== id));
+  };
+  if (favoriteVacancies.length) {
     return (
       <MainLayouts>
         <Typography variant="h5" color="primary">
@@ -28,7 +35,13 @@ const Favorite: React.FC<IFavoriteProps> = ({ favoriteVacancies }) => {
         </Typography>
         <div className={classes.cardsWrapper}>
           {favoriteVacancies.map((element) => (
-            <Vacancy vacancy={element.info} id={element._id} key={element._id} />
+            <FavoriteVacancies
+              vacancy={element.info}
+              id={element._id}
+              key={element._id}
+              favorite={favorite}
+              setFavoriteState={changeFavoriteState}
+            />
           ))}
         </div>
       </MainLayouts>
@@ -76,7 +89,16 @@ export const getServerSideProps = async (ctx: any) => {
     withCredentials: true,
   });
 
+  if (favoriteVacancies.data) {
+    return {
+      props: { favorite: favoriteVacancies.data.list, vacancies: favoriteVacancies.data.vacancy },
+    };
+  }
+
   return {
-    props: { favoriteVacancies: favoriteVacancies.data },
+    props: {
+      vacancies: [],
+      favorite: favoriteVacancies.data,
+    },
   };
 };

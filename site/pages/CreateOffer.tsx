@@ -87,7 +87,7 @@ const createOffer: React.FC = () => {
   const [employment, setEmployment] = React.useState<string[]>([]);
 
   const classes = useStyles();
-  const { setNewVacancy } = useActions();
+
 
   //typeCategory
   const addCategory = (currentCategory: string) => {

@@ -30,7 +30,7 @@ class VacancyService {
     return vacancy;
   }
 
-  async getVacancies() {
+  async getVacancies(refreshToken) {
     const vacancyData = await vacancyModel.aggregate([
       {
         $project: {
@@ -39,37 +39,44 @@ class VacancyService {
         },
       },
     ]);
+
+    if (refreshToken) {
+      const tokenData = await tokenService.checkRefreshToken(refreshToken);
+      const favorite = await favoriteModel.findOne({ user: tokenData.user.id });
+      return { vacancyData, favorite };
+    }
     return vacancyData;
   }
   async getCurrentVacancy(id) {
     const vacancyData = await vacancyModel.findById(id);
     return vacancyData;
   }
-  async deleteVacancy(idVacancy) {
-    await vacancyModel.findByIdAndDelete(idVacancy);
-  }
-  async addFavoriteVacancy(refreshToken, id) {
+  async changeFavoriteVacancies(refreshToken, id) {
     const tokenData = await tokenService.checkRefreshToken(refreshToken);
     const favorite = await favoriteModel.findOne({ user: tokenData.user.id });
+
     if (favorite) {
       const check = favorite.list.includes(id);
       if (check) {
-        return favorite;
+        favorite.list = favorite.list.filter((element) => element.toString() !== id);
+        return await favorite.save();
       }
       favorite.list = [...favorite.list, id];
-      await favorite.save();
-      return favorite;
+      return await favorite.save();
     }
     const vacancyData = await favoriteModel.create({ user: tokenData.user.id, list: [id] });
     return vacancyData;
   }
   async getFavoriteVacancies(refreshToken) {
     const tokenData = await tokenService.checkRefreshToken(refreshToken);
-    const { list } = await favoriteModel.findOne({ user: tokenData.user.id });
+    const favoriteData = await favoriteModel.findOne({ user: tokenData.user.id });
+    if (!favoriteData.list.length) {
+      return null;
+    }
     const vacancy = await vacancyModel.aggregate([
       {
         $match: {
-          $expr: { _id: list },
+          _id: { $in: favoriteData.list },
         },
       },
       {
@@ -79,7 +86,7 @@ class VacancyService {
         },
       },
     ]);
-    return vacancy;
+    return { vacancy, list: favoriteData.list };
   }
 }
 module.exports = new VacancyService();

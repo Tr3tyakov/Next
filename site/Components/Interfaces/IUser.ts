@@ -1,13 +1,12 @@
 export enum userType {
   AUTH = 'AUTH',
-  LOADING = 'LOADING',
+  FAVORITE = 'FAVORITE',
   MODAL = 'MODAL',
-  USER = 'USER',
-  CLEAR = 'CLEAR',
 }
 export interface IUser {
   isAuth: boolean;
   openModal: boolean;
+  favorite: object;
   mainInfo: IMainInfo;
 }
 
@@ -25,7 +24,11 @@ export interface IMainInfo {
 //actions
 interface authAction {
   type: userType.AUTH;
-  payload: { value: boolean; mainInfo: IMainInfo };
+  payload: { value: boolean; mainInfo?: IMainInfo };
+}
+interface favoriteAction {
+  type: userType.FAVORITE;
+  payload: object;
 }
 
 interface modalAction {
@@ -33,4 +36,4 @@ interface modalAction {
   payload: boolean;
 }
 
-export type userActions = authAction | modalAction;
+export type userActions = authAction | modalAction | favoriteAction;

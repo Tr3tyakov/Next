@@ -29,6 +29,7 @@ export const setLogout = () => {
     try {
       await UserService.logout();
       localStorage.removeItem('Token');
+      dispatch(setAuth(false));
     } catch (e) {
       console.log(e);
     }

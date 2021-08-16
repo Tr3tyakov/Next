@@ -6,7 +6,7 @@ router.post('/vacancy', vacancyController.createVacancy);
 router.post('/vacancy', vacancyController.deleteVacancy);
 router.get('/vacancy', vacancyController.getVacancies);
 router.get('/vacancy/favorite', vacancyController.getFavoriteVacancies);
-router.post('/vacancy/favorite', vacancyController.addFavoriteVacancy);
+router.post('/vacancy/favorite', vacancyController.changeFavoriteVacancies);
 router.get('/vacancy/:id', vacancyController.getCurrentVacancy);
 
 module.exports = router;

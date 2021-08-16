@@ -16,34 +16,26 @@ import { changeFavoriteVacancies } from '../utils/api/vacancyApi';
 interface IVacanciesProps {
   vacancy: IInfoVacancy;
   id: string;
-  favorite?: string[];
+  favorite: string[];
+  setFavoriteState: Function;
 }
 
-const Vacancy: React.FC<IVacanciesProps> = ({ vacancy, id, favorite }) => {
-  const [favoriteList, setFavoriteList] = React.useState<string[]>(favorite || []);
-
-  const changeFavorite = (event: React.SyntheticEvent) => {
+const FavoriteVacancies: React.FC<IVacanciesProps> = ({ vacancy, id, setFavoriteState }) => {
+  const changeFavoriteState = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    if (favoriteList.includes(id)) {
-      changeFavoriteVacancies(id);
-      return setFavoriteList(favoriteList.filter((element) => element !== id));
-    }
-    setFavoriteList([...favoriteList, id]);
     changeFavoriteVacancies(id);
+    setFavoriteState(id);
   };
   const classes = useStyles();
 
   return (
-    <Paper className={classes.paper}>
+    <Paper className={classes.favoritePaper}>
       <Link href={`/currentWork/${id}`}>
         <a style={{ textDecoration: 'none' }}>
-          <Card className={classes.ownerCard}>
+          <Card className={classes.favoriteCard}>
             <CardHeader
               title={
                 <div className={classes.cardMainInfo}>
-                  {/* <Typography variant="subtitle1" color="primary" gutterBottom>
-                    Сейчас просматривают: 43 чел.
-                  </Typography> */}
                   <Typography className={classes.work} variant="h6" gutterBottom>
                     {vacancy.title}
                   </Typography>
@@ -67,32 +59,26 @@ const Vacancy: React.FC<IVacanciesProps> = ({ vacancy, id, favorite }) => {
                 </div>
               }></CardHeader>
             <div className={classes.favorite}>
-              <IconButton onClick={changeFavorite}>
-                {favoriteList ? (
-                  favoriteList.includes(id) ? (
-                    <Image src={ActiveStar} width={20} height={20}></Image>
-                  ) : (
-                    <Image src={Star} width={22} height={22}></Image>
-                  )
-                ) : (
-                  ''
-                )}
+              <IconButton onClick={changeFavoriteState}>
+                <Image src={ActiveStar} width={20} height={20}></Image>
               </IconButton>
             </div>
             <div className={classes.cardFooter}>
               <div className={classes.date}>
                 <Typography color="textSecondary" gutterBottom>
-                  Опубликовано: <br />
+                  Опубликовано:&nbsp;
                   {new Date(vacancy.date).toLocaleString()}
                 </Typography>
               </div>
-              <div className={classes.btns}>
-                <Button color="primary" variant="outlined">
-                  Контакты
-                </Button>
-                <Button color="primary" variant="contained">
-                  Откликнуться
-                </Button>
+              <div className={classes.favoriteBtns}>
+                <div className={classes.justify}>
+                  <Button className={classes.favoriteBtn} color="primary" variant="outlined">
+                    Контакты
+                  </Button>
+                  <Button className={classes.favoriteBtn} color="primary" variant="contained">
+                    Откликнуться
+                  </Button>
+                </div>
               </div>
             </div>
           </Card>
@@ -102,4 +88,4 @@ const Vacancy: React.FC<IVacanciesProps> = ({ vacancy, id, favorite }) => {
   );
 };
 
-export default Vacancy;
+export default FavoriteVacancies;
