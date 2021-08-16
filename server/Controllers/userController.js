@@ -1,7 +1,6 @@
 const UserService = require('../Services/userService');
 const { validationResult } = require('express-validator');
 const ApiError = require('../middleware/apiError');
-const { parseCookies, setCookie, destroyCookie } = require('nookies');
 class UserController {
   async registration(req, res, next) {
     try {
