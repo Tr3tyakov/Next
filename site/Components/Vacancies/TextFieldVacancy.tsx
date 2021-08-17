@@ -9,14 +9,24 @@ interface ITextFieldProps {
   title: string;
   value: string | string[];
   change: any;
+  error: boolean;
 }
 
 const TextFieldVacancy: React.FC<ITextFieldProps> = React.memo(
-  ({ classes, title, label, value, change }) => {
+  ({ classes, title, label, value, change, error }) => {
+    React.useEffect(() => {
+      setTextFieldError(error);
+    }, [error]);
+    const [textFieldError, setTextFieldError] = React.useState<boolean>(error);
+
     const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
       const inputValue = event.target.value;
+      if (textFieldError) {
+        setTextFieldError(false);
+      }
       change(inputValue);
     };
+
     return (
       <div className={classes.flex}>
         <Typography variant="subtitle1" gutterBottom>
@@ -27,6 +37,8 @@ const TextFieldVacancy: React.FC<ITextFieldProps> = React.memo(
           variant="filled"
           color="primary"
           label={label}
+          error={textFieldError && value === '' ? true : false}
+          helperText={textFieldError && value === '' ? 'Данное поле обязательно к заполнению' : ''}
           value={value}
           size="small"
           onChange={changeValue}></TextField>

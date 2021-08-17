@@ -4,7 +4,6 @@ const initialState: IUser = {
   isAuth: false,
   openModal: false,
   mainInfo: {},
-  favorite: {},
 };
 
 export const userReducer = (state = initialState, action: userActions): IUser => {
@@ -16,8 +15,6 @@ export const userReducer = (state = initialState, action: userActions): IUser =>
       }
       return { ...state, isAuth: action.payload.value };
     }
-    case userType.FAVORITE:
-      return { ...state, favorite: action.payload };
     case userType.MODAL:
       return { ...state, openModal: action.payload };
     default:

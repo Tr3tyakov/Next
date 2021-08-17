@@ -13,6 +13,8 @@ import nookies from 'nookies';
 import axios from 'axios';
 import { URL } from '../Components/utils/http/utils';
 import FavoriteVacancies from '../Components/vacancies/FavoriteVacancy';
+import { useSnackbar } from 'notistack';
+import { changeFavoriteVacancies } from '../Components/utils/api/vacancyApi';
 
 interface IFavoriteProps {
   favorite: string[];
@@ -23,9 +25,14 @@ const Favorite: React.FC<IFavoriteProps> = ({ favorite, vacancies }) => {
   const classes = useStyles();
 
   const [favoriteVacancies, setFavoriteVacancies] = React.useState<IVacancy[]>(vacancies);
+  const { enqueueSnackbar } = useSnackbar();
 
-  const changeFavoriteState = (id: string) => {
-    setFavoriteVacancies(favoriteVacancies.filter((element) => element._id !== id));
+  const changeFavoriteState = async (id: string) => {
+    const favoriteData = await changeFavoriteVacancies(id);
+    if (favoriteData.status === 200) {
+      setFavoriteVacancies(favoriteVacancies.filter((element) => element._id !== id));
+      enqueueSnackbar(favoriteData.data.message, { variant: 'success' });
+    }
   };
   if (favoriteVacancies.length) {
     return (
@@ -89,16 +96,16 @@ export const getServerSideProps = async (ctx: any) => {
     withCredentials: true,
   });
 
-  if (favoriteVacancies.data) {
+  if (favoriteVacancies.data === null) {
     return {
-      props: { favorite: favoriteVacancies.data.list, vacancies: favoriteVacancies.data.vacancy },
+      props: { favorite: [], vacancies: [] },
     };
   }
 
   return {
     props: {
-      vacancies: [],
-      favorite: favoriteVacancies.data,
+      vacancies: favoriteVacancies.data.vacancy,
+      favorite: favoriteVacancies.data.list,
     },
   };
 };

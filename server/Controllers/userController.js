@@ -27,7 +27,7 @@ class UserController {
         maxAge: 30 * 24 * 60 * 1000,
         httpOnly: true,
       });
-      res.json(userData.mainInfo);
+      res.json(userData);
     } catch (e) {
       next(e);
     }
@@ -52,7 +52,7 @@ class UserController {
         httpOnly: true,
         secure: false,
       });
-      res.json(userData.mainInfo);
+      res.json(userData);
     } catch (e) {
       next(e);
     }
@@ -69,8 +69,6 @@ class UserController {
 
   async getMainInfo(req, res, next) {
     const refreshToken = req.headers.refreshtoken;
-    console.log(refreshToken);
-    console.log(213321312);
     try {
       const userData = await UserService.getMainInfo(refreshToken);
       console.log(userData);

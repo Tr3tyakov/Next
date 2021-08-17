@@ -34,7 +34,6 @@ class VacancyController {
     const { refreshToken } = req.cookies;
     const { id } = req.body;
     try {
-      console.log(id, 'ID');
       const vacancyData = await VacancyService.changeFavoriteVacancies(refreshToken, id);
       res.json(vacancyData);
     } catch (error) {
@@ -45,6 +44,7 @@ class VacancyController {
     const refreshToken = req.headers.refreshtoken;
     try {
       const vacancyData = await VacancyService.getFavoriteVacancies(refreshToken);
+      console.log(vacancyData);
       res.json(vacancyData);
     } catch (error) {
       next(error);

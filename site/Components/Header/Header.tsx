@@ -17,13 +17,11 @@ import { useActions } from '../Hooks/useAction';
 import EmailIcon from '@material-ui/icons/Email';
 import WorkIcon from '@material-ui/icons/Work';
 import Image from 'next/image';
-import HeaderModal from './ModalHeader';
-import { IMainInfo } from '../Interfaces/IUser';
 
 const navigation = [
   {
     title: 'Поиск',
-    href: '/',
+    href: '/FindVacancies',
     img: <SearchIcon />,
   },
   {
@@ -37,17 +35,18 @@ const navigation = [
 
 const Header: React.FC = () => {
   React.useEffect(() => {
-    checkAuth();
+    if (localStorage.getItem('Token')) {
+      checkAuth();
+    }
   }, []);
 
   const [menu, setMenu] = React.useState<null | HTMLElement>(null);
-  const { setLogout, setModal, checkAuth } = useActions();
+  const { setLogout, checkAuth } = useActions();
   const classes = useStyles();
 
-  const { isAuth, openModal, mainInfo } = useTypedSelector(({ userReducer }) => {
+  const { isAuth, mainInfo } = useTypedSelector(({ userReducer }) => {
     return {
       isAuth: userReducer.isAuth,
-      openModal: userReducer.openModal,
       mainInfo: userReducer.mainInfo,
     };
   });
@@ -59,38 +58,26 @@ const Header: React.FC = () => {
     setMenu(event.currentTarget);
   };
 
-  //modal
-  const setOpenModal = () => {
-    setModal(true);
-    handleClose();
-  };
-  const setCloseModal = React.useCallback(() => {
-    setModal(false);
-  }, []);
-
   const makeLogout = (): void => {
     setLogout();
   };
   return (
     <AppBar position="relative">
       <Toolbar className={classes.flex}>
-        <Typography variant="h5">TT.ru</Typography>
+        <Link href="/">
+          <a className={classes.textDecortation}>
+            <Typography variant="h5">TW.ru</Typography>
+          </a>
+        </Link>
         <div className={classes.flex}>
-          {isAuth ? (
+          {isAuth &&
             navigation.map((element) => (
               <Link href={element.href} key={element.title}>
                 <Button variant="text" startIcon={element.img} color="default">
                   <a className={classes.navigation}>{element.title}</a>
                 </Button>
               </Link>
-            ))
-          ) : (
-            <Link href="/">
-              <Button variant="text" startIcon={<SearchIcon />} color="default">
-                <a className={classes.navigation}>Поиск</a>
-              </Button>
-            </Link>
-          )}
+            ))}
         </div>
         {isAuth ? (
           <>
@@ -122,11 +109,21 @@ const Header: React.FC = () => {
             </Menu>
           </>
         ) : (
-          <Button variant="contained" onClick={setOpenModal}>
-            Войти
-          </Button>
+          <div>
+            {!isAuth && (
+              <Link href="/FindVacancies">
+                <Button variant="text" startIcon={<SearchIcon />} color="default">
+                  <a className={classes.navigation}>Поиск</a>
+                </Button>
+              </Link>
+            )}
+            <Link href="/Authorization">
+              <a className={classes.textDecortation}>
+                <Button variant="contained">Войти</Button>
+              </a>
+            </Link>
+          </div>
         )}
-        <HeaderModal classes={classes} openModal={openModal} setCloseModal={setCloseModal} />
       </Toolbar>
     </AppBar>
   );

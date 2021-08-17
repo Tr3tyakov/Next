@@ -11,8 +11,8 @@ import TextFieldVacancy from '../Components/vacancies/TextFieldVacancy';
 import CheckBoxVacancy from '../Components/vacancies/CheckBoxVacancy';
 import KeySkills from '../Components/vacancies/KeySkills';
 import ModalVacancy from '../Components/vacancies/ModalVacancy';
-import { useActions } from '../Components/Hooks/useAction';
-import { IVacancy } from '../Components/Interfaces/IVacancy';
+import { setNewVacancy } from '../Components/utils/api/vacancyApi';
+import { useSnackbar } from 'notistack';
 
 const typeCategory = ['A', 'B', 'C', 'D', 'E', 'BE', 'CE', 'DE', 'TM', 'TB'];
 
@@ -66,6 +66,8 @@ export interface INewVacancy {
 }
 
 const createOffer: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  const [error, setError] = React.useState<boolean>(false);
   const [vacancy, setVacancy] = React.useState<string>('');
   const [city, setCity] = React.useState<string>('');
   const [address, setAddress] = React.useState<string>('');
@@ -87,7 +89,6 @@ const createOffer: React.FC = () => {
   const [employment, setEmployment] = React.useState<string[]>([]);
 
   const classes = useStyles();
-
 
   //typeCategory
   const addCategory = (currentCategory: string) => {
@@ -127,7 +128,11 @@ const createOffer: React.FC = () => {
   const closeModal = () => {
     setModal(false);
   };
-  const createNewVacancy = () => {
+  const createNewVacancy = async () => {
+    if (vacancy === '' || city === '' || address === '') {
+      setError(true);
+      return enqueueSnackbar('Заполните все необходимые поля', { variant: 'warning' });
+    }
     const newVacancy: INewVacancy = {
       vacancy,
       city,
@@ -145,7 +150,11 @@ const createOffer: React.FC = () => {
       employment,
     };
 
-    setNewVacancy(newVacancy);
+    const vacancyData = await setNewVacancy(newVacancy);
+    if (vacancyData.status === 200) {
+      return enqueueSnackbar('Вакансия успешно размещена', { variant: 'success' });
+    }
+    enqueueSnackbar('Error', { variant: 'error' });
   };
   return (
     <MainLayouts>
@@ -157,6 +166,7 @@ const createOffer: React.FC = () => {
         title="Название вакансии"
         label="Вакансия"
         value={vacancy}
+        error={error}
         change={setVacancy}
       />
       <TextFieldVacancy
@@ -164,6 +174,7 @@ const createOffer: React.FC = () => {
         title="Вакансия в городе"
         label="Город"
         value={city}
+        error={error}
         change={setCity}
       />
       <TextFieldVacancy
@@ -171,6 +182,7 @@ const createOffer: React.FC = () => {
         title="Адрес офиса"
         label="Адрес"
         value={address}
+        error={error}
         change={setAddress}
       />
       <div className={classes.graph}>

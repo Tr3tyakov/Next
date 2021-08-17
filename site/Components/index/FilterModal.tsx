@@ -10,7 +10,7 @@ import Box from '@material-ui/core/Box';
 import CloseIcon from '@material-ui/icons/Close';
 import { useActions } from '../Hooks/useAction';
 import { IUseStylesIndex } from '../../styles/index.style';
-import { currencies } from '../../pages/CreateOffer';
+import { currencies } from '../../pages/CreateVacancy';
 import { MenuItem } from '@material-ui/core';
 interface IFilterModalProps {
   classes: IUseStylesIndex;

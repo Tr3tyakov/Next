@@ -23,7 +23,6 @@ interface IVacanciesProps {
 const FavoriteVacancies: React.FC<IVacanciesProps> = ({ vacancy, id, setFavoriteState }) => {
   const changeFavoriteState = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    changeFavoriteVacancies(id);
     setFavoriteState(id);
   };
   const classes = useStyles();

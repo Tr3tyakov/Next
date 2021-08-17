@@ -22,7 +22,7 @@ export class UserService {
     return await axios.put(`${URL}/update/skills`, { skills }, { withCredentials: true });
   }
 
-  static async updateMainInfo(mainInfo: IMainInfo) {
+  static async updateMainInfo(mainInfo: any) {
     const formData = new FormData();
     formData.append('avatar', mainInfo.avatar);
     formData.append('name', mainInfo.name);

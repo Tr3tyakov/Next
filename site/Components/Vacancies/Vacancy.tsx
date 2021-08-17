@@ -12,24 +12,32 @@ import Image from 'next/image';
 import ActiveStar from '../../public/img/activeStar.svg';
 import Star from '../../public/img/star.svg';
 import { changeFavoriteVacancies } from '../utils/api/vacancyApi';
+import SnackBar from '../layouts/SnackBar';
 
 interface IVacanciesProps {
   vacancy: IInfoVacancy;
   id: string;
   favorite?: string[];
+  isAuth?: boolean;
+  changeFavoriteOnServer: Function;
 }
 
-const Vacancy: React.FC<IVacanciesProps> = ({ vacancy, id, favorite }) => {
+const Vacancy: React.FC<IVacanciesProps> = ({
+  isAuth,
+  vacancy,
+  id,
+  favorite,
+  changeFavoriteOnServer,
+}) => {
   const [favoriteList, setFavoriteList] = React.useState<string[]>(favorite || []);
-
   const changeFavorite = (event: React.SyntheticEvent) => {
     event.preventDefault();
     if (favoriteList.includes(id)) {
-      changeFavoriteVacancies(id);
+      changeFavoriteOnServer(id);
       return setFavoriteList(favoriteList.filter((element) => element !== id));
     }
     setFavoriteList([...favoriteList, id]);
-    changeFavoriteVacancies(id);
+    changeFavoriteOnServer(id);
   };
   const classes = useStyles();
 
@@ -68,7 +76,7 @@ const Vacancy: React.FC<IVacanciesProps> = ({ vacancy, id, favorite }) => {
               }></CardHeader>
             <div className={classes.favorite}>
               <IconButton onClick={changeFavorite}>
-                {favoriteList ? (
+                {isAuth ? (
                   favoriteList.includes(id) ? (
                     <Image src={ActiveStar} width={20} height={20}></Image>
                   ) : (

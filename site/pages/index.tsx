@@ -1,81 +1,94 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { useStyles } from '../styles/index.style';
-import Vacancy from '../Components/vacancies/Vacancy';
-import MainLayouts from '../Components/layouts/MainLayouts';
-import FilterVacancies from '../Components/index/FilterVacancies';
-import axios from 'axios';
-import { IVacancy } from '../Components/Interfaces/IVacancy';
-import { URL } from '../Components/utils/http/utils';
-import { NextThunkDispatch, wrapper } from '../Components/store/reducers/rootReducer';
-import nookies from 'nookies';
-import { setFavorite } from '../Components/store/actions/user/userActions';
-interface IHomeProps {
-  vacancies: [IVacancy];
-  favorite: [];
-}
+import { useStyles } from '../styles/home.style';
+import Button from '@material-ui/core/Button';
+import Link from 'next/link';
+import Header from '../Components/header/Header';
+import { Box } from '@material-ui/core';
+import { useTypedSelector } from '../Components/Hooks/useTypedSelector';
+import SnackBar from '../Components/layouts/SnackBar';
 
-const Home: React.FC<IHomeProps> = ({ vacancies, favorite }) => {
-  const [filter, setFilter] = React.useState<string>('');
+const Home: React.FC = () => {
   const classes = useStyles();
-  const filterVacancies = React.useMemo(() => {
-    return vacancies.filter((element) =>
-      element.info.title.toLowerCase().includes(filter.toLowerCase()),
-    );
-  }, [filter]);
+  const [mainInput, setMainInput] = React.useState<string>('');
+  const isAuth = useTypedSelector(({ userReducer }) => userReducer.isAuth);
+  const changeMainInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setMainInput(value);
+  };
+
+  const setExample = () => {
+    setMainInput('Менеджер по продажам');
+  };
 
   return (
-    <MainLayouts>
-      <div>
-        <div className={classes.flex}>
-          <FilterVacancies classes={classes} setFilter={setFilter} />
+    <>
+      <Header />
+
+      <div className={classes.content}>
+        <div className={classes.black}>
+          <div className={classes.titleWrapper}>
+            <Typography className={classes.title}>Размещайте обьявления на TW.ru</Typography>
+            <Typography className={classes.subTitle}>
+              И находите сотрудников среди тех, кто хочет у вас работать. TW.ru — сервис №1 по
+              поиску сотрудников в России*
+            </Typography>
+            <div className={classes.btn}>
+              <Link href={isAuth ? '/CreateOffer' : '/Authorization'}>
+                <a className={classes.a}>
+                  <Button className={classes.btn} variant="contained" color="primary">
+                    Создать вакансию
+                  </Button>
+                </a>
+              </Link>
+            </div>
+          </div>
         </div>
-        <Typography variant="h6" gutterBottom>
-          Вакансии для вас
-        </Typography>
-        <div className={classes.cardsWrapper}>
-          {filterVacancies.map((element) => (
-            <Vacancy
-              vacancy={element.info}
-              id={element._id}
-              key={element._id}
-              favorite={favorite}
-            />
-          ))}
+        <div className={classes.gray}>
+          <div className={classes.titleWrapper}>
+            <Typography className={classes.title}>
+              Найдите вашу идеальную работу вместе с TW.ru
+            </Typography>
+            <Typography className={classes.subTitle}>
+              Не ждите откликов — ищете подходящую вакансию сами среди 52 945 272 резюме у 31 763
+              572 соискателей
+            </Typography>
+            <div className={classes.inputWrapper}>
+              <input
+                className={classes.input}
+                type="text"
+                value={mainInput}
+                onChange={changeMainInput}
+              />
+              <Link href={isAuth ? '/FindVacancies' : '/Authorization'}>
+                <a className={classes.a}>
+                  <Button variant="contained" color="primary">
+                    Найти вакансию
+                  </Button>
+                </a>
+              </Link>
+            </div>
+            <div>
+              <span className={classes.inputSub}>Чаще всего ищут:&nbsp;</span>
+              <span className={classes.inputTarget} onClick={setExample}>
+                Менеджер по продажам
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className={classes.black}>
+          <div className={classes.titleWrapper}>
+            <Box margin="50px 0 0 0">
+              <Typography>
+                © 2021 Группа компаний Tail Wind Сегодня на сайте 1 077 216 вакансий, 52 954 874
+                резюме, 1 569 407 компании и за неделю 2 285 959 приглашений
+              </Typography>
+            </Box>
+          </div>
         </div>
       </div>
-    </MainLayouts>
+    </>
   );
 };
 
 export default Home;
-
-export const getServerSideProps = async (ctx: any) => {
-  const { refreshToken } = nookies.get(ctx);
-  const vacanciesData = await axios.get(`${URL}/vacancy`, {
-    headers: { refreshToken: refreshToken ? refreshToken : '' },
-    withCredentials: true,
-  });
-
-  if (vacanciesData.data.favorite) {
-    return {
-      props: {
-        vacancies: vacanciesData.data.vacancyData,
-        favorite: vacanciesData.data.favorite.list,
-      },
-    };
-  }
-  return {
-    props: {
-      vacancies: vacanciesData.data.vacancyData,
-      favorite: [],
-    },
-  };
-};
-
-// export const getServerSideProps = async () => {
-//   const vacanciesData = await axios.get(`${URL}/vacancy`);
-//   return {
-//     props: { vacancies: vacanciesData.data },
-//   };
-// };

@@ -45,6 +45,12 @@ export const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'flex-start',
   },
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: '180px auto',
+    maxWidth: '400px',
+  },
 });
 
 export type IuseStyles = ReturnType<typeof useStyles>;

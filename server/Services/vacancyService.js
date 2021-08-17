@@ -59,18 +59,20 @@ class VacancyService {
       const check = favorite.list.includes(id);
       if (check) {
         favorite.list = favorite.list.filter((element) => element.toString() !== id);
-        return await favorite.save();
+        const favoriteData = await favorite.save();
+        return { favoriteData, message: 'Вакансия была успешно удалена' };
       }
       favorite.list = [...favorite.list, id];
-      return await favorite.save();
+      const favoriteData = await favorite.save();
+      return { favoriteData, message: 'Вакансия была успешно добавлена' };
     }
-    const vacancyData = await favoriteModel.create({ user: tokenData.user.id, list: [id] });
-    return vacancyData;
+    const favoriteData = await favoriteModel.create({ user: tokenData.user.id, list: [id] });
+    return { favoriteData, message: 'Вакансия была успешно создана' };
   }
   async getFavoriteVacancies(refreshToken) {
     const tokenData = await tokenService.checkRefreshToken(refreshToken);
     const favoriteData = await favoriteModel.findOne({ user: tokenData.user.id });
-    if (!favoriteData.list.length) {
+    if (!favoriteData) {
       return null;
     }
     const vacancy = await vacancyModel.aggregate([

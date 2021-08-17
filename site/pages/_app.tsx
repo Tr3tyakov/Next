@@ -4,12 +4,12 @@ import { FC } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-
+import { SnackbarProvider } from 'notistack';
 import { wrapper } from '../Components/store/reducers/rootReducer';
 
 const MyApp: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
   return (
-    <>
+    <SnackbarProvider maxSnack={3}>
       <Head>
         <title>TT.ru</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
@@ -22,7 +22,7 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
       <CssBaseline />
       <Component {...pageProps} />
-    </>
+    </SnackbarProvider>
   );
 };
 export default wrapper.withRedux(MyApp);

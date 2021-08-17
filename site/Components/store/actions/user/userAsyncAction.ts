@@ -1,8 +1,8 @@
 import { userActions } from '../../../Interfaces/IUser';
 import { UserService } from '../../../utils/services/userService';
 import { Dispatch } from 'react';
-import { setAuth, setModal } from './userActions';
-
+import { setAuth } from './userActions';
+import Router from 'next/router';
 export const setRegistration = (email: string, password: string) => {
   return async (dispatch: Dispatch<userActions>) => {
     try {
@@ -17,8 +17,8 @@ export const setLogin = (email: string, password: string) => {
     try {
       const userData = await UserService.login(email, password);
       localStorage.setItem('Token', userData.data.accessToken);
-      dispatch(setAuth(true, userData.data));
-      dispatch(setModal(false));
+      dispatch(setAuth(true, userData.data.mainInfo));
+      Router.push('/FindVacancies');
     } catch (e) {
       console.log(e);
     }
@@ -30,6 +30,7 @@ export const setLogout = () => {
       await UserService.logout();
       localStorage.removeItem('Token');
       dispatch(setAuth(false));
+      Router.push('/');
     } catch (e) {
       console.log(e);
     }
@@ -40,9 +41,9 @@ export const checkAuth = () => {
     try {
       const userData = await UserService.refresh();
       localStorage.setItem('Token', userData.data.accessToken);
-      dispatch(setAuth(true, userData.data));
+      dispatch(setAuth(true, userData.data.mainInfo));
     } catch (e) {
-      console.log(e, 'ОШИБКА');
+      console.log(e, 'Пользователь не авторизован');
     }
   };
 };
