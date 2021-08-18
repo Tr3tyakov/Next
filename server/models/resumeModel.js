@@ -1,10 +1,12 @@
 const { Schema, model } = require('mongoose');
 
 const Resume = new Schema({
-  languages: [{ mainLanguage: String, additionalLanguage: String }],
+  languages: [
+    { mainLanguage: String, additionLanguages: [{ language: String, knowledge: String }] },
+  ],
   skills: [{ type: String }],
   typeLicense: {
-    haveCar: { type: Boolean },
+    haveCar: { type: Boolean || String },
     typeCategory: [{ type: String }],
   },
   education: { type: String },
@@ -12,6 +14,7 @@ const Resume = new Schema({
   desiredPosition: { type: String },
   desiredPay: { type: Number },
   aboutMe: { type: String },
+  date: { type: Date, default: Date.now },
   mainInfo: {
     email: { type: String, require: true },
     name: { type: String, require: true },

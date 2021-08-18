@@ -12,32 +12,31 @@ import { changeFavoriteVacancies } from '../Components/utils/api/vacancyApi';
 import { useSnackbar } from 'notistack';
 import { Box } from '@material-ui/core';
 import Link from 'next/link';
-
 interface IHomeProps {
-  vacancies: [IVacancy];
-  favorite: [];
+  resume: any;
   isAuth?: boolean;
 }
 
-const FindVacancies: React.FC<IHomeProps> = ({ isAuth, vacancies, favorite }) => {
+const FindResume: React.FC<IHomeProps> = ({ isAuth, resume }) => {
+  console.log(resume);
   const [filter, setFilter] = React.useState<string>('');
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
-  const filterVacancies = React.useMemo(() => {
-    return vacancies.filter((element) =>
-      element.info.title.toLowerCase().includes(filter.toLowerCase()),
-    );
-  }, [filter]);
+  //   const filterVacancies = React.useMemo(() => {
+  //     return vacancies.filter((element) =>
+  //       element.info.title.toLowerCase().includes(filter.toLowerCase()),
+  //     );
+  //   }, [filter]);
 
-  const changeFavorite = async (id: string) => {
-    const favoriteData = await changeFavoriteVacancies(id);
-    if (favoriteData.status === 200) {
-      const message = favoriteData.data.message;
-      return enqueueSnackbar(message, { variant: 'success' });
-    }
-    enqueueSnackbar('Error', { variant: 'error' });
-  };
-
+  //   const changeFavorite = async (id: string) => {
+  //     const favoriteData = await changeFavoriteVacancies(id);
+  //     if (favoriteData.status === 200) {
+  //       const message = favoriteData.data.message;
+  //       return enqueueSnackbar(message, { variant: 'success' });
+  //     }
+  //     enqueueSnackbar('Error', { variant: 'error' });
+  //   };
+  return <div></div>;
   return (
     <MainLayouts>
       <div>
@@ -45,23 +44,23 @@ const FindVacancies: React.FC<IHomeProps> = ({ isAuth, vacancies, favorite }) =>
           <FilterVacancies
             classes={classes}
             setFilter={setFilter}
-            title={'Должность, которая вас интересует'}
+            title={'Вакансия, которая вас интересует'}
           />
         </div>
         <Box display="flex">
           <Box margin="0 10px 0 0">
-            <Typography variant="h6" gutterBottom>
-              Вакансии
-            </Typography>
-          </Box>
-          <Box>
-            <Link href="/FindResume">
+            <Link href="/FindVacancies">
               <a className={classes.textDecoration}>
                 <Typography variant="h6" gutterBottom color="textSecondary">
-                  Резюме
+                  Вакансии
                 </Typography>
               </a>
             </Link>
+          </Box>
+          <Box>
+            <Typography variant="h6" gutterBottom>
+              Резюме
+            </Typography>
           </Box>
         </Box>
 
@@ -82,28 +81,18 @@ const FindVacancies: React.FC<IHomeProps> = ({ isAuth, vacancies, favorite }) =>
   );
 };
 
-export default FindVacancies;
+export default FindResume;
 
 export const getServerSideProps = async (ctx: any) => {
   const { refreshToken } = nookies.get(ctx);
-  const vacanciesData = await axios.get(`${URL}/vacancy`, {
+  const resumeData = await axios.get(`${URL}/resume`, {
     headers: { refreshToken: refreshToken ? refreshToken : '' },
     withCredentials: true,
   });
 
-  if (vacanciesData.data.favorite) {
-    return {
-      props: {
-        isAuth: true,
-        vacancies: vacanciesData.data.vacancyData,
-        favorite: vacanciesData.data.favorite.list,
-      },
-    };
-  }
   return {
     props: {
-      vacancies: vacanciesData.data.vacancyData,
-      favorite: [],
+      resume: resumeData.data,
     },
   };
 };

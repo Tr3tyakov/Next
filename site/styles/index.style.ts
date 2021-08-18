@@ -30,6 +30,9 @@ export const useStyles = makeStyles({
   filterBtn: {
     marginLeft: '10px',
   },
+  textDecoration: {
+    textDecoration: 'none',
+  },
   cardsWrapper: {
     display: 'flex',
     flexWrap: 'wrap',

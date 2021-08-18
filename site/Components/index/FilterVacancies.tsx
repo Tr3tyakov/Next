@@ -7,9 +7,10 @@ import FilterModal from './FilterModal';
 interface IFilterVacanciesProps {
   classes: IUseStylesIndex;
   setFilter: any;
+  title: string;
 }
 
-const FilterVacancies: React.FC<IFilterVacanciesProps> = ({ classes, setFilter }) => {
+const FilterVacancies: React.FC<IFilterVacanciesProps> = ({ classes, setFilter, title }) => {
   const [input, setInput] = React.useState<string>('');
   const [modal, setModal] = React.useState<boolean>(false);
 
@@ -40,7 +41,7 @@ const FilterVacancies: React.FC<IFilterVacanciesProps> = ({ classes, setFilter }
         <TextField
           variant="filled"
           value={input}
-          label="Должность, которая вас интересует"
+          label={title}
           fullWidth
           onChange={changeInput}></TextField>
         <Button size="small" className={classes.positionBtn} onClick={opendModalFilter}>

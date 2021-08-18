@@ -8,7 +8,6 @@ export const setLogin = (email: string, password: string) => {
   return async (dispatch: Dispatch<userActions>) => {
     try {
       const userData = await UserService.login(email, password);
-      console.log(userData, 'userData');
       localStorage.setItem('Token', userData.data.accessToken);
       dispatch(setAuth(true, userData.data));
       Router.push('/FindVacancies');

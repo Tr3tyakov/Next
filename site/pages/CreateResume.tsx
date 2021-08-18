@@ -21,6 +21,7 @@ import { Box, TextareaAutosize } from '@material-ui/core';
 import ModalForeignLanguage from '../Components/resume/ModalForeignLanguage';
 import { typeCategory } from './CreateVacancy';
 import ModalTypeLicense from '../Components/resume/ModalTypeLicense';
+import { setNewResume } from '../Components/utils/api/resumeApi';
 
 export interface INewResume {
   mainInfo: IMainInfo;
@@ -43,7 +44,6 @@ export interface ITypeLicense {
 }
 
 const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
-  console.log(mainInfo);
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const [desiredSalary, setDesiredSalary] = React.useState<string>('');
@@ -105,9 +105,37 @@ const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
     setModalLicense(false);
   }, []);
 
-  const createResume = () => {
-    enqueueSnackbar('Поля должны быть заполнены', { variant: 'warning' });
+  const createResume = async () => {
+    console.log(
+      languages,
+      skills,
+      aboutMe,
+      typeLicense,
+      sphereActivity,
+      desiredPosition,
+      desiredSalary,
+      education,
+    );
+    if (aboutMe === '' || education === '' || desiredPosition === '' || desiredSalary === '') {
+      return enqueueSnackbar('Поля должны быть заполнены', { variant: 'warning' });
+    }
+    const newResume = {
+      languages,
+      skills,
+      aboutMe,
+      typeLicense,
+      specializations: sphereActivity,
+      desiredPosition,
+      desiredPay: desiredSalary,
+      education,
+    };
+    const resumeData = await setNewResume(newResume, mainInfo);
+    if (resumeData.status === 200) {
+      return enqueueSnackbar('Резюме успешно создано', { variant: 'success' });
+    }
+    enqueueSnackbar('Error', { variant: 'error' });
   };
+
   return (
     <MainLayouts>
       <Typography variant="h4" gutterBottom>
