@@ -6,12 +6,16 @@ import TextField from '@material-ui/core/TextField';
 import { useActions } from '../Components/Hooks/useAction';
 import { useStyles } from '../Components/header/header.style';
 import MainLayouts from '../Components/layouts/MainLayouts';
+import { setRegistration } from '../Components/utils/api/userApi';
+import { useSnackbar } from 'notistack';
 
 const Authorization: React.FC = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
-  const { setRegistration, setLogin } = useActions();
+  const { setLogin } = useActions();
 
   //inputs
   const changeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,8 +35,12 @@ const Authorization: React.FC = () => {
   };
 
   //auth
-  const registration = () => {
-    setRegistration(email, password);
+  const registration = async () => {
+    const userData = await setRegistration(email, password);
+    if (userData.status === 200) {
+      return enqueueSnackbar(userData.data, { variant: 'success' });
+    }
+    enqueueSnackbar(userData.data.message, { variant: 'error' });
   };
   const login = async () => {
     setLogin(email, password);

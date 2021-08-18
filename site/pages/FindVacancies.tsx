@@ -9,7 +9,6 @@ import { IVacancy } from '../Components/Interfaces/IVacancy';
 import { URL } from '../Components/utils/http/utils';
 import nookies from 'nookies';
 import { changeFavoriteVacancies } from '../Components/utils/api/vacancyApi';
-import SnackBar from '../Components/layouts/SnackBar';
 import { useSnackbar } from 'notistack';
 interface IHomeProps {
   vacancies: [IVacancy];
@@ -87,3 +86,4 @@ export const getServerSideProps = async (ctx: any) => {
     },
   };
 };
+///chekc error seriallize

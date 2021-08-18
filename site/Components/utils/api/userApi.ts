@@ -1,6 +1,13 @@
 import { IMainInfo } from '../../Interfaces/IUser';
 import { UserService } from '../services/userService';
 
+export const setRegistration = async (email: string, password: string) => {
+  try {
+    return await UserService.registration(email, password);
+  } catch (e) {
+    return e.response;
+  }
+};
 export const updateMainInfo = async (mainInfo: IMainInfo) => {
   try {
     const userData = await UserService.updateMainInfo(mainInfo);

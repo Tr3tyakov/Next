@@ -6,9 +6,9 @@ import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import React from 'react';
-import { specializations } from '../account/ModalPosition';
+import { specializations } from '../resume/ModalPosition';
 import Box from '@material-ui/core/Box';
-import { IuseStylesCreateOffer } from '../../styles/createOffer.style';
+import { IuseStylesCreateOffer } from '../../styles/create/vacancy/createVacancy.style';
 
 interface IModalVacancyProps {
   classes: IuseStylesCreateOffer;

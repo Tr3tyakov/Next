@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import { useStyles } from './vacancy.style';
+import { useStyles } from '../../styles/create/vacancy/vacancy.style';
 import { IInfoVacancy } from '../Interfaces/IVacancy';
 import Image from 'next/image';
 import ActiveStar from '../../public/img/activeStar.svg';

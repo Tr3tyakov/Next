@@ -17,7 +17,7 @@ import { useActions } from '../Hooks/useAction';
 import EmailIcon from '@material-ui/icons/Email';
 import WorkIcon from '@material-ui/icons/Work';
 import Image from 'next/image';
-
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 const navigation = [
   {
     title: 'Поиск',
@@ -30,7 +30,8 @@ const navigation = [
     img: <StarIcon />,
   },
   { title: 'Сообщения', href: '/Message', img: <EmailIcon /> },
-  { title: 'Cоздать резюме', href: '/CreateOffer', img: <WorkIcon /> },
+  { title: 'Cоздать вакансию', href: '/CreateVacancy', img: <WorkIcon /> },
+  { title: 'Cоздать резюме', href: '/CreateResume', img: <LibraryBooksIcon /> },
 ];
 
 const Header: React.FC = () => {

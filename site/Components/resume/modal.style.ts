@@ -24,6 +24,38 @@ export const useStyles = makeStyles({
     display: 'flex',
     flexWrap: 'wrap',
   },
+  languageWrapper: {
+    display: 'flex',
+    borderRadius: '4px',
+    margin: '5px 5px 0 0',
+    color: '#3f51b5',
+    border: '1px solid rgba(63, 81, 181, 0.5)',
+    fontWeight: 500,
+  },
+  language: {
+    margin: '0',
+  },
+  btn: {
+    height: '50px',
+  },
+  input: {
+    maxWidth: '400px',
+    width: '100%',
+  },
+  foreignPaper: {
+    padding: '20px',
+    maxWidth: '600px',
+    width: '100%',
+  },
+  knowledge: {
+    padding: '10px 5px',
+    width: '100%',
+  },
+  educationModal: {
+    maxWidth: '500px',
+    padding: '20px',
+    width: '100%',
+  },
   skill: {
     display: 'flex',
     alignItems: 'center',
@@ -37,6 +69,11 @@ export const useStyles = makeStyles({
   cancel: {},
   specializationWrapper: {
     height: '300px',
+    width: '100%',
+    overflow: 'auto',
+  },
+  mainLanguageWrapper: {
+    maxHeight: '300px',
     width: '100%',
     overflow: 'auto',
   },

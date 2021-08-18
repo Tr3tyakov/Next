@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
-import { useStyles } from '../styles/MainInfo.style';
+import { useStyles } from '../styles/mainInfo.style';
 import MainLayouts from '../Components/layouts/MainLayouts';
 import TextField from '@material-ui/core/TextField';
 import MyTextField from '../Components/account/MainTextField';

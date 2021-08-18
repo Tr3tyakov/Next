@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import Divider from '@material-ui/core/Divider';
-import { IuseStylesCreateOffer } from '../../styles/createOffer.style';
+import { IuseStylesCreateOffer } from '../../styles/create/vacancy/createVacancy.style';
 
 interface ICheckBoxProps {
   classes: IuseStylesCreateOffer;

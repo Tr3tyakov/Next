@@ -6,7 +6,6 @@ import Link from 'next/link';
 import Header from '../Components/header/Header';
 import { Box } from '@material-ui/core';
 import { useTypedSelector } from '../Components/Hooks/useTypedSelector';
-import SnackBar from '../Components/layouts/SnackBar';
 
 const Home: React.FC = () => {
   const classes = useStyles();

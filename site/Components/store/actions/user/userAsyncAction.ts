@@ -3,15 +3,7 @@ import { UserService } from '../../../utils/services/userService';
 import { Dispatch } from 'react';
 import { setAuth } from './userActions';
 import Router from 'next/router';
-export const setRegistration = (email: string, password: string) => {
-  return async (dispatch: Dispatch<userActions>) => {
-    try {
-      await UserService.registration(email, password);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-};
+
 export const setLogin = (email: string, password: string) => {
   return async (dispatch: Dispatch<userActions>) => {
     try {

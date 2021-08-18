@@ -4,6 +4,7 @@ const userDto = require('../DTO/userDto');
 const TokenService = require('./tokenService');
 const ApiError = require('../middleware/apiError');
 const fileService = require('./fileService');
+const mongoose = require('mongoose');
 
 class UserService {
   async registration(email, password) {
@@ -74,9 +75,7 @@ class UserService {
       const userData = await userModel.aggregate([
         {
           $match: {
-            $expr: {
-              _id: tokenData.user.id,
-            },
+            _id: mongoose.Types.ObjectId(tokenData.user.id),
           },
         },
         {
@@ -87,6 +86,7 @@ class UserService {
           },
         },
       ]);
+
       return userData;
     } catch (e) {
       throw ApiError.BadRequest(e);

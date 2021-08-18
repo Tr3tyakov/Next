@@ -114,7 +114,6 @@ const ModalPosition: React.FC<PositionProps> = React.memo(
       updateDesiredPosition(positionInput, salary, currentTarget);
       closeModalPosition();
     };
-    console.log('RERENDER');
 
     return (
       <Modal open={modal} onClose={closeModalPosition} className={classes.modal}>

@@ -8,7 +8,8 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import CloseIcon from '@material-ui/icons/Close';
 import { updateSkills } from '../utils/api/userApi';
-
+import { Box } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 interface AccountProps {
   modal: boolean;
   closeModalSkills: any;
@@ -35,12 +36,16 @@ const ModalSkills: React.FC<AccountProps> = React.memo(
     };
 
     //skills
-    const addSkill = (event: React.KeyboardEvent) => {
+    const addSkillForm = (event: React.KeyboardEvent) => {
       if (event.key === 'Enter') {
         event.preventDefault();
         setAbility([...ability, input]);
-        setInput('');
+        return setInput('');
       }
+    };
+    const addSkill = (event: React.SyntheticEvent) => {
+      setAbility([...ability, input]);
+      setInput('');
     };
 
     const saveSkills = () => {
@@ -70,16 +75,26 @@ const ModalSkills: React.FC<AccountProps> = React.memo(
                   Очистить
                 </Button>
               </div>
-              <form onKeyPress={addSkill}>
-                <TextField
-                  margin="dense"
-                  variant="standard"
-                  label="Добавить навык"
-                  error={error}
-                  helperText={error && 'Навыки не должны содержать цифры'}
-                  fullWidth
-                  value={input}
-                  onChange={changeInputValidation}></TextField>
+
+              <form onKeyPress={addSkillForm}>
+                <Box margin={'20px 0 0 0'} display="flex" alignItems="center">
+                  <TextField
+                    className={classes.input}
+                    margin="dense"
+                    variant="standard"
+                    label="Добавить навык"
+                    error={error}
+                    helperText={error && 'Навыки не должны содержать цифры'}
+                    value={input}
+                    onChange={changeInputValidation}></TextField>
+                  {input ? (
+                    <Button className={classes.btn} color="primary" size="small" onClick={addSkill}>
+                      <AddIcon />
+                    </Button>
+                  ) : (
+                    ''
+                  )}
+                </Box>
               </form>
             </div>
             <div className={classes.skills}>

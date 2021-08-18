@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { useStyles } from '../styles/createOffer.style';
+import { useStyles } from '../styles/create/vacancy/createVacancy.style';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import MainLayouts from '../Components/layouts/MainLayouts';
@@ -14,7 +14,7 @@ import ModalVacancy from '../Components/vacancies/ModalVacancy';
 import { setNewVacancy } from '../Components/utils/api/vacancyApi';
 import { useSnackbar } from 'notistack';
 
-const typeCategory = ['A', 'B', 'C', 'D', 'E', 'BE', 'CE', 'DE', 'TM', 'TB'];
+export const typeCategory = ['A', 'B', 'C', 'D', 'E', 'BE', 'CE', 'DE', 'TM', 'TB'];
 
 const workExperiences = ['Нет опыта', 'От 1 года до 3 лет', 'От 3 до 6 лет', 'Более 6 лет'];
 
