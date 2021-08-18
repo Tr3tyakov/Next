@@ -8,8 +8,9 @@ export const setLogin = (email: string, password: string) => {
   return async (dispatch: Dispatch<userActions>) => {
     try {
       const userData = await UserService.login(email, password);
+      console.log(userData, 'userData');
       localStorage.setItem('Token', userData.data.accessToken);
-      dispatch(setAuth(true, userData.data.mainInfo));
+      dispatch(setAuth(true, userData.data));
       Router.push('/FindVacancies');
     } catch (e) {
       console.log(e);
@@ -33,7 +34,9 @@ export const checkAuth = () => {
     try {
       const userData = await UserService.refresh();
       localStorage.setItem('Token', userData.data.accessToken);
-      dispatch(setAuth(true, userData.data.mainInfo));
+      console.log(userData, 'userData');
+
+      dispatch(setAuth(true, userData.data));
     } catch (e) {
       console.log(e, 'Пользователь не авторизован');
     }

@@ -24,10 +24,11 @@ interface IMainInfoProps {
     phone: string;
     city: string;
     country: string;
+    email: string;
   };
-  userEmail: string;
 }
-const MainInfo: React.FC<IMainInfoProps> = ({ mainInfo, userEmail }) => {
+const MainInfo: React.FC<IMainInfoProps> = ({ mainInfo }) => {
+  console.log(mainInfo);
   const [avatar, setAvatar] = React.useState<{ file: string; img: string }>({
     file: mainInfo.avatar,
     img: '',
@@ -35,7 +36,7 @@ const MainInfo: React.FC<IMainInfoProps> = ({ mainInfo, userEmail }) => {
   const [name, setName] = React.useState<string>(mainInfo.name);
   const [secondName, setSecondName] = React.useState<string>(mainInfo.secondName);
   const [bithday, setBithday] = React.useState<string>(mainInfo.bithday);
-  const [email, setEmail] = React.useState<string>(userEmail);
+  const [email, setEmail] = React.useState<string>(mainInfo.email);
   const [phone, setPhone] = React.useState<string>(mainInfo.phone);
   const [city, setCity] = React.useState<string>(mainInfo.city);
   const [country, setCountry] = React.useState<string>(mainInfo.country);
@@ -145,6 +146,6 @@ export const getServerSideProps = async (ctx: any) => {
     withCredentials: true,
   });
   return {
-    props: { mainInfo: userData.data[0].mainInfo, userEmail: userData.data[0].email },
+    props: { mainInfo: userData.data },
   };
 };

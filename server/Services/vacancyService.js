@@ -8,9 +8,9 @@ class VacancyService {
     const vacancy = await vacancyModel.create({
       user: tokenData.user.id,
       email: tokenData.user.email,
-      phone: tokenData.user.mainInfo.phone,
+      phone: tokenData.user.phone,
       info: {
-        userName: `${tokenData.user.mainInfo.name} ${tokenData.user.mainInfo.secondName}`,
+        userName: `${tokenData.user.name} ${tokenData.user.secondName}`,
         title: newVacancy.vacancy,
         city: newVacancy.city,
         specializations: newVacancy.specialization,

@@ -1,19 +1,25 @@
 module.exports = class userDto {
   id;
+  name;
+  secondName;
+  avatar;
+  bithday;
+  gender;
+  phone;
+  city;
+  country;
   email;
-  skills;
-  mainInfo;
-  desiredPosition;
-  desiredPay;
-  specializations;
 
-  constructor({ _id, mainInfo, email, skills, specializations, desiredPay, desiredPosition }) {
+  constructor({ _id, name, secondName, avatar, bithday, gender, phone, city, country, email }) {
     (this.id = _id),
-      (this.skills = skills),
-      (this.mainInfo = mainInfo),
-      (this.email = email),
-      (this.desiredPosition = desiredPosition),
-      (this.desiredPay = desiredPay),
-      (this.specializations = specializations);
+      (this.name = name),
+      (this.secondName = secondName),
+      (this.avatar = avatar),
+      (this.bithday = bithday),
+      (this.gender = gender),
+      (this.phone = phone),
+      (this.city = city),
+      (this.country = country),
+      (this.email = email);
   }
 };

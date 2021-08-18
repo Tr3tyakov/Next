@@ -43,6 +43,7 @@ export interface ITypeLicense {
 }
 
 const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
+  console.log(mainInfo);
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const [desiredSalary, setDesiredSalary] = React.useState<string>('');
@@ -290,6 +291,6 @@ export const getServerSideProps = async (ctx: any) => {
     withCredentials: true,
   });
   return {
-    props: { mainInfo: userData.data[0].mainInfo, userEmail: userData.data[0].email },
+    props: { mainInfo: userData.data },
   };
 };

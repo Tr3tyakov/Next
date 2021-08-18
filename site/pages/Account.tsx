@@ -21,13 +21,12 @@ import { IMainInfo } from '../Components/Interfaces/IUser';
 
 interface IAccountProps {
   mainInfo: IMainInfo;
-  email: string;
 }
 
-const Account: React.FC<IAccountProps> = ({ mainInfo, email }) => {
+const Account: React.FC<IAccountProps> = ({ mainInfo }) => {
   const classes = useStyles();
 
-  console.log(mainInfo, email);
+  console.log(mainInfo);
 
   return (
     <MainLayouts>
@@ -84,13 +83,19 @@ const Account: React.FC<IAccountProps> = ({ mainInfo, email }) => {
             </a>
           </Link>
         </div>
-        <div>
-          <p>{`${mainInfo.name} ${mainInfo.secondName}`}</p>
-          <p>{mainInfo.city}</p>
-          <p>{email}</p>
-          <p>{mainInfo.country}</p>
-          <p>{mainInfo.phone}</p>
-        </div>
+        {mainInfo.name ? (
+          <div>
+            <p>{`${mainInfo.name} ${mainInfo.secondName}`}</p>
+            <p>{mainInfo.city}</p>
+            <p>{mainInfo.email}</p>
+            <p>{mainInfo.country}</p>
+            <p>{mainInfo.phone}</p>
+          </div>
+        ) : (
+          <Typography variant="subtitle2" className={classes.gutterBottom}>
+            Добавьте информацию о себе
+          </Typography>
+        )}
       </Paper>
     </MainLayouts>
   );
@@ -107,8 +112,7 @@ export const getServerSideProps = async (ctx: any) => {
 
   return {
     props: {
-      mainInfo: userData.data[0].mainInfo,
-      email: userData.data[0].email,
+      mainInfo: userData.data,
     },
   };
 };
