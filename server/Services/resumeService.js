@@ -21,9 +21,8 @@ class ResumeService {
     });
     return resume;
   }
-  async getResume(refreshToken) {
-    const tokenData = await tokenService.checkRefreshToken(refreshToken);
-    return await resumeModel.find();
+  async getResume() {
+    return await resumeModel.find().limit(20);
   }
 }
 module.exports = new ResumeService();

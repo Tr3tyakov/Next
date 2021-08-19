@@ -43,9 +43,9 @@ class VacancyService {
     if (refreshToken) {
       const tokenData = await tokenService.checkRefreshToken(refreshToken);
       const favorite = await favoriteModel.findOne({ user: tokenData.user.id });
-      return { vacancyData, favorite };
+      return { vacancyData, favorite, auth: true };
     }
-    return vacancyData;
+    return { vacancyData, favorite: null, auth: false };
   }
   async getCurrentVacancy(id) {
     const vacancyData = await vacancyModel.findById(id);

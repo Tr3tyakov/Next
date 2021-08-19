@@ -28,9 +28,10 @@ const Authorization: React.FC = () => {
     setPassword(value);
   };
 
-  const enter = (event: React.KeyboardEvent) => {
+  const enter = async (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      setLogin(email, password);
+      const userData = await setLogin(email, password);
+      console.log(userData);
     }
   };
 

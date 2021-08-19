@@ -12,10 +12,12 @@ export const setLogin = (email: string, password: string) => {
       dispatch(setAuth(true, userData.data));
       Router.push('/FindVacancies');
     } catch (e) {
-      console.log(e);
+      console.log(e.response.data);
+      alert(e.response.data.message);
     }
   };
 };
+
 export const setLogout = () => {
   return async (dispatch: Dispatch<userActions>) => {
     try {
@@ -33,7 +35,6 @@ export const checkAuth = () => {
     try {
       const userData = await UserService.refresh();
       localStorage.setItem('Token', userData.data.accessToken);
-      console.log(userData, 'userData');
 
       dispatch(setAuth(true, userData.data));
     } catch (e) {

@@ -8,35 +8,24 @@ import axios from 'axios';
 import { IVacancy } from '../Components/Interfaces/IVacancy';
 import { URL } from '../Components/utils/http/utils';
 import nookies from 'nookies';
-import { changeFavoriteVacancies } from '../Components/utils/api/vacancyApi';
-import { useSnackbar } from 'notistack';
 import { Box } from '@material-ui/core';
 import Link from 'next/link';
+import Resume from '../Components/resume/Resume';
+import { IResume } from '../Components/Interfaces/IResume';
+
 interface IHomeProps {
-  resume: any;
-  isAuth?: boolean;
+  AllResume: IResume[];
 }
 
-const FindResume: React.FC<IHomeProps> = ({ isAuth, resume }) => {
-  console.log(resume);
+const FindResume: React.FC<IHomeProps> = ({ AllResume }) => {
   const [filter, setFilter] = React.useState<string>('');
-  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
-  //   const filterVacancies = React.useMemo(() => {
-  //     return vacancies.filter((element) =>
-  //       element.info.title.toLowerCase().includes(filter.toLowerCase()),
-  //     );
-  //   }, [filter]);
 
-  //   const changeFavorite = async (id: string) => {
-  //     const favoriteData = await changeFavoriteVacancies(id);
-  //     if (favoriteData.status === 200) {
-  //       const message = favoriteData.data.message;
-  //       return enqueueSnackbar(message, { variant: 'success' });
-  //     }
-  //     enqueueSnackbar('Error', { variant: 'error' });
-  //   };
-  return <div></div>;
+  const filterVacancies = React.useMemo(() => {
+    return AllResume.filter((element: any) =>
+      element.desiredPosition.toLowerCase().includes(filter.toLowerCase()),
+    );
+  }, [filter]);
   return (
     <MainLayouts>
       <div>
@@ -44,7 +33,7 @@ const FindResume: React.FC<IHomeProps> = ({ isAuth, resume }) => {
           <FilterVacancies
             classes={classes}
             setFilter={setFilter}
-            title={'Вакансия, которая вас интересует'}
+            title={'Должность, которая вас интересует'}
           />
         </div>
         <Box display="flex">
@@ -64,18 +53,9 @@ const FindResume: React.FC<IHomeProps> = ({ isAuth, resume }) => {
           </Box>
         </Box>
 
-        <div className={classes.cardsWrapper}>
-          {filterVacancies.map((element) => (
-            <Vacancy
-              vacancy={element.info}
-              id={element._id}
-              key={element._id}
-              favorite={favorite}
-              changeFavoriteOnServer={changeFavorite}
-              isAuth={isAuth}
-            />
-          ))}
-        </div>
+        {filterVacancies.map((element) => (
+          <Resume id={element._id} resume={element} key={element._id} />
+        ))}
       </div>
     </MainLayouts>
   );
@@ -84,16 +64,10 @@ const FindResume: React.FC<IHomeProps> = ({ isAuth, resume }) => {
 export default FindResume;
 
 export const getServerSideProps = async (ctx: any) => {
-  const { refreshToken } = nookies.get(ctx);
-  const resumeData = await axios.get(`${URL}/resume`, {
-    headers: { refreshToken: refreshToken ? refreshToken : '' },
-    withCredentials: true,
-  });
-
+  const resumeData = await axios.get(`${URL}/resume`);
   return {
     props: {
-      resume: resumeData.data,
+      AllResume: resumeData.data,
     },
   };
 };
-///chekc error seriallize

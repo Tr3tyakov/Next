@@ -10,7 +10,7 @@ export const setRegistration = async (email: string, password: string) => {
 };
 export const updateMainInfo = async (mainInfo: IMainInfo) => {
   try {
-    const userData = await UserService.updateMainInfo(mainInfo);
+    return await UserService.updateMainInfo(mainInfo);
   } catch (e) {
     console.log(e);
   }

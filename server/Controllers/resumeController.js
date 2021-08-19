@@ -5,7 +5,6 @@ class ResumeController {
   async createResume(req, res, next) {
     const { refreshToken } = req.cookies;
     const { newResume, mainInfo } = req.body;
-    console.log(newResume, mainInfo);
     try {
       const resumeData = await ResumeService.createResume(refreshToken, newResume, mainInfo);
       res.json(resumeData);
@@ -14,9 +13,8 @@ class ResumeController {
     }
   }
   async getResume(req, res, next) {
-    const refreshToken = req.headers.refreshtoken;
     try {
-      const resumeData = await ResumeService.getResume(refreshToken);
+      const resumeData = await ResumeService.getResume();
       res.json(resumeData);
     } catch (error) {
       next(error);

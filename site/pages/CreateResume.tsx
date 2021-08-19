@@ -2,8 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { useStyles } from '../styles/create/resume/createResume.style';
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
+
 import MainLayouts from '../Components/layouts/MainLayouts';
 import { useSnackbar } from 'notistack';
 import { IMainInfo } from '../Components/Interfaces/IUser';

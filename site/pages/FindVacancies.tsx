@@ -16,10 +16,11 @@ import Link from 'next/link';
 interface IHomeProps {
   vacancies: [IVacancy];
   favorite: [];
-  isAuth?: boolean;
+  isAuth: boolean;
 }
 
 const FindVacancies: React.FC<IHomeProps> = ({ isAuth, vacancies, favorite }) => {
+  console.log(vacancies, favorite);
   const [filter, setFilter] = React.useState<string>('');
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
@@ -37,7 +38,7 @@ const FindVacancies: React.FC<IHomeProps> = ({ isAuth, vacancies, favorite }) =>
     }
     enqueueSnackbar('Error', { variant: 'error' });
   };
-
+  // return <div></div>;
   return (
     <MainLayouts>
       <div>
@@ -45,7 +46,7 @@ const FindVacancies: React.FC<IHomeProps> = ({ isAuth, vacancies, favorite }) =>
           <FilterVacancies
             classes={classes}
             setFilter={setFilter}
-            title={'Должность, которая вас интересует'}
+            title={'Вакансия, которая вас интересует'}
           />
         </div>
         <Box display="flex">
@@ -91,19 +92,11 @@ export const getServerSideProps = async (ctx: any) => {
     withCredentials: true,
   });
 
-  if (vacanciesData.data.favorite) {
-    return {
-      props: {
-        isAuth: true,
-        vacancies: vacanciesData.data.vacancyData,
-        favorite: vacanciesData.data.favorite.list,
-      },
-    };
-  }
   return {
     props: {
+      isAuth: vacanciesData.data.auth,
       vacancies: vacanciesData.data.vacancyData,
-      favorite: [],
+      favorite: vacanciesData.data.favorite === null ? [] : vacanciesData.data.favorite.list,
     },
   };
 };

@@ -33,7 +33,7 @@ const Home: React.FC = () => {
               поиску сотрудников в России*
             </Typography>
             <div className={classes.btn}>
-              <Link href={isAuth ? '/CreateOffer' : '/Authorization'}>
+              <Link href={isAuth ? '/CreateVacancy' : '/Authorization'}>
                 <a className={classes.a}>
                   <Button className={classes.btn} variant="contained" color="primary">
                     Создать вакансию

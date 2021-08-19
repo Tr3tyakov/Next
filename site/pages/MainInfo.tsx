@@ -13,6 +13,7 @@ import nookies from 'nookies';
 import axios from 'axios';
 import { URL as ServerURL } from '../Components/utils/http/utils';
 import { updateMainInfo } from '../Components/utils/api/userApi';
+import { useSnackbar } from 'notistack';
 
 interface IMainInfoProps {
   mainInfo: {
@@ -28,7 +29,8 @@ interface IMainInfoProps {
   };
 }
 const MainInfo: React.FC<IMainInfoProps> = ({ mainInfo }) => {
-  console.log(mainInfo);
+  const { enqueueSnackbar } = useSnackbar();
+
   const [avatar, setAvatar] = React.useState<{ file: string; img: string }>({
     file: mainInfo.avatar,
     img: '',
@@ -53,7 +55,7 @@ const MainInfo: React.FC<IMainInfoProps> = ({ mainInfo }) => {
     const img = URL.createObjectURL(file);
     setAvatar({ ...avatar, img, file });
   };
-  const saveData = () => {
+  const saveData = async () => {
     const mainInfo = {
       avatar: avatar.file,
       gender,
@@ -65,7 +67,11 @@ const MainInfo: React.FC<IMainInfoProps> = ({ mainInfo }) => {
       city,
       country,
     };
-    updateMainInfo(mainInfo);
+    const userData = await updateMainInfo(mainInfo);
+    if (userData!.status === 200) {
+      return enqueueSnackbar('Информация успешно обновлена', { variant: 'success' });
+    }
+    enqueueSnackbar('error', { variant: 'error' });
   };
 
   return (

@@ -12,7 +12,6 @@ import Image from 'next/image';
 import ActiveStar from '../../public/img/activeStar.svg';
 import Star from '../../public/img/star.svg';
 import { changeFavoriteVacancies } from '../utils/api/vacancyApi';
-import SnackBar from '../layouts/SnackBar';
 
 interface IVacanciesProps {
   vacancy: IInfoVacancy;
@@ -74,19 +73,20 @@ const Vacancy: React.FC<IVacanciesProps> = ({
                   ))}
                 </div>
               }></CardHeader>
-            <div className={classes.favorite}>
-              <IconButton onClick={changeFavorite}>
-                {isAuth ? (
-                  favoriteList.includes(id) ? (
+            {isAuth ? (
+              <div className={classes.favorite}>
+                <IconButton onClick={changeFavorite}>
+                  {favoriteList.includes(id) ? (
                     <Image src={ActiveStar} width={20} height={20}></Image>
                   ) : (
                     <Image src={Star} width={22} height={22}></Image>
-                  )
-                ) : (
-                  ''
-                )}
-              </IconButton>
-            </div>
+                  )}
+                </IconButton>
+              </div>
+            ) : (
+              ''
+            )}
+
             <div className={classes.cardFooter}>
               <div className={classes.date}>
                 <Typography color="textSecondary" gutterBottom>
