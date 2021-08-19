@@ -17,23 +17,7 @@ import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
 
 interface IResumeProps {
-  resume: {
-    languages: [
-      { mainLanguage: string; additionLanguages: [{ language: string; knowledge: string }] },
-    ];
-    skills: string[];
-    typeLicense: {
-      haveCar: boolean;
-      typeCategory: string[];
-    };
-    education: string;
-    specializations: string[];
-    desiredPosition: string;
-    desiredPay: number;
-    aboutMe: string;
-    date: Date;
-    mainInfo: IMainInfo;
-  };
+  resume: any;
   id: string;
 }
 const Resume: React.FC<IResumeProps> = ({ resume, id }) => {

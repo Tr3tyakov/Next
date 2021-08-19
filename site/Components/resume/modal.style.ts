@@ -16,6 +16,10 @@ export const useStyles = makeStyles({
     width: '100%',
     minWidth: '250px',
   },
+  forgotPassword: {
+    maxWidth: '450px',
+    width: '100%',
+  },
   outlineBtn: {
     flex: 1,
     margin: '10px 10px 0 0',

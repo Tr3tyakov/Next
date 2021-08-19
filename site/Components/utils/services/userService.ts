@@ -48,4 +48,12 @@ export class UserService {
       { withCredentials: true },
     );
   }
+  static async changePassword(link: string, newPassword: string) {
+    const data = await axios.post(`${URL}/changePassword`, { link, newPassword });
+    return data;
+  }
+  static async forgotPassword(email: string) {
+    const data = await axios.post(`${URL}/forgotPassword`, { email });
+    return data;
+  }
 }

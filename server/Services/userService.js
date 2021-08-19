@@ -4,6 +4,9 @@ const userDto = require('../DTO/userDto');
 const TokenService = require('./tokenService');
 const ApiError = require('../middleware/apiError');
 const fileService = require('./fileService');
+const transportMailer = require('../nodemailer/confirmEmail');
+const uuid = require('uuid');
+const passwordMailer = require('../nodemailer/forgotPassword');
 
 class UserService {
   async registration(email, password) {
@@ -12,8 +15,17 @@ class UserService {
       if (check) {
         throw ApiError.BadRequest('Данный пользователь уже существует');
       }
+      const activationLink = uuid.v4();
+      const forgotPasswordLink = uuid.v4();
+      await transportMailer(email, activationLink);
       const hashPassword = bcrypt.hashSync(password, 6);
-      const user = userModel.create({ email, password: hashPassword });
+      const user = userModel.create({
+        email,
+        password: hashPassword,
+        activationLink,
+        forgotPasswordLink,
+        isActiveEmail: false,
+      });
       return user;
     } catch (e) {
       throw ApiError.BadRequest(e);
@@ -23,7 +35,7 @@ class UserService {
     try {
       const check = await userModel.findOne({ email });
       if (!check) {
-        throw ApiError.BadRequest('Данный пользователь не зарегестрирован');
+        throw ApiError.BadRequest('Данный пользователь не зарегистрирован');
       }
       const checkPassword = bcrypt.compareSync(password, check.password);
       if (!checkPassword) {
@@ -58,7 +70,45 @@ class UserService {
       throw ApiError.BadRequest(error);
     }
   }
-
+  async activate(link) {
+    const check = await userModel.findOneAndUpdate(
+      { activationLink: link },
+      { isActiveEmail: true },
+    );
+    return check;
+  }
+  async changePassword(link, newPassword) {
+    try {
+      const userData = await userModel.findOne({ forgotPasswordLink: link });
+      const checkPassword = await bcrypt.compare(newPassword, userData.password);
+      console.log(checkPassword);
+      if (checkPassword) {
+        throw ApiError.BadRequest('Пароль должен отличаться от предыдущего');
+      }
+      const hashPassword = await bcrypt.hash(newPassword, 6);
+      userData.password = hashPassword;
+      await userData.save();
+      return { message: 'Пароль был успешно изменен' };
+    } catch (e) {
+      throw ApiError.BadRequest(e);
+    }
+  }
+  async forgotPassword(email) {
+    try {
+      const check = await userModel.findOne({ email });
+      console.log(check);
+      if (!check) {
+        return { message: 'Данный пользователь не зарегистрирован' };
+      }
+      await passwordMailer(email, check.forgotPasswordLink);
+      return {
+        message:
+          'На Ваш почтовый ящик отправлена ссылка, перейдя по которой, вы сможете изменить пароль',
+      };
+    } catch (e) {
+      throw ApiError.BadRequest(e);
+    }
+  }
   async getMainInfo(refreshToken) {
     try {
       const tokenData = await TokenService.checkRefreshToken(refreshToken);

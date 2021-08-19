@@ -57,6 +57,35 @@ class UserController {
       next(e);
     }
   }
+  async activate(req, res, next) {
+    try {
+      const { link } = req.params;
+      console.log(link);
+      const userData = await UserService.activate(link);
+      res.redirect(`${process.env.SERVER}/Authorization`);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async changePassword(req, res, next) {
+    try {
+      const { link, newPassword } = req.body;
+      console.log(link, newPassword);
+      const userData = await UserService.changePassword(link, newPassword);
+      res.json(userData.message);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async forgotPassword(req, res, next) {
+    try {
+      const { email } = req.body;
+      const userData = await UserService.forgotPassword(email);
+      res.json(userData.message);
+    } catch (e) {
+      next(e);
+    }
+  }
   async getUser(req, res, next) {
     const refreshToken = req.headers.refreshtoken;
     try {

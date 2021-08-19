@@ -11,6 +11,10 @@ const User = new Schema({
   phone: { type: String, default: '' },
   city: { type: String, default: '' },
   country: { type: String, default: '' },
+  activationLink: { type: String },
+  forgotPasswordLink: { type: String },
+  forgotPassword: { type: String },
+  isActiveEmail: false,
 });
 
 module.exports = model('User', User);

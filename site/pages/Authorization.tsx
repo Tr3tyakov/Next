@@ -8,6 +8,7 @@ import { useStyles } from '../Components/header/header.style';
 import MainLayouts from '../Components/layouts/MainLayouts';
 import { setRegistration } from '../Components/utils/api/userApi';
 import { useSnackbar } from 'notistack';
+import ForgotPasswordModal from '../Components/account/ForgotPasswordModal';
 
 const Authorization: React.FC = () => {
   const classes = useStyles();
@@ -15,7 +16,15 @@ const Authorization: React.FC = () => {
 
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
+  const [modal, setModal] = React.useState<boolean>(false);
   const { setLogin } = useActions();
+
+  const openModal = () => {
+    setModal(true);
+  };
+  const closeModal = React.useCallback(() => {
+    setModal(false);
+  }, []);
 
   //inputs
   const changeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +40,6 @@ const Authorization: React.FC = () => {
   const enter = async (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       const userData = await setLogin(email, password);
-      console.log(userData);
     }
   };
 
@@ -49,6 +57,7 @@ const Authorization: React.FC = () => {
 
   return (
     <MainLayouts>
+      <ForgotPasswordModal modal={modal} closeModal={closeModal} />
       <div className={classes.wrapper}>
         <div>
           <Typography align="center" color="primary" variant="h5" gutterBottom>
@@ -73,13 +82,15 @@ const Authorization: React.FC = () => {
           </form>
         </div>
         <div className={classes.forgotPassword}>
-          <Link href="/password">
-            <a className={classes.textDecortation}>
-              <Typography align="center" color="textSecondary" variant="subtitle2" gutterBottom>
-                Забыли пароль?
-              </Typography>
-            </a>
-          </Link>
+          <Typography
+            className={classes.passwordText}
+            align="center"
+            color="textSecondary"
+            variant="subtitle2"
+            gutterBottom
+            onClick={openModal}>
+            Забыли пароль?
+          </Typography>
         </div>
         <div className={classes.btns}>
           <Button className={classes.outlineBtn} onClick={login} variant="outlined" color="primary">

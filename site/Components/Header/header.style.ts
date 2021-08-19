@@ -16,7 +16,9 @@ export const useStyles = makeStyles({
   avatar: {
     borderRadius: '50%',
   },
-
+  passwordText: {
+    cursor: 'pointer',
+  },
   modal: {
     display: 'flex',
     justifyContent: 'center',
