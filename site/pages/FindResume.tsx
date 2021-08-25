@@ -15,26 +15,55 @@ import { IResume } from '../Components/Interfaces/IResume';
 
 interface IHomeProps {
   AllResume: IResume[];
+  countResume: number;
 }
 
-const FindResume: React.FC<IHomeProps> = ({ AllResume }) => {
+const FindResume: React.FC<IHomeProps> = ({ AllResume, countResume }) => {
   const [filter, setFilter] = React.useState<string>('');
+  const [page, setPage] = React.useState<number>(2);
+  const [fetching, setFetching] = React.useState<boolean>(false);
+  const [resume, setResume] = React.useState<IResume[]>(AllResume);
+  const [count, setCount] = React.useState<number>(countResume);
   const classes = useStyles();
 
-  const filterVacancies = React.useMemo(() => {
-    return AllResume.filter((element: any) =>
+  const filterResume = React.useMemo(() => {
+    return resume.filter((element: any) =>
       element.desiredPosition.toLowerCase().includes(filter.toLowerCase()),
     );
-  }, [filter]);
+  }, [filter, resume]);
+
+  React.useEffect(() => {
+    if (fetching) {
+      const fetchingResume = async () => {
+        const resumeData = await axios.get(`${URL}/resume?page=${page}`);
+        setFetching(false);
+        setPage((page) => page + 1);
+        setResume([...resume, ...resumeData.data.resumeData]);
+      };
+      fetchingResume();
+    }
+  }, [fetching]);
+
+  React.useEffect(() => {
+    document.addEventListener('scroll', handlerScroll);
+    return function () {
+      document.removeEventListener('scroll', handlerScroll);
+    };
+  });
+
+  const handlerScroll = (e: any) => {
+    const scrollHeight = e.target.documentElement.scrollHeight;
+    const scrollTop = e.target.documentElement.scrollTop;
+    const innerHeight = window.innerHeight;
+    if (scrollHeight - innerHeight - scrollTop < 100 && resume.length < count) {
+      setFetching(true);
+    }
+  };
   return (
     <MainLayouts>
       <div>
         <div className={classes.flex}>
-          <FilterVacancies
-            classes={classes}
-            setFilter={setFilter}
-            title={'Должность, которая вас интересует'}
-          />
+          <FilterVacancies classes={classes} setFilter={setFilter} title={'Должность'} />
         </div>
         <Box display="flex">
           <Box margin="0 10px 0 0">
@@ -53,7 +82,7 @@ const FindResume: React.FC<IHomeProps> = ({ AllResume }) => {
           </Box>
         </Box>
 
-        {filterVacancies.map((element) => (
+        {filterResume.map((element) => (
           <Resume id={element._id} resume={element} key={element._id} />
         ))}
       </div>
@@ -67,7 +96,8 @@ export const getServerSideProps = async (ctx: any) => {
   const resumeData = await axios.get(`${URL}/resume`);
   return {
     props: {
-      AllResume: resumeData.data,
+      AllResume: resumeData.data.resumeData,
+      countResume: resumeData.data.count,
     },
   };
 };

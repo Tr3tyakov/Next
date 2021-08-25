@@ -5,6 +5,7 @@ const nextConfig = {
   images: {
     domains: ['localhost'],
   },
+  responseStrictMode: false,
 };
 
 module.exports = withPlugins([[withImages]], nextConfig);

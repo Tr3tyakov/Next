@@ -56,4 +56,8 @@ export class UserService {
     const data = await axios.post(`${URL}/forgotPassword`, { email });
     return data;
   }
+  static async confirmEmail(email: string) {
+    const data = await axios.post(`${URL}/confirmEmail`, { email });
+    return data;
+  }
 }

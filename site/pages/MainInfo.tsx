@@ -80,11 +80,11 @@ const MainInfo: React.FC<IMainInfoProps> = ({ mainInfo }) => {
         <Link href="/Account">
           <a className={classes.link}>Мой аккаунт</a>
         </Link>
-        <Typography color="textPrimary">Основная информация</Typography>
+        <Typography color="black">Основная информация</Typography>
       </Breadcrumbs>
       <div className={classes.user}>
         {avatar.img ? (
-          <img className={classes.avatar} src={avatar.img} />
+          <img className={classes.avatar} src={avatar.img} alt="avatar" />
         ) : avatar.file ? (
           <Image
             className={classes.avatar}
@@ -92,6 +92,7 @@ const MainInfo: React.FC<IMainInfoProps> = ({ mainInfo }) => {
             layout="intrinsic"
             width={200}
             height={200}
+            alt="avatar"
           />
         ) : (
           <Avatar className={classes.userIcon} />
@@ -126,15 +127,21 @@ const MainInfo: React.FC<IMainInfoProps> = ({ mainInfo }) => {
       <div>
         <Typography gutterBottom>Пол</Typography>
         <div className={classes.btns}>
-          <Button variant={gender === 'Мужской' ? 'contained' : 'outlined'} onClick={changeGender}>
+          <Button
+            className={classes.btn}
+            variant={gender === 'Мужской' ? 'contained' : 'outlined'}
+            onClick={changeGender}>
             Мужской
           </Button>
-          <Button variant={gender === 'Женский' ? 'contained' : 'outlined'} onClick={changeGender}>
+          <Button
+            className={classes.btn}
+            variant={gender === 'Женский' ? 'contained' : 'outlined'}
+            onClick={changeGender}>
             Женский
           </Button>
         </div>
         <div className={classes.saveData}>
-          <Button variant="contained" color="primary" onClick={saveData}>
+          <Button className={classes.btn} variant="contained" color="primary" onClick={saveData}>
             Сохранить данные
           </Button>
         </div>

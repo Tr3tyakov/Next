@@ -11,6 +11,7 @@ import { URL } from '../Components/utils/http/utils';
 import FavoriteVacancies from '../Components/vacancies/FavoriteVacancy';
 import { useSnackbar } from 'notistack';
 import { changeFavoriteVacancies } from '../Components/utils/api/vacancyApi';
+import Link from 'next/link';
 
 interface IFavoriteProps {
   favorite: string[];
@@ -57,26 +58,21 @@ const Favorite: React.FC<IFavoriteProps> = ({ favorite, vacancies }) => {
         <div>
           <Typography variant="h4">Избранное</Typography>
         </div>
-        <div className={classes.btns}>
-          <Button className={classes.btn} variant="contained" color="default">
-            Вакансии
-          </Button>
-          <Button className={classes.btn} variant="contained" color="default">
-            Подписки
-          </Button>
-        </div>
-        {/* {subscribe ?} */}
         <div className={classes.flex}>
           <NotificationsIcon className={classes.img} />
-          <Typography variant="h6">Подписывайтесь на поиски</Typography>
+          <Typography variant="h6">Добавьте вакансии в избранное</Typography>
           <Typography variant="subtitle2">
-            Получайте уведомления о новых вакансиях по интересующим вас параметрам
+            Вы можете вернуться к ним позже, чтобы откликнуться
           </Typography>
         </div>
         <div>
-          <Button variant="contained" color="primary">
-            Создать подписку
-          </Button>
+          <Link href="/FindVacancies">
+            <a style={{ textDecoration: 'none' }}>
+              <Button className={classes.btn} variant="contained" color="primary">
+                Искать вакансии
+              </Button>
+            </a>
+          </Link>
         </div>
       </div>
     </MainLayouts>

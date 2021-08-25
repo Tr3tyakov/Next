@@ -1,4 +1,4 @@
-import makeStyles from '@material-ui/styles/makeStyles';
+import { makeStyles } from '@material-ui/styles';
 export const useStyles = makeStyles({
   flex: {
     display: 'flex',
@@ -9,7 +9,7 @@ export const useStyles = makeStyles({
     margin: '10px 0',
   },
   paper: {
-    padding: '20px',
+    padding: '10px',
     margin: '20px 0',
   },
   flexBetween: {
@@ -52,5 +52,9 @@ export const useStyles = makeStyles({
   },
   salary: {
     margin: '0',
+    padding: '0 16px',
+  },
+  btn: {
+    padding: '5px 10px',
   },
 });

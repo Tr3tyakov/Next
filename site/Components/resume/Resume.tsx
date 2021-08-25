@@ -24,43 +24,48 @@ const Resume: React.FC<IResumeProps> = ({ resume, id }) => {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.paper}>
-      <Box>
-        <Typography variant="h6">{resume.desiredPosition}</Typography>
-        <Typography variant="subtitle2">{resume.desiredPay}&nbsp;руб.</Typography>
-        <Typography variant="subtitle2">
-          {`${resume.mainInfo.name} ${resume.mainInfo.secondName}`}
-        </Typography>
-        <Typography variant="subtitle2">{resume.mainInfo.email}</Typography>
-        <Typography variant="subtitle2">{resume.education}</Typography>
-        <div>
+    <Link href={`/currentResume/${id}`}>
+      <a style={{ textDecoration: 'none' }}>
+        <Paper className={classes.paper}>
           <div>
-            <Typography color="textSecondary" gutterBottom>
-              Опубликовано: <br />
-              {new Date(resume.date).toLocaleString()}
+            <Typography variant="h6">{resume.desiredPosition}</Typography>
+            <Typography variant="subtitle2">{resume.desiredPay}&nbsp;руб.</Typography>
+            <Typography variant="subtitle2">
+              {`${resume.mainInfo.name} ${resume.mainInfo.secondName}`}
             </Typography>
+            <Typography variant="subtitle2">{resume.mainInfo.email}</Typography>
+            <Typography variant="subtitle2">{resume.education}</Typography>
+            <div>
+              <div>
+                <Typography color="textSecondary" gutterBottom>
+                  Опубликовано: <br />
+                  {new Date(resume.date).toLocaleString()}
+                </Typography>
+              </div>
+              <Button className={classes.btn} color="primary" variant="contained">
+                Контакты
+              </Button>
+            </div>
           </div>
-          <Button color="primary" variant="outlined">
-            Контакты
-          </Button>
-        </div>
-      </Box>
-      <Box>
-        {resume.mainInfo.avatar ? (
-          <Box m={2}>
-            <Image
-              className={classes.avatar}
-              src={`http://localhost:5000/${resume.mainInfo.avatar}`}
-              layout="intrinsic"
-              width={100}
-              height={100}
-            />
-          </Box>
-        ) : (
-          <Avatar />
-        )}
-      </Box>
-    </Paper>
+          <div>
+            {resume.mainInfo.avatar ? (
+              <Box m={2}>
+                <Image
+                  className={classes.avatar}
+                  src={`http://localhost:5000/${resume.mainInfo.avatar}`}
+                  layout="intrinsic"
+                  width={100}
+                  height={100}
+                  alt="avatar"
+                />
+              </Box>
+            ) : (
+              <Avatar />
+            )}
+          </div>
+        </Paper>
+      </a>
+    </Link>
   );
 };
 

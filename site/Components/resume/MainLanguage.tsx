@@ -26,7 +26,7 @@ const MainLanguage: React.FC<IMainLanguagesProps> = React.memo(
       return foreignLanguage.filter((element) =>
         element.toLowerCase().includes(input.toLowerCase()),
       );
-    }, [input]);
+    }, [input, foreignLanguage]);
     const addLanguage = (element: string) => {
       setMainLanguage(element);
       setInput(element);

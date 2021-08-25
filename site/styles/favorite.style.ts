@@ -1,4 +1,5 @@
-import makeStyles from '@material-ui/styles/makeStyles';
+import { makeStyles } from '@material-ui/styles';
+
 export const useStyles = makeStyles({
   wrapper: {
     display: 'flex',
@@ -31,6 +32,6 @@ export const useStyles = makeStyles({
     justifyContent: 'center',
   },
   btn: {
-    margin: '5px 5px',
+    padding: '5px 10px',
   },
 });

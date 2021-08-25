@@ -13,8 +13,18 @@ class ResumeController {
     }
   }
   async getResume(req, res, next) {
+    const { page } = req.query;
     try {
-      const resumeData = await ResumeService.getResume();
+      const resumeData = await ResumeService.getResume(page);
+      res.json(resumeData);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getCurrentResume(req, res, next) {
+    try {
+      const { id } = req.params;
+      const resumeData = await ResumeService.getCurrentResume(id);
       res.json(resumeData);
     } catch (error) {
       next(error);

@@ -1,4 +1,5 @@
-import makeStyles from '@material-ui/styles/makeStyles';
+import { makeStyles } from '@material-ui/styles';
+
 export const useStyles = makeStyles({
   textField: {
     display: 'flex',
@@ -28,7 +29,6 @@ export const useStyles = makeStyles({
   },
 
   checkbox: {
-    width: '500px',
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
@@ -38,14 +38,32 @@ export const useStyles = makeStyles({
     flexWrap: 'wrap',
   },
   btn: {
-    margin: '20px 20px 0 0',
+    padding: '5px 10px',
+    margin: '10px 5px',
   },
   typeCategory: {
     maxWidth: '700px',
     width: '100%',
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+  },
+  type: {
+    margin: '2px 2px!important',
+  },
+  wrapperCurrency: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    width: ' 100%',
+    // maxWidth: ' 290px',
+    flexDirection: 'column',
+  },
+  wrapperCurrencyMedia: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    width: ' 100%',
+    maxWidth: ' 290px',
+    flexDirection: 'column',
   },
   currency: {
     maxWidth: '100px',

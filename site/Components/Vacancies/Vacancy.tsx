@@ -11,7 +11,6 @@ import { IInfoVacancy } from '../Interfaces/IVacancy';
 import Image from 'next/image';
 import ActiveStar from '../../public/img/activeStar.svg';
 import Star from '../../public/img/star.svg';
-import { changeFavoriteVacancies } from '../utils/api/vacancyApi';
 
 interface IVacanciesProps {
   vacancy: IInfoVacancy;
@@ -39,18 +38,14 @@ const Vacancy: React.FC<IVacanciesProps> = ({
     changeFavoriteOnServer(id);
   };
   const classes = useStyles();
-
   return (
     <Paper className={classes.paper}>
       <Link href={`/currentWork/${id}`}>
         <a style={{ textDecoration: 'none' }}>
-          <Card className={classes.ownerCard}>
+          <Card className={classes.card}>
             <CardHeader
               title={
                 <div className={classes.cardMainInfo}>
-                  {/* <Typography variant="subtitle1" color="primary" gutterBottom>
-                    Сейчас просматривают: 43 чел.
-                  </Typography> */}
                   <Typography className={classes.work} variant="h6" gutterBottom>
                     {vacancy.title}
                   </Typography>
@@ -77,9 +72,9 @@ const Vacancy: React.FC<IVacanciesProps> = ({
               <div className={classes.favorite}>
                 <IconButton onClick={changeFavorite}>
                   {favoriteList.includes(id) ? (
-                    <Image src={ActiveStar} width={20} height={20}></Image>
+                    <Image src={ActiveStar} width={20} height={20} alt="Image"></Image>
                   ) : (
-                    <Image src={Star} width={22} height={22}></Image>
+                    <Image src={Star} width={22} height={22} alt="Image"></Image>
                   )}
                 </IconButton>
               </div>
@@ -95,11 +90,8 @@ const Vacancy: React.FC<IVacanciesProps> = ({
                 </Typography>
               </div>
               <div className={classes.btns}>
-                <Button color="primary" variant="outlined">
-                  Контакты
-                </Button>
-                <Button color="primary" variant="contained">
-                  Откликнуться
+                <Button className={classes.btn} color="primary" variant="contained">
+                  Подробнее
                 </Button>
               </div>
             </div>

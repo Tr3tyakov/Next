@@ -1,4 +1,4 @@
-import makeStyles from '@material-ui/styles/makeStyles';
+import { makeStyles } from '@material-ui/styles';
 export const useStyles = makeStyles({
   nav: {
     margin: '20px 0',

@@ -1,4 +1,5 @@
-import makeStyles from '@material-ui/styles/makeStyles';
+import { makeStyles } from '@material-ui/styles';
+
 export const useStyles = makeStyles({
   paper: {
     padding: '20px',
@@ -12,5 +13,8 @@ export const useStyles = makeStyles({
   },
   avatar: {
     borderRadius: '5px',
+  },
+  btn: {
+    padding: '5px 10px',
   },
 });

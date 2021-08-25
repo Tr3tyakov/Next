@@ -1,4 +1,5 @@
-import makeStyles from '@material-ui/styles/makeStyles';
+import { makeStyles } from '@material-ui/styles';
+
 export const useStyles = makeStyles({
   user: {
     display: 'flex',
@@ -27,6 +28,7 @@ export const useStyles = makeStyles({
     flexWrap: 'wrap',
   },
   btn: {
+    padding: '5px 10px',
     margin: '10px 10px 0 0',
   },
   gutterBottom: {
@@ -36,6 +38,13 @@ export const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    textDecoration: 'none',
+
+    padding: '5px 0',
+  },
+  textDecoration: {
+    textDecoration: 'none',
+    color: 'black',
   },
   phone: {
     margin: 'auto',

@@ -9,3 +9,7 @@ export const setNewVacancy = async (newVacancy: INewVacancy) => {
   const favoriteData = await VacancyService.createVacancy(newVacancy);
   return favoriteData;
 };
+export const moreCurrentVacancies = async (title: string, page: number) => {
+  const vacancyData = await VacancyService.moreCurrentVacancies(title, page);
+  return vacancyData;
+};

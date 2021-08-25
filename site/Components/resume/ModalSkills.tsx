@@ -71,7 +71,12 @@ const ModalSkills: React.FC<AccountProps> = React.memo(
                 <Typography align="center" color="primary" variant="h5" gutterBottom>
                   Ключевые навыки
                 </Typography>
-                <Button variant="outlined" color="primary" size="small" onClick={clearSkills}>
+                <Button
+                  className={classes.btn}
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  onClick={clearSkills}>
                   Очистить
                 </Button>
               </div>
@@ -88,7 +93,12 @@ const ModalSkills: React.FC<AccountProps> = React.memo(
                     value={input}
                     onChange={changeInputValidation}></TextField>
                   {input ? (
-                    <Button className={classes.btn} color="primary" size="small" onClick={addSkill}>
+                    <Button
+                      className={classes.btn}
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      onClick={addSkill}>
                       <AddIcon />
                     </Button>
                   ) : (

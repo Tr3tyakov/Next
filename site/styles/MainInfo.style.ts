@@ -1,4 +1,5 @@
-import makeStyles from '@material-ui/styles/makeStyles';
+import { makeStyles } from '@material-ui/styles';
+
 export const useStyles = makeStyles({
   user: {
     display: 'flex',
@@ -53,6 +54,10 @@ export const useStyles = makeStyles({
     display: 'flex',
     flexWrap: 'wrap',
   },
+  btn: {
+    padding: '5px 10px',
+    margin: '10px 5px ',
+  },
   saveData: {
     width: '100%',
     display: 'flex',
@@ -60,7 +65,7 @@ export const useStyles = makeStyles({
   },
   link: {
     textDecoration: 'none',
-    color: 'gray',
+    color: 'lightgrey',
   },
   currentLink: {
     textDecoration: 'none',

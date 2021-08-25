@@ -17,6 +17,7 @@ export interface IMainInfo {
   city: string;
   country: string;
   email: string;
+  isActiveEmail?: boolean;
 }
 
 //actions

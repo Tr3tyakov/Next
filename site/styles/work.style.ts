@@ -1,4 +1,4 @@
-import makeStyles from '@material-ui/styles/makeStyles';
+import { makeStyles } from '@material-ui/styles';
 export const useStyles = makeStyles({
   container: {
     margin: '20px auto',
@@ -8,7 +8,7 @@ export const useStyles = makeStyles({
     width: '100%',
     height: '100%',
     backgroundColor: '#E0E0E0',
-    padding: '0 0 40px 0',
+    padding: '0 0 10px 0',
     boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.25)',
   },
   companyTag: {
@@ -28,7 +28,7 @@ export const useStyles = makeStyles({
     alignItems: 'center',
   },
   companyInfo: {
-    margin: '40px 0',
+    margin: '10px 0',
   },
   flex: {
     cursor: 'pointer',
@@ -47,6 +47,14 @@ export const useStyles = makeStyles({
   skills: {
     display: 'flex',
     flexWrap: 'wrap',
+  },
+  title: {
+    margin: '10px 0 ',
+  },
+  cardsWrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   skill: {
     margin: '5px 5px 0 0',

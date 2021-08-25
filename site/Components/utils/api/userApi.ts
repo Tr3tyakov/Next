@@ -52,3 +52,11 @@ export const forgotPassword = async (email: string) => {
     console.log(e);
   }
 };
+export const setConfirmEmail = async (email: string) => {
+  try {
+    const userData = await UserService.confirmEmail(email);
+    return userData;
+  } catch (e) {
+    console.log(e);
+  }
+};

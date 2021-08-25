@@ -1,5 +1,6 @@
-import makeStyles from '@material-ui/styles/makeStyles';
-export const useStyles = makeStyles({
+import { makeStyles } from '@material-ui/styles';
+
+export const useStyles = makeStyles((theme) => ({
   title: {
     margin: '70px 0 20px',
     fontStyle: 'Bold',
@@ -8,6 +9,11 @@ export const useStyles = makeStyles({
     lineHeight: '75px',
     textAlign: 'center',
     color: 'white',
+  },
+
+  titleMedia: {
+    fontSize: '34px',
+    lineHeight: '38px',
   },
   titleWrapper: {
     display: 'flex',
@@ -23,9 +29,14 @@ export const useStyles = makeStyles({
   subTitle: {
     textAlign: 'center',
     fontStyle: 'Regular',
-    fontSize: '24px',
+    fontSize: '28px',
     lineHeight: '28px',
     color: 'white',
+  },
+
+  subTitleMedia: {
+    fontSize: '18px',
+    lineHeight: '22px',
   },
   btn: {
     width: '250px',
@@ -33,13 +44,24 @@ export const useStyles = makeStyles({
     margin: '22px auto 0 auto!important',
     borderRadius: '20px!important',
   },
+
+  btnMedia: {
+    width: '250px',
+    height: '50px',
+    borderRadius: '20px!important',
+    margin: '10px auto 0 auto!important',
+  },
   black: {
-    padding: '20px 0 150px',
+    padding: '20px 15px 150px 15px',
     width: '100%',
     backgroundColor: '#1E1B1B',
   },
+  blackMedia: {
+    padding: '0 15px',
+  },
   inputWrapper: {
     display: 'flex',
+    flexWrap: 'wrap',
     alignItems: 'center',
     margin: '10px 0 5px 0',
   },
@@ -55,11 +77,15 @@ export const useStyles = makeStyles({
     borderRadius: '4px',
   },
   gray: {
-    padding: '0 0 60px 0',
+    padding: '0 15px 60px 15px',
+
     width: '100%',
     backgroundColor: '#5C5C5C',
   },
   inputSub: {
+    color: 'white',
+  },
+  white: {
     color: 'white',
   },
   inputTarget: {
@@ -70,4 +96,4 @@ export const useStyles = makeStyles({
   a: {
     textDecoration: 'none',
   },
-});
+}));

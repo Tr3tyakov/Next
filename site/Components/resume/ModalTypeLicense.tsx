@@ -78,7 +78,12 @@ const ModalTypeLicense: React.FC<AccountProps> = React.memo(
               ))}
             </div>
             <Box marginTop="10px">
-              <Button fullWidth variant="contained" color="primary" onClick={saveLicense}>
+              <Button
+                className={classes.btn}
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={saveLicense}>
                 Сохранить
               </Button>
             </Box>

@@ -62,7 +62,17 @@ class UserController {
       const { link } = req.params;
       console.log(link);
       const userData = await UserService.activate(link);
-      res.redirect(`${process.env.SERVER}/Authorization`);
+      res.redirect(`${process.env.SERVER}/Account`);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async confirmEmail(req, res, next) {
+    try {
+      const { email } = req.body;
+      const userData = await UserService.confirmEmail(email);
+      res.json(userData);
     } catch (e) {
       next(e);
     }

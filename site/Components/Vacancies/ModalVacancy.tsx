@@ -23,7 +23,7 @@ const ModalVacancy: React.FC<IModalVacancyProps> = ({ classes, modal, closeModal
 
   const filterSpecialization = React.useMemo(() => {
     return specializations.filter((element) => element.toLowerCase().includes(input.toLowerCase()));
-  }, [specializations, input]);
+  }, [input]);
 
   const addSpecialization = (element: string) => {
     if (currentSpecialization.includes(element)) {
@@ -53,17 +53,17 @@ const ModalVacancy: React.FC<IModalVacancyProps> = ({ classes, modal, closeModal
             <Typography variant="h5" color="primary">
               Специализации
             </Typography>
-            <Button variant="outlined" color="primary" onClick={clearAll}>
+            <Button className={classes.btn} variant="outlined" color="primary" onClick={clearAll}>
               Очистить
             </Button>
           </div>
-          <div className={classes.skills}>
+          {/* <div className={classes.skills}>
             {currentSpecialization.map((element, index) => (
               <div className={classes.skill} key={index}>
                 {element}
               </div>
             ))}
-          </div>
+          </div> */}
           <TextField
             margin="dense"
             variant="standard"
@@ -87,7 +87,12 @@ const ModalVacancy: React.FC<IModalVacancyProps> = ({ classes, modal, closeModal
             })}
           </div>
           <Box mt={2}>
-            <Button variant="contained" color="primary" fullWidth onClick={saveSpecialization}>
+            <Button
+              className={classes.btn}
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={saveSpecialization}>
               Сохранить
             </Button>
           </Box>

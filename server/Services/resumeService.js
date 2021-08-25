@@ -21,8 +21,20 @@ class ResumeService {
     });
     return resume;
   }
-  async getResume() {
-    return await resumeModel.find().limit(20);
+  async getResume(page) {
+    if (!page) {
+      page = 1;
+    }
+    const count = await resumeModel.countDocuments({});
+    const resumeData = await resumeModel
+      .find()
+      .skip(page * 4 - 4)
+      .limit(4);
+    return { resumeData, count };
+  }
+  async getCurrentResume(id) {
+    const resumeData = await resumeModel.findOne({ _id: id });
+    return resumeData;
   }
 }
 module.exports = new ResumeService();

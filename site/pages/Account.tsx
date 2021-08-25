@@ -15,6 +15,9 @@ import axios from 'axios';
 import nookies from 'nookies';
 import { URL } from '../Components/utils/http/utils';
 import { IMainInfo } from '../Components/Interfaces/IUser';
+import { setConfirmEmail } from '../Components/utils/api/userApi';
+import { useSnackbar } from 'notistack';
+import { MenuItem } from '@material-ui/core';
 
 interface IAccountProps {
   mainInfo: IMainInfo;
@@ -22,8 +25,15 @@ interface IAccountProps {
 
 const Account: React.FC<IAccountProps> = ({ mainInfo }) => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
-  console.log(mainInfo);
+  const confirmEmail = async () => {
+    const data = await setConfirmEmail(mainInfo.email);
+    if (data?.status === 200) {
+      return enqueueSnackbar(data.data.message, { variant: 'success' });
+    }
+    enqueueSnackbar('Error', { variant: 'error' });
+  };
 
   return (
     <MainLayouts>
@@ -39,6 +49,7 @@ const Account: React.FC<IAccountProps> = ({ mainInfo }) => {
               layout="intrinsic"
               width={200}
               height={200}
+              alt="Image"
             />
           </Box>
         ) : (
@@ -55,31 +66,38 @@ const Account: React.FC<IAccountProps> = ({ mainInfo }) => {
             : 'User'}
         </Typography>
       </div>
+      {mainInfo.isActiveEmail ? (
+        ''
+      ) : (
+        <Paper className={classes.paper}>
+          <Typography className={classes.gutterBottom} variant="h5">
+            Подтвердите почту
+          </Typography>
+          <Typography variant="subtitle2">
+            Работодатели чаще доверяют проверенным пользователям
+          </Typography>
+          <div className={classes.phone}>
+            <Button
+              className={classes.btn}
+              variant="contained"
+              color="primary"
+              onClick={confirmEmail}>
+              Подтвердить почту
+            </Button>
+          </div>
+        </Paper>
+      )}
       <Paper className={classes.paper}>
-        {/* {confirm ?} */}
-        <Typography className={classes.gutterBottom} variant="h5">
-          Подтвердите почту
-        </Typography>
-        <Typography variant="subtitle2" className={classes.gutterBottom}>
-          Работодатели чаще доверяют проверенным пользователям
-        </Typography>
-        <div className={classes.phone}>
-          <Button variant="contained" color="primary">
-            Подтвердить почту
-          </Button>
-        </div>
-      </Paper>
-      <Paper className={classes.paper}>
-        <div className={classes.flexBetween}>
-          <Typography variant="h5">Основная информация</Typography>
-          <Link href="/MainInfo">
-            <a>
+        <Link href="/MainInfo">
+          <a className={classes.textDecoration}>
+            <MenuItem className={classes.flexBetween}>
+              <Typography variant="h5">Информация</Typography>
               <Button color="primary">
                 <ArrowForwardIosIcon />
               </Button>
-            </a>
-          </Link>
-        </div>
+            </MenuItem>
+          </a>
+        </Link>
         {mainInfo.name ? (
           <div>
             <p>{`${mainInfo.name} ${mainInfo.secondName}`}</p>

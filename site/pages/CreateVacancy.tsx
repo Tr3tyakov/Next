@@ -5,7 +5,7 @@ import { useStyles } from '../styles/create/vacancy/createVacancy.style';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import MainLayouts from '../Components/layouts/MainLayouts';
-import { Divider, TextareaAutosize } from '@material-ui/core';
+import { Box, Divider, TextareaAutosize, useMediaQuery } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextFieldVacancy from '../Components/vacancies/TextFieldVacancy';
 import CheckBoxVacancy from '../Components/vacancies/CheckBoxVacancy';
@@ -13,6 +13,7 @@ import KeySkills from '../Components/vacancies/KeySkills';
 import ModalVacancy from '../Components/vacancies/ModalVacancy';
 import { setNewVacancy } from '../Components/utils/api/vacancyApi';
 import { useSnackbar } from 'notistack';
+import clsx from 'clsx';
 
 export const typeCategory = ['A', 'B', 'C', 'D', 'E', 'BE', 'CE', 'DE', 'TM', 'TB'];
 
@@ -65,7 +66,9 @@ export interface INewVacancy {
   employment: string[];
 }
 
-const createOffer: React.FC = () => {
+const CreateOffer: React.FC = () => {
+  const media = useMediaQuery('(max-width: 700px)');
+
   const { enqueueSnackbar } = useSnackbar();
   const [error, setError] = React.useState<boolean>(false);
   const [vacancy, setVacancy] = React.useState<string>('');
@@ -202,7 +205,6 @@ const createOffer: React.FC = () => {
           ) : (
             ''
           )}
-
           <ModalVacancy
             classes={classes}
             modal={modal}
@@ -213,24 +215,35 @@ const createOffer: React.FC = () => {
       </div>
       <div className={classes.graph}>
         <Typography gutterBottom>Предполагаемый уровень месячного дохода</Typography>
-        <div>
-          <div style={{ justifyContent: 'space-evenly', width: '100%' }}>
-            <TextField
-              variant="filled"
-              label="От"
-              value={firstSalary}
-              size="small"
-              onChange={changeFirstSalary}></TextField>
-            <TextField
-              variant="filled"
-              label="До"
-              size="small"
-              value={secondSalary}
-              onChange={changeSecondSalary}></TextField>
+        <Box width={media ? '100%' : '300px'}>
+          <div
+            className={clsx({
+              [classes.wrapperCurrency]: true,
+              [classes.wrapperCurrencyMedia]: false,
+            })}>
+            <Box margin="5px 0">
+              <TextField
+                variant="filled"
+                label="От"
+                value={firstSalary}
+                fullWidth
+                size="small"
+                onChange={changeFirstSalary}></TextField>
+            </Box>
+            <Box margin="5px 0">
+              <TextField
+                variant="filled"
+                label="До"
+                size="small"
+                fullWidth
+                value={secondSalary}
+                onChange={changeSecondSalary}></TextField>
+            </Box>
             <TextField
               className={classes.currency}
               variant="filled"
               size="small"
+              fullWidth
               value={currency}
               select
               onChange={changeCurrency}>
@@ -259,7 +272,7 @@ const createOffer: React.FC = () => {
             />
             <Typography>На руки</Typography>
           </div>
-        </div>
+        </Box>
       </div>
       <div>
         <Typography gutterBottom>Описание вакансии</Typography>
@@ -271,6 +284,7 @@ const createOffer: React.FC = () => {
         <div className={classes.typeCategory}>
           {typeCategory.map((element) => (
             <Button
+              className={classes.type}
               key={element}
               color="primary"
               variant={category.includes(element) ? 'contained' : 'outlined'}
@@ -281,7 +295,6 @@ const createOffer: React.FC = () => {
         </div>
       </div>
       <Divider />
-
       <CheckBoxVacancy
         classes={classes}
         title={'Опыт работы'}
@@ -303,7 +316,6 @@ const createOffer: React.FC = () => {
         state={employment}
         setChange={setEmployment}
       />
-
       <div className={classes.btns}>
         <Button
           className={classes.btn}
@@ -320,4 +332,4 @@ const createOffer: React.FC = () => {
   );
 };
 
-export default createOffer;
+export default CreateOffer;

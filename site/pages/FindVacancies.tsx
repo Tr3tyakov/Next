@@ -17,18 +17,23 @@ interface IHomeProps {
   vacancies: [IVacancy];
   favorite: [];
   isAuth: boolean;
+  count: number;
 }
 
-const FindVacancies: React.FC<IHomeProps> = ({ isAuth, vacancies, favorite }) => {
-  console.log(vacancies, favorite);
-  const [filter, setFilter] = React.useState<string>('');
-  const { enqueueSnackbar } = useSnackbar();
+const FindVacancies: React.FC<IHomeProps> = ({ isAuth, vacancies, favorite, count }) => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [page, setPage] = React.useState<number>(2);
+  const [fetching, setFetching] = React.useState<boolean>(false);
+  const [data, setData] = React.useState<IVacancy[]>(vacancies);
+  const [filter, setFilter] = React.useState<string>('');
+
   const filterVacancies = React.useMemo(() => {
-    return vacancies.filter((element) =>
+    return data.filter((element) =>
       element.info.title.toLowerCase().includes(filter.toLowerCase()),
     );
-  }, [filter]);
+  }, [filter, data]);
 
   const changeFavorite = async (id: string) => {
     const favoriteData = await changeFavoriteVacancies(id);
@@ -38,16 +43,40 @@ const FindVacancies: React.FC<IHomeProps> = ({ isAuth, vacancies, favorite }) =>
     }
     enqueueSnackbar('Error', { variant: 'error' });
   };
-  // return <div></div>;
+
+  React.useEffect(() => {
+    if (fetching) {
+      const vacancies = async () => {
+        const vacanciesData = await axios.get(`${URL}/vacancy?page=${page}`);
+        setFetching(false);
+        setPage((page) => page + 1);
+        setData([...data, ...vacanciesData.data.vacancyData]);
+      };
+      vacancies();
+    }
+  }, [fetching]);
+
+  React.useEffect(() => {
+    document.addEventListener('scroll', handlerScroll);
+    return function () {
+      document.removeEventListener('scroll', handlerScroll);
+    };
+  });
+
+  const handlerScroll = (e: any) => {
+    const scrollHeight = e.target.documentElement.scrollHeight;
+    const scrollTop = e.target.documentElement.scrollTop;
+    const innerHeight = window.innerHeight;
+    if (scrollHeight - innerHeight - scrollTop < 100 && data.length < count) {
+      setFetching(true);
+    }
+  };
+
   return (
     <MainLayouts>
       <div>
         <div className={classes.flex}>
-          <FilterVacancies
-            classes={classes}
-            setFilter={setFilter}
-            title={'Вакансия, которая вас интересует'}
-          />
+          <FilterVacancies classes={classes} setFilter={setFilter} title={'Вакансия'} />
         </div>
         <Box display="flex">
           <Box margin="0 10px 0 0">
@@ -65,7 +94,6 @@ const FindVacancies: React.FC<IHomeProps> = ({ isAuth, vacancies, favorite }) =>
             </Link>
           </Box>
         </Box>
-
         <div className={classes.cardsWrapper}>
           {filterVacancies.map((element) => (
             <Vacancy
@@ -97,7 +125,7 @@ export const getServerSideProps = async (ctx: any) => {
       isAuth: vacanciesData.data.auth,
       vacancies: vacanciesData.data.vacancyData,
       favorite: vacanciesData.data.favorite === null ? [] : vacanciesData.data.favorite.list,
+      count: vacanciesData.data.count,
     },
   };
 };
-///chekc error seriallize

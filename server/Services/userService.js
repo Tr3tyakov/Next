@@ -77,11 +77,22 @@ class UserService {
     );
     return check;
   }
+  async confirmEmail(email) {
+    try {
+      const userData = await userModel.findOne({ email });
+      await transportMailer(email, userData.activationLink);
+      return {
+        message:
+          'На Ваш почтовый ящик отправлена ссылка, перейдя по которой, вы сможете подтвердить почту',
+      };
+    } catch (e) {
+      throw ApiError.BadRequest(e);
+    }
+  }
   async changePassword(link, newPassword) {
     try {
       const userData = await userModel.findOne({ forgotPasswordLink: link });
       const checkPassword = await bcrypt.compare(newPassword, userData.password);
-      console.log(checkPassword);
       if (checkPassword) {
         throw ApiError.BadRequest('Пароль должен отличаться от предыдущего');
       }

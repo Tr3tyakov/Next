@@ -12,6 +12,7 @@ router.post('/login', userController.login);
 router.get('/logout', userController.logout);
 router.get('/refresh', userController.refresh);
 router.get('/activate/:link', userController.activate);
+router.post('/confirmEmail', userController.confirmEmail);
 router.post('/changePassword', userController.changePassword);
 router.post('/forgotPassword', userController.forgotPassword);
 router.get('/user/mainInfo', userController.getMainInfo);

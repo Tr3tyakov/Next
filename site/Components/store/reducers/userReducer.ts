@@ -2,8 +2,18 @@ import { userActions, userType, IUser } from '../../Interfaces/IUser';
 
 const initialState: IUser = {
   isAuth: false,
-  openModal: false,
-  mainInfo: {},
+  mainInfo: {
+    name: '',
+    secondName: '',
+    avatar: '',
+    bithday: '',
+    gender: '',
+    phone: '',
+    city: '',
+    country: '',
+    email: '',
+    isActiveEmail: false,
+  },
 };
 
 export const userReducer = (state = initialState, action: userActions): IUser => {
@@ -15,8 +25,7 @@ export const userReducer = (state = initialState, action: userActions): IUser =>
       }
       return { ...state, isAuth: action.payload.value };
     }
-    case userType.MODAL:
-      return { ...state, openModal: action.payload };
+
     default:
       return state;
   }

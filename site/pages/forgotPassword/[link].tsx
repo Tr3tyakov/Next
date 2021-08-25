@@ -82,7 +82,7 @@ const Authorization: React.FC = () => {
           <Button
             className={classes.outlineBtn}
             onClick={send}
-            variant="outlined"
+            variant="contained"
             color="primary"
             fullWidth>
             Войти

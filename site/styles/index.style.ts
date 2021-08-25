@@ -1,5 +1,5 @@
-import { IuseStyles } from './../Components/header/header.style';
-import makeStyles from '@material-ui/styles/makeStyles';
+import { makeStyles } from '@material-ui/styles';
+
 export const useStyles = makeStyles({
   modal: {
     display: 'flex',
@@ -36,10 +36,14 @@ export const useStyles = makeStyles({
   cardsWrapper: {
     display: 'flex',
     flexWrap: 'wrap',
+    justifyContent: 'center',
   },
 
   container: {
     margin: '20px auto',
+  },
+  white: {
+    color: 'white',
   },
   form: {
     width: '100%',
@@ -51,6 +55,9 @@ export const useStyles = makeStyles({
     top: '0',
     height: '55px',
     right: '0',
+  },
+  btn: {
+    padding: '5px 10px',
   },
 });
 

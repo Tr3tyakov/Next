@@ -34,7 +34,7 @@ const FavoriteVacancies: React.FC<IVacanciesProps> = ({ vacancy, id, setFavorite
           <Card className={classes.favoriteCard}>
             <CardHeader
               title={
-                <div className={classes.cardMainInfo}>
+                <div className={classes.cardMainFavorite}>
                   <Typography className={classes.work} variant="h6" gutterBottom>
                     {vacancy.title}
                   </Typography>
@@ -59,25 +59,20 @@ const FavoriteVacancies: React.FC<IVacanciesProps> = ({ vacancy, id, setFavorite
               }></CardHeader>
             <div className={classes.favorite}>
               <IconButton onClick={changeFavoriteState}>
-                <Image src={ActiveStar} width={20} height={20}></Image>
+                <Image src={ActiveStar} width={20} height={20} alt="star"></Image>
               </IconButton>
             </div>
             <div className={classes.cardFooter}>
-              <div className={classes.date}>
-                <Typography color="textSecondary" gutterBottom>
-                  Опубликовано:&nbsp;
-                  {new Date(vacancy.date).toLocaleString()}
-                </Typography>
-              </div>
-              <div className={classes.favoriteBtns}>
-                <div className={classes.justify}>
-                  <Button className={classes.favoriteBtn} color="primary" variant="outlined">
-                    Контакты
-                  </Button>
-                  <Button className={classes.favoriteBtn} color="primary" variant="contained">
-                    Откликнуться
-                  </Button>
+              <div className={classes.flex}>
+                <div className={classes.date}>
+                  <Typography color="textSecondary" gutterBottom>
+                    Опубликовано:&nbsp;
+                    {new Date(vacancy.date).toLocaleString()}
+                  </Typography>
                 </div>
+                <Button className={classes.favoriteBtn} color="primary" variant="contained">
+                  Откликнуться
+                </Button>
               </div>
             </div>
           </Card>

@@ -1,18 +1,11 @@
-import makeStyles from '@material-ui/styles/makeStyles';
+import { makeStyles } from '@material-ui/styles';
+
 export const useStyles = makeStyles({
   card: {
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
-    width: '300px',
-    height: '100%',
-  },
-  ownerCard: {
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    width: '300px',
-    boxShadow: '0 4px 5px rgba(63, 81, 181, 1)',
+    width: '270px',
     height: '100%',
   },
   cardMainInfo: {
@@ -21,6 +14,20 @@ export const useStyles = makeStyles({
     justifyContent: 'flex-end',
     flexDirection: 'column',
     maxWidth: '230px',
+  },
+  cardMainFavorite: {
+    padding: '0',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    flexDirection: 'column',
+    maxWidth: '250px',
+  },
+  flex: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '10px',
   },
   cardTags: {
     margin: '10px 0',
@@ -56,8 +63,11 @@ export const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
   },
+  btn: {
+    padding: '5px 10px',
+  },
   date: {
-    padding: '0 20px',
+    padding: '0 15px',
   },
   paper: {
     margin: '10px',
@@ -67,7 +77,7 @@ export const useStyles = makeStyles({
     textDecoration: 'none',
   },
   work: {
-    lineHeight: '1.3 ',
+    lineHeight: '1.3',
   },
   favoritePaper: {
     width: '100%',
@@ -77,7 +87,6 @@ export const useStyles = makeStyles({
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
-    boxShadow: '0 4px 5px rgba(63, 81, 181, 1)',
     height: '100%',
   },
   favoriteBtns: {

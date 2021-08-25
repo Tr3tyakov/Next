@@ -1,15 +1,20 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { useStyles } from './work.style';
-import Link from 'next/link';
+import { useStyles } from '../../styles/work.style';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import MainLayouts from '../../Components/layouts/MainLayouts';
 import axios from 'axios';
-import { IFullVacancy } from '../../Components/Interfaces/IVacancy';
+import { IFullVacancy, IVacancy } from '../../Components/Interfaces/IVacancy';
 import { URL } from '../../Components/utils/http/utils';
+import {
+  changeFavoriteVacancies,
+  moreCurrentVacancies,
+} from '../../Components/utils/api/vacancyApi';
+import Vacancy from '../../Components/vacancies/Vacancy';
+import { useSnackbar } from 'notistack';
 
 interface IWorkProps {
   currentVacancy: IFullVacancy;
@@ -17,12 +22,39 @@ interface IWorkProps {
 
 const Work: React.FC<IWorkProps> = ({ currentVacancy }) => {
   const classes = useStyles();
+
+  const { enqueueSnackbar } = useSnackbar();
+  const [isAuth, setIsAuth] = React.useState<boolean>(false);
+  const [page, setPage] = React.useState<number>(1);
+  const [favorite, setFavorite] = React.useState<any>([]);
+  const [vacancies, setVacancies] = React.useState<IVacancy[]>([]);
+  const [visible, setVisible] = React.useState<boolean>(false);
+
+  const getMoreVacancies = async () => {
+    const vacanciesData = await moreCurrentVacancies(currentVacancy.info.title, page);
+    if (vacanciesData.status === 200) {
+      console.log();
+      setVacancies([...vacancies, ...vacanciesData.data.vacancyData]);
+      setIsAuth(vacanciesData.data.auth);
+      setFavorite(vacanciesData.data.favorite?.list);
+      setPage(page + 1);
+      return setVisible(true);
+    }
+  };
+  const changeFavorite = async (id: string) => {
+    const favoriteData = await changeFavoriteVacancies(id);
+    if (favoriteData.status === 200) {
+      const message = favoriteData.data.message;
+      return enqueueSnackbar(message, { variant: 'success' });
+    }
+    enqueueSnackbar('Error', { variant: 'error' });
+  };
   return (
     <>
       <div className={classes.backGround}>
         <MainLayouts>
           <div>
-            <Typography gutterBottom>Санкт-Петербург</Typography>
+            <Typography gutterBottom>{currentVacancy.info?.city}</Typography>
           </div>
           <div>
             <Typography variant="h5" gutterBottom>
@@ -41,26 +73,10 @@ const Work: React.FC<IWorkProps> = ({ currentVacancy }) => {
             </p>
             <p>{currentVacancy.typeEmployment?.map((element) => element)}</p>
           </div>
-          <Link href="/company/ОнлайнТрейд">
-            <div className={classes.companyTag}>
-              <Typography className={classes.titleTag}>Онлайн Трейд</Typography>
-            </div>
-          </Link>
         </MainLayouts>
       </div>
       <Container maxWidth="md">
         <div className={classes.companyInfo}>
-          <div className={classes.flex}>
-            <Typography>{currentVacancy.info?.userName}</Typography>
-            <Button color="primary">
-              <ArrowForwardIosIcon />
-            </Button>
-          </div>
-          <Divider />
-          <div className={classes.city}>
-            <Typography>{currentVacancy.info?.city}</Typography>
-          </div>
-          <Divider />
           <div>
             <Typography>{currentVacancy.description}</Typography>
           </div>
@@ -92,13 +108,29 @@ const Work: React.FC<IWorkProps> = ({ currentVacancy }) => {
             </Typography>
             <Divider />
             <Typography variant="h6">Похожие вакансии</Typography>
-            <div className={classes.moreVacancies}>
-              {/* <Vacancy /> */}
-              {/* <Vacancy /> */}
-            </div>
+            {visible ? (
+              <div className={classes.cardsWrapper}>
+                {vacancies.map((element) => (
+                  <Vacancy
+                    vacancy={element.info}
+                    id={element._id}
+                    key={element._id}
+                    favorite={favorite}
+                    changeFavoriteOnServer={changeFavorite}
+                    isAuth={isAuth}
+                  />
+                ))}
+              </div>
+            ) : (
+              ''
+            )}
             <div className={classes.btnVacancies}>
-              <Button variant="outlined" color="primary" endIcon={<ArrowForwardIosIcon />}>
-                Показать все похожие вакансии
+              <Button
+                variant="outlined"
+                color="primary"
+                endIcon={<ArrowForwardIosIcon />}
+                onClick={getMoreVacancies}>
+                {page === 1 ? 'Показать похожие вакансии' : 'Показать еще'}
               </Button>
             </div>
           </div>

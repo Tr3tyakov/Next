@@ -8,13 +8,15 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import { updateDesiredPosition } from '../utils/api/userApi';
+import clsx from 'clsx';
+import { useMediaQuery } from '@material-ui/core';
 export const specializations = [
   'Бухгалтерия',
   'Закупки',
   'Другое',
   'Рабочий персонал',
   'Добыча сырья',
-  'Информационный технологии, Интернет, Мультимедия',
+  'Информационный технологии, Интернет',
   'Искусство, Развлечение, Масс-медиа',
   'Маркетинг, реклама, PR',
   'Медицина, Фармацевтика',
@@ -60,7 +62,7 @@ const ModalPosition: React.FC<PositionProps> = React.memo(
 
     const [specializationInput, setSpecializationInput] = React.useState<string>('');
     const [currentTarget, setCurrentTarget] = React.useState<string[]>(sphereActivity);
-
+    const media = useMediaQuery('(max-width:600px)');
     const classes = useStyles();
 
     //inputs
@@ -95,7 +97,7 @@ const ModalPosition: React.FC<PositionProps> = React.memo(
       return specializations.filter((element) =>
         element.toLowerCase().includes(specializationInput.toLowerCase()),
       );
-    }, [specializations, specializationInput]);
+    }, [specializationInput]);
 
     //global
     const clearAll = () => {
@@ -118,13 +120,18 @@ const ModalPosition: React.FC<PositionProps> = React.memo(
     return (
       <Modal open={modal} onClose={closeModalPosition} className={classes.modal}>
         <Fade in={modal}>
-          <Paper className={classes.paperModal}>
+          <Paper
+            className={clsx({ [classes.paperModal]: !media, [classes.mediaPaperModal]: media })}>
             <div>
               <div className={classes.title}>
-                <Typography align="center" color="primary" variant="h5" gutterBottom>
+                <Typography color="primary" variant="h5" gutterBottom>
                   Желаемая должность
                 </Typography>
-                <Button variant="outlined" color="primary" onClick={clearAll}>
+                <Button
+                  className={classes.btn}
+                  variant="outlined"
+                  color="primary"
+                  onClick={clearAll}>
                   очистить
                 </Button>
               </div>

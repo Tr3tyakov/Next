@@ -1,4 +1,4 @@
-import makeStyles from '@material-ui/styles/makeStyles';
+import { makeStyles } from '@material-ui/styles';
 export const useStyles = makeStyles({
   modal: {
     display: 'flex',
@@ -9,7 +9,16 @@ export const useStyles = makeStyles({
     padding: '20px',
     maxWidth: '500px',
     maxHeight: '950px',
+    overflow: 'scroll',
   },
+
+  mediaPaperModal: {
+    padding: '20px',
+    maxWidth: '500px',
+    maxHeight: '700px',
+    overflow: 'scroll',
+  },
+
   paperSkill: {
     padding: '20px',
     maxWidth: '450px',
@@ -23,6 +32,7 @@ export const useStyles = makeStyles({
   outlineBtn: {
     flex: 1,
     margin: '10px 10px 0 0',
+    padding: '5px 10px',
   },
   skills: {
     display: 'flex',
@@ -40,7 +50,7 @@ export const useStyles = makeStyles({
     margin: '0',
   },
   btn: {
-    height: '50px',
+    padding: '5px 10px',
   },
   input: {
     maxWidth: '400px',
@@ -70,7 +80,6 @@ export const useStyles = makeStyles({
     border: '1px solid rgba(63, 81, 181, 0.5)',
     fontWeight: 500,
   },
-  cancel: {},
   specializationWrapper: {
     height: '300px',
     width: '100%',

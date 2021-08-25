@@ -11,6 +11,8 @@ import { updateDesiredPosition } from '../utils/api/userApi';
 import { Box, Divider, MenuItem } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MainLanguage from './MainLanguage';
+import { useMediaQuery } from '@material-ui/core';
+import clsx from 'clsx';
 const foreignLanguages = [
   'Английский',
   'Упрощенный китайский',
@@ -128,7 +130,7 @@ const ModalForeignLanguage: React.FC<PositionProps> = React.memo(
   ({ modal, closeModal, setLanguages }) => {
     const classes = useStyles();
     const [findLanguage, setFindLanguage] = React.useState<string>('');
-
+    const media = useMediaQuery('(max-width: 800px)');
     //
     const [mainLanguage, setMainLanguage] = React.useState<string>('');
     const [foreignModal, setForeignModal] = React.useState<boolean>(false);
@@ -178,7 +180,8 @@ const ModalForeignLanguage: React.FC<PositionProps> = React.memo(
     return (
       <Modal open={modal} onClose={closeModal} className={classes.modal}>
         <Fade in={modal}>
-          <Paper className={classes.foreignPaper}>
+          <Paper
+            className={clsx({ [classes.foreignPaper]: !media, [classes.mediaPaperModal]: media })}>
             <div>
               <Typography color="primary" variant="h5" gutterBottom>
                 Знание иностранных языков

@@ -30,7 +30,12 @@ class VacancyService {
     return vacancy;
   }
 
-  async getVacancies(refreshToken) {
+  async getVacancies(refreshToken, page) {
+    if (!page) {
+      page = 1;
+    }
+
+    const count = await vacancyModel.countDocuments({});
     const vacancyData = await vacancyModel.aggregate([
       {
         $project: {
@@ -38,14 +43,20 @@ class VacancyService {
           info: 1,
         },
       },
+      {
+        $skip: page * 6 - 6,
+      },
+      {
+        $limit: 6,
+      },
     ]);
-
+    console.log(vacancyData);
     if (refreshToken) {
       const tokenData = await tokenService.checkRefreshToken(refreshToken);
       const favorite = await favoriteModel.findOne({ user: tokenData.user.id });
-      return { vacancyData, favorite, auth: true };
+      return { vacancyData, count, favorite, auth: true };
     }
-    return { vacancyData, favorite: null, auth: false };
+    return { vacancyData, count, favorite: null, auth: false };
   }
   async getCurrentVacancy(id) {
     const vacancyData = await vacancyModel.findById(id);
@@ -89,6 +100,30 @@ class VacancyService {
       },
     ]);
     return { vacancy, list: favoriteData.list };
+  }
+  async getMoreCurrentVacancy(title, page, refreshToken) {
+    const check = title.split(' ');
+    if (!page) {
+      page = 1;
+    }
+    try {
+      const vacancyData = await vacancyModel
+        .find({ $text: { $search: check[0] } })
+        .skip(page * 5 - 5)
+        .limit(5);
+      if (refreshToken) {
+        const tokenData = await tokenService.checkRefreshToken(refreshToken);
+        const favorite = await favoriteModel.findOne({ user: tokenData.user.id });
+        return { vacancyData, favorite, auth: true };
+      }
+      return {
+        vacancyData,
+        favorite: null,
+        auth: false,
+      };
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 module.exports = new VacancyService();

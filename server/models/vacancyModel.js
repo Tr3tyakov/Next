@@ -22,8 +22,9 @@ const Vacancy = new Schema({
   workExperiences: [{ type: String }],
   schedule: [{ type: String }],
   typeEmployment: [{ type: String }],
-  // typeWork: { type: String },
-  // company: { type: String },
 });
 
+Vacancy.index({ 'info.title': 'text' });
+Vacancy.index({ 'info.startSalary': 'salary' });
+Vacancy.index({ 'info.city': 'city' });
 module.exports = model('Vacancy', Vacancy);

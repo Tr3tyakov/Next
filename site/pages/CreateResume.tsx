@@ -16,11 +16,12 @@ import ModalSkills from '../Components/resume/ModalSkills';
 import AddIcon from '@material-ui/icons/Add';
 import ModalPosition from '../Components/resume/ModalPosition';
 import ModalEducation from '../Components/resume/ModalEducation';
-import { Box, TextareaAutosize } from '@material-ui/core';
+import { Box, MenuItem, TextareaAutosize } from '@material-ui/core';
 import ModalForeignLanguage from '../Components/resume/ModalForeignLanguage';
 import { typeCategory } from './CreateVacancy';
 import ModalTypeLicense from '../Components/resume/ModalTypeLicense';
 import { setNewResume } from '../Components/utils/api/resumeApi';
+import clsx from 'clsx';
 
 export interface INewResume {
   mainInfo: IMainInfo;
@@ -42,7 +43,7 @@ export interface ITypeLicense {
   typeCategory: string[] | [];
 }
 
-const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
+const CreateOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const [desiredSalary, setDesiredSalary] = React.useState<string>('');
@@ -105,16 +106,6 @@ const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
   }, []);
 
   const createResume = async () => {
-    console.log(
-      languages,
-      skills,
-      aboutMe,
-      typeLicense,
-      sphereActivity,
-      desiredPosition,
-      desiredSalary,
-      education,
-    );
     if (aboutMe === '' || education === '' || desiredPosition === '' || desiredSalary === '') {
       return enqueueSnackbar('Поля должны быть заполнены', { variant: 'warning' });
     }
@@ -142,8 +133,8 @@ const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
       </Typography>
       <div>
         <Paper className={classes.paper}>
-          <div className={classes.flexBetween}>
-            <Typography variant="h5">Основная информация</Typography>
+          <MenuItem className={classes.flexBetween}>
+            <Typography variant="h5">Информация</Typography>
             <Link href="/MainInfo">
               <a>
                 <Button color="primary">
@@ -151,31 +142,41 @@ const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
                 </Button>
               </a>
             </Link>
-          </div>
-          <div>
-            <p>{`${mainInfo.name} ${mainInfo.secondName}`}</p>
-            <p>{mainInfo.city}</p>
-            <p>{userEmail}</p>
-            <p>{mainInfo.country}</p>
-            <p>{mainInfo.phone}</p>
-          </div>
+          </MenuItem>
+          {mainInfo.name && mainInfo.secondName ? (
+            <div className={classes.salary}>
+              <p>{`${mainInfo.name} ${mainInfo.secondName}`}</p>
+              <p>{mainInfo.city}</p>
+              <p>{userEmail}</p>
+              <p>{mainInfo.country}</p>
+              <p>{mainInfo.phone}</p>
+            </div>
+          ) : (
+            ''
+          )}
         </Paper>
         <Paper className={classes.paper}>
-          <Typography variant="h5">Ключевые навыки</Typography>
-          <div className={classes.flexBetween}>
-            <Typography variant="subtitle2">Знание языков</Typography>
-            <Button color="primary" onClick={openModalLanguage}>
+          <Typography className={classes.salary} variant="h5">
+            Ключевые навыки
+          </Typography>
+          <MenuItem className={classes.flexBetween} onClick={openModalLanguage}>
+            <Typography variant="subtitle1">Знание языков</Typography>
+            <Button color="primary">
               <ArrowForwardIosIcon />
             </Button>
-          </div>
+          </MenuItem>
           <ModalForeignLanguage
             modal={modalLanguage}
             closeModal={closeModalLanguage}
             setLanguages={setLanguages}
           />
-          {languages.mainLanguage ? (
+          {languages.mainLanguage || languages.additionLanguages.length ? (
             <div className={classes.spheres}>
-              <Box className={classes.skill}>{languages.mainLanguage}</Box>
+              {languages.mainLanguage ? (
+                <Box className={classes.skill}>{languages.mainLanguage}</Box>
+              ) : (
+                ''
+              )}
               {languages?.additionLanguages?.map((element, index) => (
                 <Box className={classes.skill} key={index}>
                   {element.language}
@@ -185,12 +186,12 @@ const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
           ) : (
             ''
           )}
-          <div className={classes.flexBetween}>
-            <Typography variant="subtitle2">Навыки</Typography>
-            <Button color="primary" onClick={openModalSkills}>
+          <MenuItem className={classes.flexBetween} onClick={openModalSkills}>
+            <Typography variant="subtitle1">Навыки</Typography>
+            <Button color="primary">
               <ArrowForwardIosIcon />
             </Button>
-          </div>
+          </MenuItem>
           <ModalSkills
             modal={modalSkills}
             closeModalSkills={closeModalSkills}
@@ -199,17 +200,17 @@ const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
           />
           <div className={classes.spheres}>
             {skills.map((element, index) => (
-              <div className={classes.skill} key={index}>
+              <div className={clsx({ [classes.skill]: true, [classes.salary]: true })} key={index}>
                 {element}
               </div>
             ))}
           </div>
-          <div className={classes.flexBetween}>
-            <Typography variant="subtitle2">Категория прав</Typography>
+          <MenuItem className={classes.flexBetween}>
+            <Typography variant="subtitle1">Категория прав</Typography>
             <Button color="primary" onClick={openModalLicense}>
               <ArrowForwardIosIcon />
             </Button>
-          </div>
+          </MenuItem>
 
           <ModalTypeLicense
             modal={modalLicense}
@@ -222,7 +223,9 @@ const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
             <Box className={classes.spheres} alignItems="center">
               <Box>Права категории —&nbsp;</Box>
               {typeLicense.typeCategory.map((element) => (
-                <div className={classes.skill} key={element}>
+                <div
+                  className={clsx({ [classes.skill]: true, [classes.salary]: true })}
+                  key={element}>
                   {element}
                 </div>
               ))}
@@ -232,15 +235,17 @@ const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
           )}
         </Paper>
         <Paper className={classes.paper}>
-          <div className={classes.flexBetween}>
+          <MenuItem className={classes.flexBetween} onClick={openModalPosition}>
             <Typography variant="h5">Желаемая должность</Typography>
-            <Button color="primary" onClick={openModalPosition}>
+            <Button color="primary">
               <ArrowForwardIosIcon />
             </Button>
-          </div>
+          </MenuItem>
           <div className={classes.flexBetween}>
             <div className={classes.lineHeight}>
-              <Typography variant="subtitle2">{desiredPosition}</Typography>
+              <Typography variant="subtitle1" className={classes.salary}>
+                {desiredPosition}
+              </Typography>
               <p className={classes.salary}>
                 {desiredSalary ? desiredSalary + ' ₽' : 'Уровень дохода не указан'}
               </p>
@@ -256,9 +261,9 @@ const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
               setDesiredPosition={setDesiredPosition}
             />
           </div>
-          <div className={classes.spheres}>
+          <div className={clsx({ [classes.spheres]: true, [classes.salary]: true })}>
             {sphereActivity.map((element, index) => (
-              <div className={classes.skill} key={index}>
+              <div className={clsx({ [classes.skill]: true, [classes.salary]: true })} key={index}>
                 {element}
               </div>
             ))}
@@ -266,17 +271,19 @@ const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
         </Paper>
 
         <Paper className={classes.paper}>
-          <div className={classes.flexBetween}>
+          <MenuItem className={classes.flexBetween} onClick={openModalEducation}>
             <Typography variant="h5">Уровень образования</Typography>
             <Button color="primary" onClick={openModalEducation}>
               <ArrowForwardIosIcon />
             </Button>
-          </div>
+          </MenuItem>
           <div className={classes.flexBetween}>
             <div className={classes.lineHeight}>
               {education ? (
                 <div className={classes.spheres}>
-                  <div className={classes.skill}>{education}</div>
+                  <div className={clsx({ [classes.skill]: true, [classes.salary]: true })}>
+                    {education}
+                  </div>
                 </div>
               ) : (
                 <p className={classes.salary}>{education ? education : 'Образование не указано'}</p>
@@ -300,7 +307,11 @@ const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
           />
         </div>
         <div>
-          <Button color="primary" variant="contained" onClick={createResume}>
+          <Button
+            className={classes.btn}
+            color="primary"
+            variant="contained"
+            onClick={createResume}>
             Сохранить резюме
           </Button>
         </div>
@@ -309,7 +320,7 @@ const createOffer: React.FC<INewResume> = ({ mainInfo, userEmail }) => {
   );
 };
 
-export default createOffer;
+export default CreateOffer;
 
 export const getServerSideProps = async (ctx: any) => {
   const { refreshToken } = nookies.get(ctx);

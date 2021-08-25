@@ -1,20 +1,56 @@
-import makeStyles from '@material-ui/styles/makeStyles';
-export const useStyles = makeStyles({
+import { makeStyles } from '@material-ui/styles';
+import { Theme } from '@material-ui/core/styles/';
+
+export const useStyles = makeStyles((theme) => ({
   flex: {
     display: 'flex',
     justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  displayMenu: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    zIndex: 1200,
+    top: '55px',
+    left: '-100%',
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    transition: '.3s linear',
+  },
+  burgerMenu: {
+    display: 'flex',
+    margin: '40px 40px',
+    width: '100%',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
+
+  displayMenuActive: {
+    left: '0',
+    transition: '.3s linear',
+  },
+  navigationMenu: {
+    margin: '10px 0',
+    fontSize: '18px',
+  },
+  padding: {
+    padding: '0',
   },
   navigation: {
-    display: 'flex',
-    margin: '0 10px',
     color: 'white',
   },
   textDecortation: {
+    margin: '0 0 0 5px',
     textDecoration: 'none',
     color: 'black',
   },
   avatar: {
     borderRadius: '50%',
+  },
+  white: {
+    color: 'white!important',
   },
   passwordText: {
     cursor: 'pointer',
@@ -37,10 +73,14 @@ export const useStyles = makeStyles({
   },
   outlineBtn: {
     flex: 1,
-    margin: '10px 10px 0 0',
+    padding: '5px 10px',
+    margin: '0 10px 0 0',
   },
   btn: {
-    margin: '10px 0 0 0',
+    padding: '5px 10px',
+  },
+  img: {
+    color: 'black',
   },
   forgotPassword: {
     margin: '35px 0 0 0',
@@ -53,6 +93,12 @@ export const useStyles = makeStyles({
     margin: '180px auto',
     maxWidth: '400px',
   },
-});
+
+  display: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    textDecoration: 'none',
+  },
+}));
 
 export type IuseStyles = ReturnType<typeof useStyles>;
